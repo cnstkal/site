@@ -2,101 +2,340 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ATEEZ Official Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fff;--text:#111;--sub:#8d8d8d;--line:#eee;--soft:#f7f7f8;--red:#ff4545;--gold:#d89b13;--nav-h:76px;}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{font-family:'Pretendard',system-ui,sans-serif;background:#fff;color:var(--text);overflow-x:hidden}.app{min-height:100vh;padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#fff}.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);padding:18px 18px 12px;border-bottom:1px solid #f5f5f5}.top-row{height:42px;display:flex;align-items:center;justify-content:space-between;gap:14px}.left{display:flex;align-items:center;gap:20px}.hamb{font-size:2rem;line-height:1}.logo{font-weight:900;font-style:italic;font-size:1.35rem;letter-spacing:-.09em}.icons{display:flex;align-items:center;gap:20px;font-size:1.55rem}.profile{width:38px;height:38px;border-radius:50%;background:#cdd3ff;display:grid;place-items:center;color:#6170d9}.view{display:none}.view.active{display:block}.hero-img{height:230px;background:linear-gradient(135deg,#08384a,#0d1d3e 65%,#06111c);display:flex;align-items:center;justify-content:center;color:#e8c872;text-align:center;padding:24px}.hero-img h1{font-size:1.9rem;font-weight:900;letter-spacing:-.04em}.dots{text-align:center;padding:14px 0 26px}.dots span{display:inline-block;width:9px;height:9px;border-radius:50%;background:#ddd;margin:0 4px}.dots span:first-child{background:#111}.tabs{display:flex;gap:32px;overflow-x:auto;padding:0 18px 12px;border-bottom:1px solid var(--line);white-space:nowrap}.tabs button{border:0;background:0;font-size:1.15rem;font-weight:900;color:#aaa;padding:12px 0;position:relative}.tabs button.active{color:#111}.tabs button.active:after{content:'';position:absolute;left:0;right:0;bottom:-13px;height:3px;background:#111}.section{padding:22px 18px}.section-title{font-size:1.2rem;font-weight:900;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.product img,.thumb{width:100%;aspect-ratio:1;border-radius:8px;background:#eee;display:grid;place-items:center;font-size:2.5rem;object-fit:cover}.p-name{font-size:1.05rem;line-height:1.35;font-weight:500;margin-top:12px}.price{font-size:1.35rem;font-weight:900;margin-top:8px}.badge{color:var(--gold);font-size:.9rem;font-weight:900;margin-top:12px}.notice-fixed{background:#fafafa;padding:18px;border-bottom:1px solid var(--line)}.fixed-head{font-size:1.18rem;font-weight:900;margin-bottom:18px}.fixed-list{display:grid;gap:18px}.fixed-item{display:flex;justify-content:space-between;gap:12px;font-size:1.05rem}.count{color:var(--red);font-weight:800}.time{color:#888;white-space:nowrap}.post-list{padding:18px}.post{display:grid;grid-template-columns:1fr 82px;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}.post-title{font-size:1.12rem;line-height:1.35}.post-meta{color:#999;margin:8px 0;font-size:.9rem}.post-comment{font-weight:700;color:#222;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.post-thumb{width:82px;height:82px;border-radius:8px;background:#eee;display:grid;place-items:center}.talk-card{padding:18px;border-bottom:1px solid var(--line);display:flex;gap:14px}.avatar{width:48px;height:48px;border-radius:50%;background:#eee;display:grid;place-items:center;font-size:1.4rem}.talk-body{flex:1}.talk-name{font-weight:900}.talk-text{font-size:1rem;margin-top:6px;line-height:1.45}.chat{display:flex;gap:14px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}.chat-info{flex:1}.chat-name{font-weight:900}.chat-msg{color:#777;margin-top:4px}.dot{width:9px;height:9px;background:var(--red);border-radius:50%}.content-card{background:#fafafa;border-radius:18px;padding:16px;margin-bottom:14px}.content-title{font-weight:900;font-size:1.1rem}.content-meta{color:#888;margin-top:6px}.my-box{margin:18px;border:1px solid var(--line);border-radius:20px;padding:20px;background:#fafafa}.my-title{font-size:1.3rem;font-weight:900}.row{display:flex;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--line);font-weight:700}.row:last-child{border-bottom:0}.bottom{position:fixed;left:0;right:0;bottom:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);backdrop-filter:blur(16px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(7,1fr);padding-bottom:env(safe-area-inset-bottom);z-index:80}.nav{border:0;background:0;color:#777;font-size:.68rem;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}.nav .ico{font-size:1.35rem}.nav.active{color:#111}.empty{padding:40px 18px;color:#999;text-align:center}.upload{position:fixed;right:18px;bottom:calc(var(--nav-h) + 22px);width:52px;height:52px;border-radius:50%;border:0;background:#111;color:#fff;font-size:1.7rem;z-index:70;box-shadow:0 8px 30px rgba(0,0,0,.18)}@media(min-width:900px){body{background:#f0f0f0}.app{max-width:520px;margin:0 auto;box-shadow:0 0 40px rgba(0,0,0,.08);position:relative}.bottom{left:50%;right:auto;transform:translateX(-50%);max-width:520px}.upload{right:calc(50% - 242px)}}
+:root{
+--bg:#ffffff;
+--card:#f5f5f7;
+--line:#e5e5e5;
+--text:#111111;
+--sub:#777777;
+--accent:#111111;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{
+font-family:'Pretendard',sans-serif;
+background:var(--bg);
+color:var(--text);
+}
+.app{padding-bottom:92px;}
+header{
+position:sticky;
+top:0;
+z-index:100;
+background:rgba(255,255,255,.92);
+backdrop-filter:blur(14px);
+border-bottom:1px solid var(--line);
+padding:16px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+.logo{
+font-size:1.2rem;
+font-weight:800;
+letter-spacing:-0.03em;
+}
+.header-actions{display:flex;gap:14px;align-items:center;font-size:1.1rem;}
+.header-actions button{border:0;background:none;font-size:1.1rem;cursor:pointer;}
+.view{display:none;}
+.view.active{display:block;}
+.hero{
+padding:20px;
+}
+.hero-card{
+background:linear-gradient(135deg,#ffffff,#f2f2f2);
+border:1px solid var(--line);
+border-radius:28px;
+padding:28px 22px;
+min-height:220px;
+display:flex;
+flex-direction:column;
+justify-content:flex-end;
+}
+.hero-card h1{
+font-size:2.2rem;
+line-height:1;
+letter-spacing:-0.05em;
+margin-bottom:10px;
+}
+.hero-card p{
+font-size:.92rem;
+color:var(--sub);
+margin-bottom:18px;
+}
+.hero-btn{
+height:48px;
+border:none;
+border-radius:999px;
+background:#111;
+color:#fff;
+font-weight:700;
+}
+.section{
+padding:0 20px 28px;
+}
+.section.pad-top{padding-top:20px;}
+.section-title{
+font-size:1rem;
+font-weight:800;
+margin-bottom:14px;
+letter-spacing:-0.03em;
+}
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+}
+.card{
+background:var(--card);
+border-radius:22px;
+overflow:hidden;
+border:1px solid #ececec;
+}
+.thumb{
+aspect-ratio:1/1;
+background:linear-gradient(135deg,#ececec,#dcdcdc);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:2rem;
+}
+.info{
+padding:12px;
+}
+.title{
+font-size:.9rem;
+font-weight:700;
+line-height:1.35;
+margin-bottom:4px;
+}
+.meta{
+font-size:.75rem;
+color:var(--sub);
+}
+.list{padding:0 20px 28px;display:flex;flex-direction:column;gap:12px;}
+.list-card{background:var(--card);border:1px solid #ececec;border-radius:20px;padding:16px;display:flex;gap:12px;align-items:center;}
+.avatar{width:46px;height:46px;border-radius:50%;background:#e8e8ec;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.25rem;}
+.list-main{flex:1;min-width:0;}
+.list-title{font-size:.95rem;font-weight:800;margin-bottom:4px;}
+.list-text{font-size:.82rem;color:var(--sub);line-height:1.45;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.notice-card{background:var(--card);border:1px solid #ececec;border-radius:18px;padding:16px;margin-bottom:10px;}
+.notice-title{font-size:.92rem;font-weight:800;line-height:1.35;margin-bottom:5px;}
+.notice-meta{font-size:.74rem;color:var(--sub);}
+.my-menu{padding:0 20px 28px;}
+.my-row{background:var(--card);border:1px solid #ececec;border-radius:18px;padding:17px 16px;margin-bottom:10px;font-size:.92rem;font-weight:800;display:flex;justify-content:space-between;}
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:74px;
+background:rgba(255,255,255,.95);
+backdrop-filter:blur(16px);
+border-top:1px solid var(--line);
+display:flex;
+justify-content:space-around;
+align-items:center;
+padding-bottom:env(safe-area-inset-bottom);
+z-index:200;
+}
+.nav-item{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:4px;
+font-size:.62rem;
+color:var(--sub);
+font-weight:600;
+border:0;
+background:none;
+font-family:inherit;
+cursor:pointer;
+min-width:0;
+}
+.nav-item span{white-space:nowrap;}
+.nav-item.active{color:#111;}
+.upload-btn{
+position:fixed;
+right:20px;
+bottom:96px;
+width:58px;
+height:58px;
+border-radius:50%;
+border:none;
+background:#111;
+color:#fff;
+font-size:1.8rem;
+box-shadow:0 10px 30px rgba(0,0,0,.15);
+z-index:150;
+}
+@media(min-width:900px){
+body{background:#efefef;}
+.app{
+max-width:500px;
+margin:0 auto;
+background:#fff;
+min-height:100vh;
+position:relative;
+box-shadow:0 0 40px rgba(0,0,0,.06);
+}
+.bottom-nav{left:50%;transform:translateX(-50%);max-width:500px;}
+.upload-btn{right:calc(50% - 230px);}
+}
 </style>
 </head>
 <body>
 <div class="app">
-<header class="top">
- <div class="top-row">
-  <div class="left"><div class="hamb">☰</div><div class="logo">ATEEZ</div></div>
-  <div class="icons"><span>♧</span><span onclick="go('notice')">▣</span><span onclick="go('shop')">♧</span><span class="profile" onclick="go('my')">◕</span></div>
- </div>
+<header>
+<div class="logo">ATEEZ</div>
+<div class="header-actions">
+<button onclick="switchPage('notice')">🔔</button>
+<button onclick="switchPage('shop')">🛒</button>
+<button onclick="switchPage('my')">🏆</button>
+</div>
 </header>
 
 <main>
-<section id="home" class="view active">
- <div class="hero-img"><h1>OUR ETERNAL<br>STAR ATINY</h1></div><div class="dots"><span></span><span></span></div>
- <div class="tabs"><button class="active">ALL</button><button>MEMBERSHIP</button><button>ALBUM</button><button>PROI</button><button>•••</button></div>
- <div class="section"><div class="section-title">추천 상품</div><div class="grid" id="homeProducts"></div></div>
+<section class="view active" id="page-home">
+<section class="hero">
+<div class="hero-card">
+<h1>GOLDEN<br>HOUR</h1>
+<p>ATEEZ Official Platform · White Edition</p>
+<button class="hero-btn" onclick="switchPage('shop')">멤버십 가입하기</button>
+</div>
+</section>
+<section class="section">
+<div class="section-title">LATEST CONTENTS</div>
+<div class="grid">
+<div class="card" onclick="switchPage('contents')"><div class="thumb">🎬</div><div class="info"><div class="title">Golden Hour Behind</div><div class="meta">YouTube · 08:21</div></div></div>
+<div class="card" onclick="switchPage('contents')"><div class="thumb">📸</div><div class="info"><div class="title">ATINY Special Photos</div><div class="meta">Gallery Update</div></div></div>
+<div class="card" onclick="switchPage('shop')"><div class="thumb">💿</div><div class="info"><div class="title">NEW ALBUM RELEASE</div><div class="meta">Shop</div></div></div>
+<div class="card" onclick="switchPage('talk')"><div class="thumb">🌟</div><div class="info"><div class="title">POP Live Message</div><div class="meta">TALK</div></div></div>
+</div>
+</section>
 </section>
 
-<section id="talk" class="view">
- <div class="tabs"><button class="active">ATEEZ TALK</button><button>ARTIST</button><button>FAN</button></div>
- <div id="talkList"></div>
+<section class="view" id="page-talk">
+<section class="section pad-top"><div class="section-title">ATEEZ TALK</div></section>
+<div class="list">
+<div class="list-card"><div class="avatar">🎤</div><div class="list-main"><div class="list-title">홍중 ✔</div><div class="list-text">우리 티니들 오늘도 화이팅! 💪</div></div></div>
+<div class="list-card"><div class="avatar">🌙</div><div class="list-main"><div class="list-title">윤호 ✔</div><div class="list-text">안녕 티니들~ 좋은 하루 보내요</div></div></div>
+<div class="list-card"><div class="avatar">🐥</div><div class="list-main"><div class="list-title">민기 ✔</div><div class="list-text">라이브 종료됨 · 새 메시지 도착</div></div></div>
+</div>
 </section>
 
-<section id="pop" class="view">
- <div class="section"><div class="section-title">POP</div></div><div id="chatList"></div>
+<section class="view" id="page-contents">
+<section class="section pad-top"><div class="section-title">CONTENTS</div><div class="grid">
+<div class="card"><div class="thumb">🎬</div><div class="info"><div class="title">Golden Hour Behind</div><div class="meta">YouTube · 08:21</div></div></div>
+<div class="card"><div class="thumb">🎵</div><div class="info"><div class="title">Dinero Production Behind</div><div class="meta">YouTube · 04:00</div></div></div>
+<div class="card"><div class="thumb">📸</div><div class="info"><div class="title">ATINY Photo Zone</div><div class="meta">Photo</div></div></div>
+<div class="card"><div class="thumb">▶️</div><div class="info"><div class="title">Route Zero Making</div><div class="meta">KQ Official</div></div></div>
+</div></section>
 </section>
 
-<section id="contents" class="view">
- <div class="tabs"><button class="active">VIDEO</button><button>PHOTO</button><button>BEHIND</button></div>
- <div class="section" id="contentsList"></div>
+<section class="view" id="page-shop">
+<section class="hero"><div class="hero-card"><h1>OUR ETERNAL<br>STAR ATINY</h1><p>Official Membership & Goods</p><button class="hero-btn">상품 둘러보기</button></div></section>
+<section class="section"><div class="section-title">SHOP</div><div class="grid">
+<div class="card"><div class="thumb">💎</div><div class="info"><div class="title">ATINY 7th MEMBERSHIP KIT</div><div class="meta">15,000원 · 멤버십 전용</div></div></div>
+<div class="card"><div class="thumb">📹</div><div class="info"><div class="title">ATINY 7TH KIT VOD ONLY</div><div class="meta">7,000원</div></div></div>
+<div class="card"><div class="thumb">💿</div><div class="info"><div class="title">GOLDEN HOUR Pt.4 Album</div><div class="meta">18,000원</div></div></div>
+<div class="card"><div class="thumb">🧸</div><div class="info"><div class="title">ANITEEZ Figure Set</div><div class="meta">35,000원</div></div></div>
+</div></section>
 </section>
 
-<section id="community" class="view">
- <div class="tabs"><button class="active">NOTICE</button><button>FREE TALK<span style="color:var(--red)">•</span></button><button>EVENT</button><button>🛍</button></div>
- <div class="notice-fixed"><div class="fixed-head">✦ 고정된 포스트</div><div class="fixed-list" id="fixedNotice"></div></div>
- <div class="post-list" id="communityList"></div>
+<section class="view" id="page-notice">
+<section class="section pad-top"><div class="section-title">NOTICE</div>
+<div class="notice-card"><div class="notice-title">ATEEZ(에이티즈) 편지 전달 주소 안내 <span style="color:#e63946">[48]</span></div><div class="notice-meta">KQ엔터테인먼트 · 3년 전</div></div>
+<div class="notice-card"><div class="notice-title">ATEEZ(에이티즈) 오피셜 플랫폼 오픈 안내 <span style="color:#e63946">[173]</span></div><div class="notice-meta">KQ엔터테인먼트 · 3년 전</div></div>
+<div class="notice-card"><div class="notice-title">멤버십 키트 배송 및 이용 안내 <span style="color:#e63946">[64]</span></div><div class="notice-meta">KQ엔터테인먼트 · 방금</div></div>
+<div class="notice-card"><div class="notice-title">개인정보 처리방침 변경 안내 <span style="color:#e63946">[12]</span></div><div class="notice-meta">KQ엔터테인먼트 · 방금</div></div>
+</section>
 </section>
 
-<section id="shop" class="view">
- <div class="hero-img"><h1>OUR ETERNAL<br>STAR ATINY</h1></div><div class="dots"><span></span><span></span></div>
- <div class="tabs"><button class="active">ALL</button><button>MEMBERSHIP</button><button>ALBUM</button><button>PROI</button><button>•••</button></div>
- <div class="section"><div class="grid" id="shopList"></div></div>
-</section>
-
-<section id="notice" class="view">
- <div class="tabs"><button class="active">NOTICE</button><button>UPDATE</button><button>FAQ</button></div>
- <div class="notice-fixed"><div class="fixed-head">📌 공지</div><div class="fixed-list" id="noticeList"></div></div>
-</section>
-
-<section id="my" class="view">
- <div class="my-box"><div class="my-title">MY</div><p style="color:#888;margin-top:6px">ATINY Membership Active</p></div>
- <div class="my-box"><div class="row">내 멤버십 <span>›</span></div><div class="row">주문 내역 <span>›</span></div><div class="row">내가 쓴 글 <span>›</span></div><div class="row">내 정보 관리 <span>›</span></div><div class="row" style="color:#ff4545">로그아웃 <span>›</span></div></div>
+<section class="view" id="page-my">
+<section class="hero"><div class="hero-card"><h1>MY<br>PAGE</h1><p>ATINY Membership Active</p><button class="hero-btn">프로필 관리</button></div></section>
+<div class="my-menu">
+<div class="my-row">내 멤버십 <span>›</span></div>
+<div class="my-row">주문 내역 <span>›</span></div>
+<div class="my-row">내가 쓴 글 <span>›</span></div>
+<div class="my-row">내 정보 관리 <span>›</span></div>
+<div class="my-row" style="color:#e63946">로그아웃 <span>›</span></div>
+</div>
 </section>
 </main>
 
-<button class="upload" onclick="uploadImage()">＋</button>
-<nav class="bottom">
- <button class="nav active" data-page="home" onclick="go('home')"><span class="ico">⌂</span>Home</button>
- <button class="nav" data-page="talk" onclick="go('talk')"><span class="ico">▤</span>ATEEZ TALK</button>
- <button class="nav" data-page="pop" onclick="go('pop')"><span class="ico">POP</span>POP</button>
- <button class="nav" data-page="contents" onclick="go('contents')"><span class="ico">▶</span>Contents</button>
- <button class="nav" data-page="community" onclick="go('community')"><span class="ico">♟</span>Community</button>
- <button class="nav" data-page="notice" onclick="go('notice')"><span class="ico">!</span>Notice</button>
- <button class="nav" data-page="shop" onclick="go('shop')"><span class="ico">▾</span>Shop</button>
+<button class="upload-btn" onclick="uploadImage()">＋</button>
+<nav class="bottom-nav">
+<button class="nav-item active" data-page="home" onclick="switchPage('home')">🏠<span>HOME</span></button>
+<button class="nav-item" data-page="talk" onclick="switchPage('talk')">💬<span>TALK</span></button>
+<button class="nav-item" data-page="contents" onclick="switchPage('contents')">▶️<span>CONTENTS</span></button>
+<button class="nav-item" data-page="shop" onclick="switchPage('shop')">🛍️<span>SHOP</span></button>
+<button class="nav-item" data-page="notice" onclick="switchPage('notice')">🔔<span>NOTICE</span></button>
+<button class="nav-item" data-page="my" onclick="switchPage('my')">👤<span>MY</span></button>
 </nav>
 </div>
-
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-const firebaseConfig={apiKey:'AIzaSyAA6mbdYfLrrgCJjN47PX91_mU7I53RiBs',authDomain:'site-c67b4.firebaseapp.com',projectId:'site-c67b4',storageBucket:'site-c67b4.firebasestorage.app',messagingSenderId:'744761377245',appId:'1:744761377245:web:3ddaee14f184716eeef634'};
-const CLOUDINARY_CLOUD='dbljkloal';
-const CLOUDINARY_PRESET='clowofficial';
-const app=initializeApp(firebaseConfig);const db=getFirestore(app);
-const products=[['💎','ATINY 7th MEMBERSHIP KIT','15,000원','멤버십 전용'],['▶','ATINY 7TH KIT VOD ONLY','7,000원',''],['💿','GOLDEN HOUR Pt.4 Album','18,000원',''],['⭐','ANITEEZ ADVENTURE MD','35,000원','']];
-const notices=['ATEEZ(에이티즈) 편지 전달 주소 안내','ATEEZ(에이티즈) 오피셜 플랫폼 오픈 안내','ATEEZ(에이티즈) 오피셜 플랫폼 통합 규정 안내'];
-const posts=['2024 ATEEZ WORLD TOUR [WILL TO POWER]','ATEEZ(에이티즈) THE WORLD EP.FIN 안내','82Valley ATINY ZONE 안내','ATEEZ X ANITEEZ ADVENTURE POP-UP'];
-function productHTML(p){return `<div class="product"><div class="thumb">${p[0]}</div>${p[3]?`<div class="badge">${p[3]}</div>`:''}<div class="p-name">${p[1]}</div><div class="price">${p[2]}</div></div>`}
-document.getElementById('homeProducts').innerHTML=products.slice(0,4).map(productHTML).join('');document.getElementById('shopList').innerHTML=products.map(productHTML).join('');
-document.getElementById('fixedNotice').innerHTML=notices.map((n,i)=>`<div class="fixed-item"><span>${n} <b class="count">[${[48,173,26][i]}]</b></span><span class="time">3년 전</span></div>`).join('');
-document.getElementById('noticeList').innerHTML=notices.concat(['멤버십 키트 배송 안내','개인정보 처리방침 변경 안내']).map((n,i)=>`<div class="fixed-item"><span>${n} <b class="count">[${[48,173,26,64,12][i]}]</b></span><span class="time">${i<3?'3년 전':'방금'}</span></div>`).join('');
-document.getElementById('communityList').innerHTML=posts.map((p,i)=>`<div class="post"><div><div class="post-title">${p} <b class="count">[${[1320,14,53,64][i]}]</b></div><div class="post-meta">KQ엔터테인먼트 · 매니저 · 2년 전 · 반응 ${[1062,212,239,98][i]}</div><div class="post-comment">${['tiktok.com/@enh.yp Anthony cambodiaHi','izuki I got it from one store in Myeongdong','woosan_ing Crying in Indonesia','ATINY 기다렸어요'][i]}</div></div><div class="post-thumb">${['◐','▣','📄','🧩'][i]}</div></div>`).join('');
-document.getElementById('talkList').innerHTML=['홍중','성화','윤호','여상','산','민기','우영','종호'].map((n,i)=>`<div class="talk-card"><div class="avatar">${['🎤','🌸','🌙','🔥','💎','🐥','⭐','🎸'][i]}</div><div class="talk-body"><div class="talk-name">${n} ✔</div><div class="talk-text">오늘도 와줘서 고마워요. 밥 잘 챙겨먹고 좋은 하루 보내기!</div></div></div>`).join('');
-document.getElementById('chatList').innerHTML=['윤호','홍중','여상','종호','성화','산'].map((n,i)=>`<div class="chat"><div class="avatar">${['🌙','🎤','🔥','🎸','🌸','💎'][i]}</div><div class="chat-info"><div class="chat-name">${n}</div><div class="chat-msg">라이브 종료됨 · ${i? '2년 전':'4달 전'}</div></div><span class="dot"></span></div>`).join('');
-document.getElementById('contentsList').innerHTML=['Golden Hour Behind','Dinero Production Behind','ATINY ZONE Special','Route Zero Making'].map((t,i)=>`<div class="content-card"><div class="content-title">${['🎬','🎵','🌟','▶'][i]} ${t}</div><div class="content-meta">YouTube · ${['08:21','04:00','10:00','06:35'][i]}</div></div>`).join('');
-window.go=function(page){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(page).classList.add('active');document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.page===page));window.scrollTo(0,0)};
-window.uploadImage=async function(){const input=document.createElement('input');input.type='file';input.accept='image/*';input.onchange=async()=>{const file=input.files[0];if(!file)return;const formData=new FormData();formData.append('file',file);formData.append('upload_preset',CLOUDINARY_PRESET);try{const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:formData});const data=await res.json();alert('업로드 완료');console.log(data.secure_url)}catch(e){alert('업로드 실패');console.error(e)}};input.click()};
-console.log('Firebase + Cloudinary connected',db);
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyAA6mbdYfLrrgCJjN47PX91_mU7I53RiBs',
+  authDomain: 'site-c67b4.firebaseapp.com',
+  projectId: 'site-c67b4',
+  storageBucket: 'site-c67b4.firebasestorage.app',
+  messagingSenderId: '744761377245',
+  appId: '1:744761377245:web:3ddaee14f184716eeef634'
+};
+
+const CLOUDINARY_CLOUD = 'dbljkloal';
+const CLOUDINARY_PRESET = 'clowofficial';
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.switchPage = function(page){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(btn => btn.classList.toggle('active', btn.dataset.page === page));
+  window.scrollTo({top:0, behavior:'instant'});
+};
+
+window.uploadImage = async function(){
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+
+  input.onchange = async () => {
+    const file = input.files[0];
+    if(!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_PRESET);
+
+    try{
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
+        method:'POST',
+        body:formData
+      });
+
+      const data = await res.json();
+      alert('업로드 완료!');
+      console.log(data.secure_url);
+    }catch(e){
+      console.error(e);
+      alert('업로드 실패');
+    }
+  }
+
+  input.click();
+}
+
+console.log('Firebase + Cloudinary Connected', db);
 </script>
 </body>
 </html>
