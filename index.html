@@ -477,20 +477,27 @@ html.force-light #modal .light{background:#f0f0f2!important;color:#111!important
 
 
 /* ARTIST SELECT + VIEW PERSIST */
-.artist-select{padding:28px 20px 120px;min-height:calc(100vh - 60px);background:inherit;color:inherit}
+.artist-select{padding:38px 20px 48px;min-height:100vh;background:inherit;color:inherit}
 .artist-select h1{font-size:2.15rem;font-weight:900;letter-spacing:-.06em;margin:20px 0 8px}
 .artist-select .artist-sub{font-size:1rem;color:var(--sub);line-height:1.5;margin-bottom:28px}
-.artist-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 14px;align-items:start}
-.artist-card{width:100%;border:0;background:transparent;color:inherit;border-radius:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;box-shadow:none;cursor:pointer;touch-action:manipulation;pointer-events:auto}
-.artist-avatar{width:82px;height:82px;border-radius:50%;background:#eee;display:grid;place-items:center;font-size:2rem;overflow:hidden;flex-shrink:0;border:1px solid var(--line)}
+.artist-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 18px;align-items:start}
+.artist-card{width:100%;border:0;background:transparent;color:inherit;border-radius:24px;padding:8px 6px 12px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;box-shadow:none;cursor:pointer;touch-action:manipulation;pointer-events:auto;user-select:none}
+.artist-avatar{width:128px;height:128px;border-radius:50%;background:#eee;display:grid;place-items:center;font-size:2.65rem;overflow:hidden;flex-shrink:0;border:1px solid var(--line)}
 .artist-avatar img{width:100%;height:100%;object-fit:cover}
-.artist-name{font-size:1rem;font-weight:900;letter-spacing:-.04em;line-height:1.2;word-break:keep-all}
+.artist-name{font-size:1.18rem;font-weight:900;letter-spacing:-.04em;line-height:1.2;word-break:keep-all}
 .artist-meta{display:none}
-.artist-add{height:54px;border-radius:18px;border:1px dashed var(--line);background:transparent;color:inherit;font-weight:900;font-size:1rem;margin-top:26px;width:100%}
-.app.artist-landing header .header-actions,.app.artist-landing .bottom-nav{display:none!important}
-.app.artist-landing{padding-bottom:0}
+.artist-add{height:58px;border-radius:18px;border:1px dashed var(--line);background:transparent;color:inherit;font-weight:900;font-size:1rem;margin-top:30px;width:100%}
+.artist-actions{display:flex;gap:8px;justify-content:center;width:100%;margin-top:-2px}
+.artist-actions button{height:32px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:inherit;font-size:.78rem;font-weight:900;padding:0 12px}
+.artist-actions button.danger{color:var(--danger)}
+.app.artist-landing header,.app.artist-landing .bottom-nav{display:none!important}
+.app.artist-landing{padding-bottom:0;min-height:100vh}
+.app.artist-landing main{min-height:100vh}
+.app.artist-landing .view#artistSelect{min-height:100vh}
 html.force-light .artist-card,html.force-light .artist-add{background:#fff;color:#111;border-color:#e5e5e5}
-html.force-dark .artist-card{background:#151519;color:#f5f5f5;border-color:#2b2b2f}
+html.force-dark .artist-card{background:transparent;color:#f5f5f5;border-color:#2b2b2f}
+@media(max-width:380px){.artist-avatar{width:112px;height:112px}.artist-grid{gap:24px 12px}.artist-name{font-size:1.08rem}}
+
 
 
 
@@ -874,31 +881,32 @@ function bindArtistGridTap(){
   const grid=document.getElementById('artistGrid');
   if(!grid || grid.dataset.bound==='1')return;
   grid.dataset.bound='1';
-  grid.addEventListener('click',e=>{
-    const card=e.target.closest('.artist-card');
+  const handler=e=>{
+    if(e.target.closest('.artist-actions'))return;
+    const card=e.target.closest('.artist-card,.artist-hit');
     if(!card)return;
-    e.preventDefault();
-    const id=card.dataset.artistId;
-    if(id) window.selectArtist(id);
-  });
-  grid.addEventListener('touchend',e=>{
-    const card=e.target.closest('.artist-card');
-    if(!card)return;
-    e.preventDefault();
-    const id=card.dataset.artistId;
-    if(id) window.selectArtist(id);
-  },{passive:false});
+    const id=card.dataset.artistId || card.closest('.artist-card')?.dataset.artistId;
+    if(id){ e.preventDefault(); window.selectArtist(id); }
+  };
+  grid.addEventListener('pointerup',handler);
+  grid.addEventListener('click',handler);
 }
 
 function renderArtistSelect(){
   const box=document.getElementById('artistGrid'); if(!box)return; bindArtistGridTap();
-  box.innerHTML=artists.map(a=>`<button type="button" class="artist-card" data-artist-id="${a.id}" onclick="window.selectArtist('${a.id}')"><div class="artist-avatar">${media(a.photo||'🎤')}</div><div class="artist-name">${esc(a.name)}</div></button>`).join('')||'<div class="meta">아티스트가 없습니다.</div>';
-  box.querySelectorAll('.artist-card').forEach(btn=>{
-    btn.addEventListener('pointerup',e=>{
+  box.innerHTML=artists.map(a=>`<div class="artist-card" data-artist-id="${a.id}" role="button" tabindex="0" aria-label="${esc(a.name)} 플랫폼 입장"><div class="artist-hit" data-artist-id="${a.id}"><div class="artist-avatar">${media(a.photo||'🎤')}</div><div class="artist-name">${esc(a.name)}</div></div><div class="artist-actions"><button type="button" onclick="event.stopPropagation();editArtist('${a.id}')">수정</button><button type="button" class="danger" onclick="event.stopPropagation();deleteArtist('${a.id}')">삭제</button></div></div>`).join('')||'<div class="meta">아티스트가 없습니다.</div>';
+  box.querySelectorAll('.artist-card,.artist-hit').forEach(el=>{
+    el.addEventListener('click',e=>{
+      if(e.target.closest('.artist-actions'))return;
       e.preventDefault();
-      const id=btn.dataset.artistId;
+      const id=el.dataset.artistId || el.closest('.artist-card')?.dataset.artistId;
       if(id) window.selectArtist(id);
-    },{once:false});
+    });
+    el.addEventListener('touchstart',e=>{
+      if(e.target.closest('.artist-actions'))return;
+      const id=el.dataset.artistId || el.closest('.artist-card')?.dataset.artistId;
+      if(id) window.selectArtist(id);
+    },{passive:true});
   });
 }
 window.selectArtist=(id)=>{
@@ -907,8 +915,9 @@ window.selectArtist=(id)=>{
   localStorage.setItem('currentArtist',id);
   loadArtistData();
   render();
-  const last=localStorage.getItem(artistKey('lastView'))||'home';
-  go(document.getElementById(last)?last:'home');
+  let last=localStorage.getItem(artistKey('lastView'))||'home';
+  if(!last || last==='artistSelect' || !document.getElementById(last)) last='home';
+  go(last);
 }
 window.addArtist=()=>{
   const name=prompt('추가할 아티스트 이름을 입력해 주세요.'); if(!name)return;
@@ -917,6 +926,23 @@ window.addArtist=()=>{
   artists.push({id,name,photo});
   localStorage.setItem('artists',JSON.stringify(artists));
   renderArtistSelect();
+}
+window.editArtist=(id)=>{
+  const a=artists.find(x=>x.id===id); if(!a)return;
+  const name=prompt('아티스트 이름을 수정해 주세요.',a.name); if(name===null)return;
+  const photo=prompt('대표 이미지 URL 또는 이모지를 수정해 주세요.',a.photo||''); if(photo===null)return;
+  a.name=(name.trim()||a.name); a.photo=(photo.trim()||a.photo||'🎤');
+  localStorage.setItem('artists',JSON.stringify(artists));
+  renderArtistSelect();
+}
+window.deleteArtist=(id)=>{
+  const a=artists.find(x=>x.id===id); if(!a)return;
+  if(!confirm(`${a.name} 아티스트를 삭제할까요?`))return;
+  artists=artists.filter(x=>x.id!==id);
+  if(currentArtist===id){currentArtist='';localStorage.removeItem('currentArtist');}
+  localStorage.setItem('artists',JSON.stringify(artists));
+  renderArtistSelect();
+  showArtistLanding();
 }
 function showArtistLanding(){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
