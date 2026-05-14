@@ -274,79 +274,66 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 @media(min-width:900px){body{background:#efefef}.app{max-width:500px;margin:0 auto;background:#fff;min-height:100vh}.bottom-nav,.fixed-bar{left:50%;transform:translateX(-50%);max-width:500px}.shop-bottom{left:50%;transform:translateX(-50%);max-width:500px}.modal{left:50%;transform:translateX(-50%);max-width:500px}.fab{right:calc(50% - 230px)}}
 @media(min-width:900px) and (prefers-color-scheme: dark){body{background:#151515}.app{background:#0b0b0d}}
 
-/* FORCE SCHEDULE DARK MODE FIX - keeps calendar readable when phone/system is dark */
+
+/* SCHEDULE COMPACT + DARK FIX */
+.schedule-wrap{padding:16px 14px 118px !important;}
+.schedule-head{margin-bottom:14px !important;align-items:center !important;}
+.schedule-month{font-size:1.42rem !important;letter-spacing:-.05em !important;}
+.schedule-actions{gap:8px !important;}
+.schedule-actions button{height:36px !important;border:1px solid var(--line) !important;border-radius:999px !important;background:#fff !important;padding:0 12px !important;font-size:.9rem !important;font-weight:900 !important;color:inherit !important;}
+.schedule-week{padding-bottom:8px !important;font-size:.78rem !important;}
+.schedule-grid{gap:4px 2px !important;margin-top:8px !important;}
+.schedule-day{height:58px !important;border-radius:10px !important;padding:5px 1px !important;}
+.schedule-num{font-size:.76rem !important;}
+.schedule-event{margin-top:5px !important;font-size:.5rem !important;padding:2px 3px !important;border-radius:6px !important;}
+.schedule-selected{margin-top:12px !important;padding-top:12px !important;}
+.schedule-selected-title{font-size:1.06rem !important;}
+.schedule-card{padding:13px !important;border-radius:14px !important;margin-bottom:10px !important;}
+.schedule-card-title{font-size:.98rem !important;}
+.schedule-card-meta{font-size:.84rem !important;margin-top:8px !important;}
+.month-panel{padding:16px 14px 18px !important;border-radius:20px 20px 0 0 !important;max-height:70vh !important;overflow:auto !important;}
+.month-panel-top{margin-bottom:14px !important;}
+.month-panel-top button{font-size:1.35rem !important;}
+.month-year{font-size:1.35rem !important;}
+.month-grid{gap:8px !important;}
+.month-option{height:48px !important;border-radius:12px !important;font-size:1rem !important;}
+.schedule-filters{height:58px !important;padding:8px 14px !important;}
+.schedule-filters button{height:36px !important;font-size:.82rem !important;padding:0 13px !important;}
 @media (prefers-color-scheme: dark){
-  #schedule,
-  #schedule .schedule-wrap,
-  #schedule .schedule-filters,
-  #schedule .schedule-week,
-  #schedule .schedule-grid,
-  #schedule .schedule-selected,
-  #schedule .schedule-list-view{
-    background:#0b0b0d !important;
-    color:#f5f5f5 !important;
-  }
-  #schedule .schedule-month,
-  #schedule .schedule-actions button,
-  #schedule .schedule-nav button,
-  #schedule .schedule-filters button{
-    color:#f5f5f5 !important;
-    background:#0b0b0d !important;
-    border-color:#2b2b2f !important;
-  }
-  #schedule .schedule-week,
-  #schedule .schedule-selected,
-  #schedule .schedule-filters,
-  #schedule .schedule-nav{
-    border-color:#2b2b2f !important;
-  }
-  #schedule .schedule-week div,
-  #schedule .schedule-selected-date,
-  #schedule .schedule-list-full,
-  #schedule .meta{
-    color:#a7a7ad !important;
-  }
-  #schedule .schedule-day{
-    background:transparent !important;
-    color:#f5f5f5 !important;
-  }
-  #schedule .schedule-day.today{
-    background:#242428 !important;
-    color:#fff !important;
-  }
-  #schedule .schedule-day.selected{
-    border-color:#fff !important;
-    background:#16161a !important;
-  }
-  #schedule .schedule-num{color:#f5f5f5 !important;}
-  #schedule .schedule-num.has-event::before{color:#ff5b65 !important;}
-  #schedule .schedule-event{
-    background:#34304c !important;
-    color:#f5f5f5 !important;
-  }
-  #schedule .schedule-card{
-    background:#151519 !important;
-    color:#f5f5f5 !important;
-    border-color:#2b2b2f !important;
-  }
-  #schedule .schedule-card-meta{color:#d7d7dc !important;}
-  #schedule .schedule-dot{background:#8fa2cc !important;}
-  .month-modal{background:rgba(0,0,0,.65) !important;}
-  .month-panel{
-    background:#111114 !important;
-    color:#f5f5f5 !important;
-  }
-  .month-panel-top button,
-  .month-year{color:#f5f5f5 !important;}
-  .month-option{
-    background:#17171b !important;
-    color:#f5f5f5 !important;
-    border-color:#303036 !important;
-  }
-  .month-option.active{
-    border-color:#fff !important;
-    background:#242428 !important;
-  }
+  #schedule,#schedule .schedule-wrap,#schedule .schedule-filters,#schedule .schedule-week,#schedule .schedule-grid,#schedule .schedule-selected,#schedule .schedule-list-view{background:#0b0b0d !important;color:#f5f5f5 !important;}
+  #schedule .schedule-month,#schedule .schedule-actions button,#schedule .schedule-nav button,#schedule .schedule-filters button{color:#f5f5f5 !important;background:#111114 !important;border-color:#2b2b2f !important;}
+  #schedule .schedule-week,#schedule .schedule-selected,#schedule .schedule-filters,#schedule .schedule-nav{border-color:#2b2b2f !important;}
+  #schedule .schedule-week div,#schedule .schedule-selected-date,#schedule .schedule-list-full,#schedule .meta{color:#a7a7ad !important;}
+  #schedule .schedule-day{background:transparent !important;color:#f5f5f5 !important;}
+  #schedule .schedule-day.today{background:#242428 !important;color:#fff !important;}
+  #schedule .schedule-day.selected{border-color:#fff !important;}
+  #schedule .schedule-card{background:#151519 !important;border-color:#2b2b2f !important;color:#f5f5f5 !important;}
+  #schedule .schedule-card-meta{color:#d0d0d5 !important;}
+  #schedule .month-panel{background:#0b0b0d !important;color:#f5f5f5 !important;border:1px solid #2b2b2f !important;border-bottom:0 !important;}
+  #schedule .month-option{background:#151519 !important;color:#f5f5f5 !important;border-color:#2b2b2f !important;}
+  #schedule .month-option.active{border-color:#8d5cff !important;box-shadow:0 0 0 1px #4f7cff inset !important;}
+}
+
+/* NOTICE DETAIL FIX */
+.notice-detail-title{font-size:1.55rem !important;line-height:1.32 !important;letter-spacing:-.05em !important;margin:18px 0 10px !important;}
+.notice-detail-body{font-size:.98rem !important;line-height:1.75 !important;margin-top:28px !important;color:inherit !important;}
+@media(max-width:420px){.notice-detail-title{font-size:1.42rem !important}.notice-detail-body{font-size:.94rem !important}}
+
+/* SCHEDULE STRONG MOBILE FIX */
+#schedule .schedule-wrap{padding:14px 12px 106px !important;}
+#schedule .schedule-month{font-size:1.25rem !important;}
+#schedule .schedule-actions button{height:34px !important;padding:0 10px !important;font-size:.78rem !important;border-radius:999px !important;}
+#schedule .schedule-week{font-size:.7rem !important;padding-bottom:7px !important;}
+#schedule .schedule-grid{gap:3px 2px !important;margin-top:7px !important;}
+#schedule .schedule-day{height:52px !important;border-radius:9px !important;padding:4px 1px !important;}
+#schedule .schedule-num{font-size:.7rem !important;}
+#schedule .schedule-event{font-size:.45rem !important;margin-top:3px !important;padding:1px 2px !important;}
+.month-panel{padding:14px 12px 16px !important;}
+.month-option{height:44px !important;font-size:.94rem !important;}
+@media (prefers-color-scheme: dark){
+  .month-modal,.month-panel{background:#0b0b0d !important;color:#f5f5f5 !important;}
+  .month-option{background:#151519 !important;color:#f5f5f5 !important;border-color:#2b2b2f !important;}
+  .month-option.active{border-color:#8d5cff !important;box-shadow:0 0 0 1px #4f7cff inset !important;}
 }
 
 </style>
@@ -396,6 +383,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
     <div class="schedule-head">
       <button class="schedule-month" id="scheduleMonthBtn" onclick="openMonthPicker()">5월, 2026⌄</button>
       <div class="schedule-actions">
+        <button onclick="openAddSchedule()">＋ 스케줄</button>
         <button id="scheduleToggleBtn" onclick="toggleScheduleMode()">📅</button>
       </div>
     </div>
@@ -408,7 +396,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 
 <section class="view" id="shop"><div class="section-title" style="padding:18px 20px 0"><span>SHOP</span><button class="primary" onclick="openAddProduct()">+ 상품 추가</button></div><div class="hero"><div class="hero-card"><h1>OUR ETERNAL<br>STAR ATINY</h1><p>Official Membership & Goods</p></div></div><div class="shop-tabs" id="shopTabs"></div><div class="section"><div class="grid" id="shopGrid"></div></div></section>
 <section class="view" id="shopDetail"><div id="shopDetailBox"></div></section>
-<section class="view" id="cart"><div class="section"><div class="section-title">장바구니</div><div class="meta" id="cartPointInfo" style="margin-bottom:14px">보유 포인트 0P</div><div id="cartList"></div></div></section>
+<section class="view" id="cart"><div class="section"><div class="section-title">장바구니</div><div class="meta" style="margin-bottom:14px">보유 포인트 ${points.toLocaleString('ko-KR')}P</div><div id="cartList"></div></div></section>
 <section class="view" id="alerts"><div class="section"><div class="section-title">알림 <button class="btn danger" onclick="clearAlerts()">초기화</button></div><div id="alertList"></div></div></section>
 
 <section class="view" id="my">
@@ -468,7 +456,7 @@ let boards=LS('boards',[{id:150,cat:'event',title:'다정 토끼 성화의 날 �
 
 let currentMember=null,shopCat='ALL',modalMode='',editId=null,tempImg='',tempProfile='',selectedProductCat='PRODUCTS',selectedPostMember='',blogBlocks=[];
 
-function save(){localStorage.setItem('members',JSON.stringify(members));localStorage.setItem('profile',JSON.stringify(profile));localStorage.setItem('membership',JSON.stringify(membership));localStorage.setItem('orders',JSON.stringify(orders));localStorage.setItem('cart',JSON.stringify(cart));localStorage.setItem('alerts',JSON.stringify(alerts));localStorage.setItem('comments',JSON.stringify(comments));localStorage.setItem('products',JSON.stringify(products));localStorage.setItem('posts',JSON.stringify(posts));localStorage.setItem('notices',JSON.stringify(notices));localStorage.setItem('boards',JSON.stringify(boards));localStorage.setItem('points',String(points))}
+function save(){localStorage.setItem('members',JSON.stringify(members));localStorage.setItem('profile',JSON.stringify(profile));localStorage.setItem('membership',JSON.stringify(membership));localStorage.setItem('orders',JSON.stringify(orders));localStorage.setItem('cart',JSON.stringify(cart));localStorage.setItem('alerts',JSON.stringify(alerts));localStorage.setItem('comments',JSON.stringify(comments));localStorage.setItem('products',JSON.stringify(products));localStorage.setItem('posts',JSON.stringify(posts));localStorage.setItem('notices',JSON.stringify(notices));localStorage.setItem('boards',JSON.stringify(boards));localStorage.setItem('points',String(points));localStorage.setItem('schedules',JSON.stringify(scheduleData))}
 const newest=a=>[...a].sort((x,y)=>(y.id||0)-(x.id||0));
 const media=v=>v&&String(v).startsWith('http')?`<img src="${v}">`:(v||'');
 const uid=()=>Date.now()+Math.floor(Math.random()*999);
@@ -493,8 +481,8 @@ function payPhysicalProduct(item,qty=1){
   alert(`결제가 완료되었습니다.\n사용 포인트: ${use.toLocaleString('ko-KR')}P\n적립 포인트: ${earn.toLocaleString('ko-KR')}P`);
 }
 const scheduleNow=new Date();
-let scheduleYear=scheduleNow.getFullYear(),scheduleMonth=scheduleNow.getMonth()+1,scheduleMode='calendar',selectedScheduleDate='';
-const scheduleData=[{date:'2026-05-07',title:'전주국제영화제 <할루시네이션> GV',member:'홍중',time:'종일',cat:'FAN'},{date:'2026-05-17',title:'ASEA 2026',member:'',time:'종일',cat:'TV'}];
+let scheduleYear=new Date().getFullYear(),scheduleMonth=new Date().getMonth()+1,scheduleMode='calendar',selectedScheduleDate='';
+let scheduleData=LS('schedules',[{date:'2026-05-07',title:'전주국제영화제 <할루시네이션> GV',member:'홍중',time:'종일',cat:'FAN'},{date:'2026-05-17',title:'ASEA 2026',member:'',time:'종일',cat:'TV'}]);
 const weekNames=['일','월','화','수','목','금','토'];
 const pad2=n=>String(n).padStart(2,'0');
 const dateKey=(y,m,d)=>`${y}-${pad2(m)}-${pad2(d)}`;
@@ -521,7 +509,21 @@ function renderSchedule(){
 window.selectScheduleDate=(date)=>{selectedScheduleDate=selectedScheduleDate===date?'':date;renderSchedule()}
 window.toggleScheduleMode=()=>{scheduleMode=scheduleMode==='calendar'?'list':'calendar';renderSchedule()}
 window.moveScheduleMonth=(n)=>{scheduleMonth+=n;if(scheduleMonth<1){scheduleMonth=12;scheduleYear--}if(scheduleMonth>12){scheduleMonth=1;scheduleYear++}selectedScheduleDate='';renderSchedule()}
-window.openMonthPicker=()=>{const modal=document.getElementById('monthModal'),panel=document.getElementById('monthPanel');panel.innerHTML=`<div class="month-panel-top"><button onclick="scheduleYear--;openMonthPicker()">‹</button><div class="month-year">${scheduleYear}</div><button onclick="scheduleYear++;openMonthPicker()">›</button><button onclick="document.getElementById('monthModal').classList.remove('open')">×</button></div><div class="month-grid">${Array.from({length:12},(_,i)=>`<button class="month-option ${scheduleMonth===i+1?'active':''}" onclick="scheduleMonth=${i+1};selectedScheduleDate='';document.getElementById('monthModal').classList.remove('open');renderSchedule()">${i+1}월</button>`).join('')}</div>`;modal.classList.add('open')}
+window.changeScheduleYear=(n)=>{scheduleYear+=n;openMonthPicker()}
+window.selectScheduleMonth=(m)=>{scheduleMonth=m;selectedScheduleDate='';document.getElementById('monthModal').classList.remove('open');renderSchedule()}
+window.openMonthPicker=()=>{const modal=document.getElementById('monthModal'),panel=document.getElementById('monthPanel');panel.innerHTML=`<div class="month-panel-top"><button onclick="changeScheduleYear(-1)">‹</button><div class="month-year">${scheduleYear}</div><button onclick="changeScheduleYear(1)">›</button><button onclick="document.getElementById('monthModal').classList.remove('open')">×</button></div><div class="month-grid">${Array.from({length:12},(_,i)=>`<button class="month-option ${scheduleMonth===i+1?'active':''}" onclick="selectScheduleMonth(${i+1})">${i+1}월</button>`).join('')}</div>`;modal.classList.add('open')}
+window.openAddSchedule=()=>{
+  const base=selectedScheduleDate||dateKey(scheduleYear,scheduleMonth,1);
+  const date=prompt('스케줄 날짜를 입력해줘. 예: 2026-05-17',base); if(!date)return;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)){alert('날짜 형식은 2026-05-17 처럼 입력해줘.');return;}
+  const title=prompt('스케줄 제목을 입력해줘.'); if(!title)return;
+  const member=prompt('멤버/대상 입력. 없으면 비워둬.','')||'';
+  const time=prompt('시간 입력. 예: 종일 / 18:00','종일')||'종일';
+  const cat=prompt('카테고리 입력. TV / YouTube / RADIO / FAN','TV')||'TV';
+  scheduleData.push({date,title,member,time,cat});
+  const d=new Date(date+'T00:00:00'); scheduleYear=d.getFullYear(); scheduleMonth=d.getMonth()+1; selectedScheduleDate=date;
+  save(); renderSchedule();
+}
 document.addEventListener('click',e=>{if(e.target.id==='monthModal')e.target.classList.remove('open')});
 
 
@@ -618,14 +620,14 @@ window.openPost=id=>{let p=posts.find(x=>x.id===id);if(!p)return;if(p.type==='ta
 
 
 window.openProduct=id=>{let p=products.find(x=>x.id===id);document.getElementById('shopDetailBox').innerHTML=`<div><button class="back" style="margin:16px" onclick="go('shop')">‹ SHOP</button><div class="shop-hero">${media(p.thumb)}</div><div class="shop-info"><div class="shop-title">${p.name}</div><div class="shop-price">${p.price}</div>${p.membership?'':`<div class="meta" style="margin-top:8px">결제 시 1% 포인트 적립 · 보유 ${points.toLocaleString('ko-KR')}P</div>`}<div class="shop-desc"><h2>상품 설명</h2><div class="detail-body">${p.body}</div></div><div class="actions"><button class="btn light" onclick="editProduct(${p.id})">수정</button><button class="btn danger" onclick="deleteProduct(${p.id})">삭제</button></div></div><div class="shop-bottom">${p.membership?'':`<button class="cart-btn" onclick="addCart(${p.id})">장바구니</button>`}<button class="buy-btn" onclick="buyProduct(${p.id})">구매하기</button></div></div>`;go('shopDetail')}
-window.openNotice=id=>{let n=notices.find(x=>x.id===id);document.getElementById('noticeDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('community')">‹ COMMUNITY</button><div class="detail-title">${n.title}</div><div class="meta">${n.meta}</div><div class="detail-body" style="font-size:1.35rem;margin-top:30px">${n.body}</div><div class="actions"><button class="btn light" onclick="editNotice(${n.id})">수정</button><button class="btn danger" onclick="deleteNotice(${n.id})">삭제</button></div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 14</span></div>`;go('noticeDetail')}
+window.openNotice=id=>{let n=notices.find(x=>x.id===id);document.getElementById('noticeDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('community')">‹ COMMUNITY</button><div class="detail-title notice-detail-title">${n.title}</div><div class="meta">${n.meta||'KQ엔터테인먼트 · 방금'}</div><div class="detail-body notice-detail-body">${esc(n.body||'')}</div><div class="actions"><button class="btn light" onclick="editNotice(${n.id})">수정</button><button class="btn danger" onclick="deleteNotice(${n.id})">삭제</button></div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 14</span></div>`;go('noticeDetail')}
 window.openContentAll=(cat,title)=>{let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===cat);document.getElementById('contentAllBox').innerHTML=`<div class="section"><button class="back" onclick="go('contents')">‹ CONTENTS</button><h1>${title}</h1><button class="primary" style="margin-top:14px" onclick="openAddContentFor('${cat}')">+ 콘텐츠 추가</button></div><div class="all-grid">${list.map(p=>`<div onclick="openPost(${p.id})">${p.thumb?`<div class="wide-thumb">${media(p.thumb)}</div>`:''}<div class="wide-title">${p.title}</div><div class="meta">${timeAgo(createdTime(p))}</div></div>`).join('')}</div>`;go('contentAll')}
 window.openBoard=cat=>{let list=newest(boards).filter(b=>b.cat===cat);let title={notice:'# NOTICE',event:'# EVENT',broadcast:'# 공방공지'}[cat];document.getElementById('boardBox').innerHTML=`<div class="section"><button class="back" onclick="go('contents')">‹ CONTENTS</button><h1>${title}</h1><button class="primary" style="margin-top:14px" onclick="openAddContentFor('${cat}')">+ 콘텐츠 추가</button></div><div class="all-grid">${list.map(b=>`<div onclick="openBoardDetail(${b.id})"><div class="wide-thumb">${cat==='notice'?'':media(b.thumb)}</div><div class="wide-title">${b.title}</div><div class="meta">${b.date}</div></div>`).join('')}</div>`;go('board')}
 window.openBoardDetail=id=>{let b=boards.find(x=>x.id===id);document.getElementById('boardDetailBox').innerHTML=`<div class="talk-detail"><button class="back" onclick="go('community')">‹ COMMUNITY</button><div class="detail-title">${b.title}</div><div class="meta">${b.date}</div>${b.cat==='notice'?'':`<div class="big-media">${media(b.thumb)}</div>`}<div class="detail-body" style="font-size:1.35rem;margin-top:28px">${b.body}</div><div class="react"><button>👍 1691</button><button>💗 8712</button><button>🍿 392</button></div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 984</span></div>`;go('boardDetail')}
 
 window.openAlerts=()=>{alerts=alerts.map(a=>({...a,read:true}));renderAlerts();save();go('alerts')}
 window.clearAlerts=()=>{alerts=[];renderAlerts();save()}
-window.openCart=()=>{const cp=document.getElementById('cartPointInfo');if(cp)cp.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`;document.getElementById('cartList').innerHTML=cart.length?newest(cart).map(c=>`<div class="cart-row"><div class="cart-thumb">${media(c.thumb)}</div><div class="cart-main"><div class="cart-title">${c.name}</div><div class="cart-meta">${c.price} · 수량 ${c.qty}</div></div><button class="btn danger" onclick="cart=cart.filter(x=>x.id!==${c.id});openCart();save()">삭제</button></div>`).join('')+`<button class="primary" style="width:100%" onclick="checkout()">장바구니 결제하기</button>`:'<div class="meta">장바구니가 비어있습니다.</div>';go('cart')}
+window.openCart=()=>{document.getElementById('cartList').innerHTML=cart.length?newest(cart).map(c=>`<div class="cart-row"><div class="cart-thumb">${media(c.thumb)}</div><div class="cart-main"><div class="cart-title">${c.name}</div><div class="cart-meta">${c.price} · 수량 ${c.qty}</div></div><button class="btn danger" onclick="cart=cart.filter(x=>x.id!==${c.id});openCart();save()">삭제</button></div>`).join('')+`<button class="primary" style="width:100%" onclick="checkout()">장바구니 결제하기</button>`:'<div class="meta">장바구니가 비어있습니다.</div>';go('cart')}
 window.addCart=id=>{let p=products.find(x=>x.id===id);let c=cart.find(x=>x.id===id);if(c)c.qty++;else cart.push({id:p.id,name:p.name,price:p.price,thumb:p.thumb,qty:1});save();alert('장바구니에 담았습니다.')}
 window.buyProduct=id=>{let p=products.find(x=>x.id===id);if(p.membership){openJoin();return}payPhysicalProduct(p,1);render();}
 window.checkout=()=>{if(!cart.length)return; const total=cart.reduce((s,c)=>s+priceNum(c.price)*(c.qty||1),0); let use=0;if(points>0&&total>0&&confirm(`보유 포인트 ${points.toLocaleString('ko-KR')}P를 사용할까?`)){use=Math.min(points,total)} points-=use; let restUse=use; cart.forEach(c=>{let sub=priceNum(c.price)*(c.qty||1); let used=Math.min(restUse,sub); restUse-=used; let final=sub-used; let earned=Math.floor(final*0.01); points+=earned; orders.unshift({...c,id:uid(),date:new Date().toLocaleString(),usedPoint:used,earnedPoint:earned,paid:final})}); cart=[];save();alert('결제가 완료되었습니다.');openCart()}
@@ -741,7 +743,11 @@ window.openAddContentFor=(cat)=>{editId=null;modalMode='content';tempImg='';sele
 window.openAddNotice=()=>{editId=null;modalMode='notice';tempImg='';openModal('공지 추가','','','');document.getElementById('thumbBlock').style.display='none'}
 window.openJoin=()=>{editId=null;modalMode='join';openModal('멤버십 가입 정보','','','');document.getElementById('thumbBlock').style.display='none';document.getElementById('mTitle').placeholder='이름';document.getElementById('mBody').placeholder='생년월일';document.getElementById('mMeta').placeholder='전화번호';document.getElementById('saveBtn').textContent='최종 결제 진행'}
 
-window.saveModal=()=>{let title=document.getElementById('mTitle').value.trim(),body=document.getElementById('mBody').value.trim(),meta=document.getElementById('mMeta').value.trim();if(modalMode==='profile'){profile.nickname=title;profile.photo=tempProfile;closeModal();render();return}if(modalMode==='editMember'){let m=members.find(x=>x.id===editId);if(m){m.name=title||m.name;m.photo=tempProfile||m.photo;}closeModal();save();render();openMemberSettings();return}if(modalMode==='join'){if(!title||!body||!meta)return alert('전부 입력해줘');let now=new Date(),end=new Date();end.setFullYear(now.getFullYear()+1);membership={name:title,birth:body,phone:meta,code:code(),start:now.toISOString(),end:end.toISOString()};orders.unshift({id:uid(),name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',qty:1,date:fmt(now)});closeModal();render();openMembership();return}if(!title)return alert('제목을 입력해줘');if(editId && (modalMode==='talk'||modalMode==='content')){let p=posts.find(x=>x.id===editId);if(p){p.title=title;p.body=body;p.thumb=tempImg||'';if(modalMode==='talk'){p.member=selectedPostMember||p.member}else{p.blocks=collectBlogBlocks();p.body=p.blocks.length?'':body;p.visibility=selectedVisibility||'public';}}closeModal();save();render();openPost(editId);editId=null;return}if(modalMode==='editProduct'){
+window.saveModal=()=>{let title=document.getElementById('mTitle').value.trim(),body=document.getElementById('mBody').value.trim(),meta=document.getElementById('mMeta').value.trim();if(modalMode==='profile'){profile.nickname=title;profile.photo=tempProfile;closeModal();render();return}if(modalMode==='editMember'){let m=members.find(x=>x.id===editId);if(m){m.name=title||m.name;m.photo=tempProfile||m.photo;}closeModal();save();render();openMemberSettings();return}if(modalMode==='join'){if(!title||!body||!meta)return alert('전부 입력해줘');let now=new Date(),end=new Date();end.setFullYear(now.getFullYear()+1);membership={name:title,birth:body,phone:meta,code:code(),start:now.toISOString(),end:end.toISOString()};orders.unshift({id:uid(),name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',qty:1,date:fmt(now)});closeModal();render();openMembership();return}if(!title)return alert('제목을 입력해줘');if(editId && (modalMode==='talk'||modalMode==='content')){let p=posts.find(x=>x.id===editId);if(p){p.title=title;p.body=body;p.thumb=tempImg||'';if(modalMode==='talk'){p.member=selectedPostMember||p.member}else{p.blocks=collectBlogBlocks();p.body=p.blocks.length?'':body;p.visibility=selectedVisibility||'public';}}closeModal();save();render();openPost(editId);editId=null;return}if(modalMode==='editNotice'){
+  let n=notices.find(x=>x.id===editId);
+  if(n){n.title=title;n.body=body;n.meta=n.meta||'KQ엔터테인먼트 · 방금';}
+  closeModal();save();render();openNotice(editId);editId=null;return;
+}if(modalMode==='editProduct'){
   let p=products.find(x=>x.id===editId);
   if(p){p.name=title;p.body=body;p.price=meta||p.price;p.thumb=tempImg||p.thumb;p.cat=selectedProductCat||p.cat||'PRODUCTS';}
   closeModal();save();render();openProduct(editId);return;
@@ -768,7 +774,7 @@ window.editProduct=id=>{
   document.getElementById('thumbPreview').innerHTML=tempImg?media(tempImg):'이미지 없음';
 }
 window.deleteProduct=id=>{products=products.filter(p=>p.id!==id);save();render();go('shop')}
-window.editNotice=id=>alert('공지 수정은 다음 단계에서 연결 가능')
+window.editNotice=id=>{let n=notices.find(x=>x.id===id);if(!n)return;editId=id;modalMode='editNotice';tempImg='';openModal('공지 수정',n.title||'',n.body||'',n.meta||'');document.getElementById('thumbBlock').style.display='none';document.getElementById('mMeta').style.display='none';}
 window.deleteNotice=id=>{notices=notices.filter(n=>n.id!==id);alerts=alerts.filter(a=>a.source!==id);save();render();go('community')}
 
 async function upload(){return new Promise(resolve=>{let i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=async()=>{let f=i.files[0];if(!f)return resolve('');let fd=new FormData();fd.append('file',f);fd.append('upload_preset',CLOUDINARY_PRESET);try{let r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});let d=await r.json();resolve(d.secure_url||'')}catch(e){alert('업로드 실패');resolve('')}};i.click()})}
