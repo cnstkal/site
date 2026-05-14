@@ -20,7 +20,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdr
 .my-menu{padding:0 20px 28px}.my-row{padding:17px 16px;margin-bottom:10px;font-size:.92rem;font-weight:800;display:flex;justify-content:space-between;cursor:pointer}.logout{color:var(--danger)}
 .bottom-nav{position:fixed;bottom:0;left:0;width:100%;height:74px;background:rgba(255,255,255,.95);backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:center;z-index:200}.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.62rem;color:var(--sub);font-weight:600;border:0;background:none;font-family:inherit}.nav-item.active{color:#111}.upload-btn{position:fixed;right:20px;bottom:96px;width:58px;height:58px;border-radius:50%;border:0;background:#111;color:#fff;font-size:1.8rem;box-shadow:0 10px 30px rgba(0,0,0,.15);z-index:150}
 .detail-wrap{padding:20px}.back{border:0;background:none;font-size:.85rem;font-weight:800;margin-bottom:14px;color:#555}.detail-main{padding:18px}.detail-thumb{width:100%;aspect-ratio:1;border-radius:20px;background:#e8e8ec;display:flex;align-items:center;justify-content:center;font-size:3rem;overflow:hidden;margin-bottom:16px}.detail-title{font-size:1.28rem;font-weight:900;margin-bottom:8px}.detail-price{font-size:1.1rem;font-weight:900;margin-bottom:14px}.detail-body{font-size:.92rem;line-height:1.65;color:#444;white-space:pre-line}.detail-img{width:100%;border-radius:18px;overflow:hidden;background:#eee;margin-top:14px}.detail-img:empty{display:none}.actions-bottom{padding-top:18px;display:flex;gap:10px;flex-wrap:wrap}.btn{height:46px;border-radius:999px;border:0;font-weight:800;padding:0 18px;font-family:inherit}.btn-light{background:#fff;border:1px solid var(--line);color:#111}.btn-danger{background:var(--danger);color:#fff}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:300;display:none;align-items:flex-end}.modal.open{display:flex}.sheet{width:100%;background:#fff;border-radius:24px 24px 0 0;padding:20px;max-height:86vh;overflow:auto}.sheet-title{font-weight:900;margin-bottom:14px}.input,.textarea{width:100%;border:1px solid var(--line);border-radius:16px;background:#fff;padding:14px;font-family:inherit;font-size:.9rem;margin-bottom:10px}.textarea{min-height:120px;resize:vertical}.thumb-preview{height:92px;border-radius:18px;background:#f1f1f1;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:10px;color:#888;font-size:.85rem}.thumb-preview img{width:100%;height:100%;object-fit:cover}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:300;display:none;align-items:flex-end;pointer-events:none}.modal.open{display:flex;pointer-events:auto}.sheet{width:100%;background:#fff;border-radius:24px 24px 0 0;padding:20px;max-height:86vh;overflow:auto}.sheet-title{font-weight:900;margin-bottom:14px}.input,.textarea{width:100%;border:1px solid var(--line);border-radius:16px;background:#fff;padding:14px;font-family:inherit;font-size:.9rem;margin-bottom:10px}.textarea{min-height:120px;resize:vertical}.thumb-preview{height:92px;border-radius:18px;background:#f1f1f1;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:10px;color:#888;font-size:.85rem}.thumb-preview img{width:100%;height:100%;object-fit:cover}
 .member-head{display:flex;align-items:center;gap:10px;padding:24px 20px 8px}.member-head h1{font-size:2rem;font-weight:900}.pill{background:#eee;border-radius:999px;padding:6px 10px;font-size:.8rem;font-weight:800}.member-wrap{padding:34px 20px;text-align:center}.flip{perspective:1200px}.membership-card{width:78%;max-width:330px;aspect-ratio:.72/1;margin:0 auto 28px;position:relative;transform-style:preserve-3d;transition:.5s}.membership-card.flipped{transform:rotateY(180deg)}.card-face{position:absolute;inset:0;border-radius:28px;backface-visibility:hidden;box-shadow:0 22px 42px rgba(0,0,0,.08);overflow:hidden}.card-front{background:linear-gradient(135deg,#fff,#eef2f9,#fff);display:flex;align-items:center;justify-content:center;color:#aaa;font-weight:900;font-size:1.25rem;padding:24px}.card-back{background:#f2f1fa;transform:rotateY(180deg);display:flex;text-align:left}.card-back:before{content:'';width:28%;background:rgba(0,0,0,.04);border-right:1px solid rgba(0,0,0,.06)}.card-back-inner{padding:28px 22px;flex:1}.small-label{font-size:.82rem;margin-top:18px}.big-info{font-size:1.35rem;font-weight:900;margin-top:5px;word-break:break-all}.blue-btn{width:100%;height:64px;border-radius:14px;background:var(--blue);color:#fff;border:0;font-weight:900;font-size:1.18rem}.qty{display:flex;gap:8px;align-items:center;margin-top:8px}.qty button{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:#fff;font-weight:900}
 
 /* TALK FEED ONLY */
@@ -117,8 +117,8 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdr
 .shop-tabs::-webkit-scrollbar{display:none}
 .shop-tab{border:0;background:none;font-family:inherit;font-size:1.15rem;font-weight:900;color:#888;padding:12px 0;white-space:nowrap;border-bottom:3px solid transparent}
 .shop-tab.active{color:#111;border-bottom-color:#111}
-.shop-more-sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;z-index:420}
-.shop-more-sheet.open{display:flex}
+.shop-more-sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;z-index:420;pointer-events:none}
+.shop-more-sheet.open{display:flex;pointer-events:auto}
 .shop-more-panel{background:#fff;width:100%;border-radius:24px 24px 0 0;padding:26px 24px 60px}
 .shop-more-panel button{display:block;width:100%;height:56px;border:0;background:#fff;text-align:left;font-size:1.25rem;font-weight:800;color:#777}
 .shop-more-panel button.active{color:#111}
@@ -265,7 +265,7 @@ let boardPosts=JSON.parse(localStorage.getItem('boardPosts')||'null')||[
  {id:202,category:'broadcast',kind:'content',title:"260214(토) MBC '쇼! 음악중심' 사전녹화 및 생방송 참여 명단 안내",date:'3달 전',thumb:'🩵',body:'사전녹화 및 생방송 참여 명단 안내입니다.'},
  {id:203,category:'broadcast',kind:'content',title:"260213(금) KBS2 '뮤직뱅크' 사전녹화 및 생방송 참여 명단 안내",date:'3달 전',thumb:'💛',body:'사전녹화 및 생방송 참여 명단 안내입니다.'},
  {id:301,category:'notice',kind:'community',title:'ATEEZ(에이티즈) THE WORLD EP.FIN : WILL 발매 안내',date:'2024.04.21',thumb:'',body:'안녕하세요.\nKQ엔터테인먼트입니다.\n\nATEEZ(에이티즈) THE WORLD EP.FIN : WILL 발매 안내드립니다.\n\nATINY 여러분의 많은 관심과 사랑 부탁드립니다.'}
-;
+];
 let shopCategories=['ALL','MEMBERSHIP','ALBUM','PRODUCTS','TICKET'];
 let comments=JSON.parse(localStorage.getItem('comments')||'null')||[
  {id:1,postId:1,nickname:'IncognitoRenegado',photo:'🏆',body:"I really like this handwriting. I can't write like this in a million years.",time:'1일 전'},
@@ -402,9 +402,9 @@ window.openPost=function(id){const p=posts.find(x=>x.id===id);editingPostId=id;
   switchPage('post-detail');return;
  }
  const mediaBox=p.type==='content'?`<div class="content-detail-media">${media(p.thumb)}</div>`:`<div class="detail-thumb">${media(p.thumb)}</div>`;
- document.getElementById('post-detail').innerHTML=`<button class="back" onclick="switchPage('${p.type==='content'?'contents':'talk'}')">‹ BACK</button><div class="detail-main">${mediaBox}<div class="detail-title">${p.title}</div><div class="notice-meta" style="margin-bottom:14px">${p.type==='content'?'CONTENTS':'ATEEZ TALK'}</div><div class="detail-body">${p.body}</div><div class="actions-bottom"><button class="btn btn-light" onclick="editPost(${p.id})">수정</button><button class="btn btn-danger" onclick="deletePost(${p.id})">삭제</button></div></div>`;switchPage('post-detail')}
-window.editPost=function(id){const p=posts.find(x=>x.id===id);modalMode='editPost';editingPostId=id;modalThumb=p.thumb;openModal('게시글 수정',p.title,p.body,'')}
-window.deletePost=function(id){if(confirm('게시글을 삭제할까요?')){const p=posts.find(x=>x.id===id);posts=sortNewest(posts).filter(x=>x.id!==id);comments=comments.filter(c=>c.postId!==id);cleanAlarms();render();switchPage(p.type==='content'?'contents':'talk')}}
+ document.getElementById('post-detail').innerHTML=`<button class="back" onclick="switchPage('${p.type==='content'?'contents':'talk'}')">‹ BACK</button><div class="detail-main">${mediaBox}<div class="detail-title">${p.title}</div><div class="notice-meta" style="margin-bottom:14px">${p.type==='content'?'CONTENTS':'ATEEZ TALK'}</div><div class="detail-body">${p.body}</div><div class="actions-bottom"><button class="btn btn-light" onclick="editPost(${p.id})">수정</button><button class="btn btn-danger" onclick="deletePost(${p.id})">삭제</button></div></div>`;switchPage('post-detail')};
+window.editPost=function(id){const p=posts.find(x=>x.id===id);modalMode='editPost';editingPostId=id;modalThumb=p.thumb;openModal('게시글 수정',p.title,p.body,'')};
+window.deletePost=function(id){if(confirm('게시글을 삭제할까요?')){const p=posts.find(x=>x.id===id);posts=sortNewest(posts).filter(x=>x.id!==id);comments=comments.filter(c=>c.postId!==id);cleanAlarms();render();switchPage(p.type==='content'?'contents':'talk')}};
 
 window.openProduct=function(id){
  const p=products.find(x=>x.id===id);
@@ -437,17 +437,7 @@ window.openProduct=function(id){
  </div>`;
  switchPage('shop-detail');
 }
->
-<script>
-document.addEventListener('DOMContentLoaded',()=>{
- document.querySelectorAll('button,[onclick],.card,.feed-card,.member-chip').forEach(el=>{el.style.pointerEvents='auto'});
- const modal=document.getElementById('modal');
- if(modal) modal.style.pointerEvents='none';
-});
-</script>
-
-<script>
-function openMyPosts(){
+window.openMyPosts=function(){
  const mine = newestFirst(posts.filter(p=>(p.author||'')===(profile.nickname||'')));
  const wrap = document.createElement('div');
  wrap.className='page-overlay';
