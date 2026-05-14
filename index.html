@@ -94,7 +94,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 
 <section class="view" id="contents">
   <div class="section-title" style="padding:18px 20px 0"><span>CONTENTS</span></div>
-  <div class="tabs"><button onclick="openBoard('notice')">NOTICE</button><button onclick="openBoard('event')">EVENT</button><button onclick="openBoard('broadcast')">공방공지</button></div>
+  <div class="content-tabs-clean"><button onclick="openBoard('notice')">NOTICE</button><button onclick="openBoard('event')">EVENT</button><button onclick="openBoard('broadcast')">공방공지</button></div>
   <div id="contentSections"></div>
 </section>
 <section class="view" id="contentAll"><div id="contentAllBox"></div></section>
@@ -134,11 +134,12 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 </div>
 
 <div class="menu" id="menu"></div>
+<div class="category-modal" id="categoryModal"><div class="category-panel" id="categoryPanel"></div></div>
 <div class="modal" id="modal"><div class="sheet">
 <h3 id="modalTitle">작성</h3>
 <div id="thumbBlock"><div class="preview" id="thumbPreview">이미지 없음</div><button class="btn light" style="width:100%;margin-bottom:10px" onclick="pickThumb()">이미지 첨부</button></div>
 <div id="profileBlock" style="display:none"><div class="preview" id="profilePreview">프로필 사진 없음</div><button class="btn light" style="width:100%;margin-bottom:10px" onclick="pickProfilePhoto()">프로필 사진 첨부</button></div>
-<div id="pickerArea" class="pick-row" style="display:none"></div><input class="input" id="mTitle" placeholder="제목">
+<div id="pickerArea" style="display:none"></div><div id="categoryFields" style="display:none"><div class="modal-field-label" id="memberLabel">멤버 카테고리</div><button type="button" class="select-like" id="memberCategorySelect" onclick="openSelectModal('member')"><span id="memberCategoryText">선택</span><span>⌄</span></button><div class="modal-field-label" id="postLabel">글 카테고리</div><button type="button" class="select-like" id="postCategorySelect" onclick="openSelectModal('post')"><span id="postCategoryText">예능</span><span>⌄</span></button><div id="visibilityRow"><div class="modal-field-label">공개 설정</div><button type="button" class="select-like" id="visibilitySelect" onclick="openSelectModal('visibility')"><span id="visibilityText">전체공개</span><span>⌄</span></button></div></div><input class="input" id="mTitle" placeholder="제목">
 <textarea class="textarea" id="mBody" placeholder="내용"></textarea>
 <input class="input" id="mMeta" placeholder="메타/가격/전화번호">
 <div style="display:flex;gap:10px"><button class="btn primary" id="saveBtn" onclick="saveModal()">저장</button><button class="btn light" onclick="closeModal()">취소</button></div>
@@ -265,33 +266,51 @@ window.openProfile=()=>{modalMode='profile';tempProfile=profile.photo||'';openMo
 window.logout=()=>{if(confirm('로그아웃할까요?')){profile={nickname:'',photo:'',name:'',birth:'',phone:''};membership=null;orders=[];cart=[];save();render();go('home')}}
 
 
-function renderPicker(type){
+
+let selectedPostCategory='예능',selectedVisibility='public';
+const postCategoryOptions=['예능','비하인드','라이브','공지','기타'];
+function updateCategoryTexts(){
+ const m=members.find(x=>x.id===selectedPostMember)||members[0];
+ const mt=document.getElementById('memberCategoryText'); if(mt) mt.textContent=m.name;
+ const pt=document.getElementById('postCategoryText'); if(pt) pt.textContent=selectedPostCategory;
+ const vt=document.getElementById('visibilityText'); if(vt) vt.textContent=selectedVisibility==='member'?'멤버십 공개':'전체공개';
+}
+window.openSelectModal=function(type){
+ const modal=document.getElementById('categoryModal');
+ const panel=document.getElementById('categoryPanel');
+ let options=[];
+ if(type==='member') options=members.map(m=>({label:m.name,value:m.id,active:selectedPostMember===m.id}));
+ if(type==='post') options=postCategoryOptions.map(v=>({label:v,value:v,active:selectedPostCategory===v}));
+ if(type==='product') options=['MEMBERSHIP','ALBUM','PRODUCTS','TICKET'].map(v=>({label:v,value:v,active:selectedProductCat===v}));
+ if(type==='visibility') options=[{label:'전체공개',value:'public',active:selectedVisibility==='public'},{label:'멤버십 공개',value:'member',active:selectedVisibility==='member'}];
+ panel.innerHTML=options.map(o=>`<button type="button" class="category-option ${o.active?'active':''}" onclick="chooseCategory('${type}','${o.value}')">${o.label}</button>`).join('');
+ modal.classList.add('open');
+}
+window.chooseCategory=function(type,value){
+ if(type==='member') selectedPostMember=value;
+ if(type==='post') selectedPostCategory=value;
+ if(type==='product') selectedProductCat=value;
+ if(type==='visibility') selectedVisibility=value;
+ document.getElementById('categoryModal').classList.remove('open');
+ updateCategoryTexts();
+ if(type==='product') renderProductCategoryField();
+}
+function renderProductCategoryField(){
  const box=document.getElementById('pickerArea');
  if(!box)return;
- if(type==='product'){
-   const cats=['MEMBERSHIP','ALBUM','PRODUCTS','TICKET'];
-   box.style.display='flex';
-   box.innerHTML=cats.map(c=>`<button type="button" class="pick-btn ${selectedProductCat===c?'active':''}" onclick="event.preventDefault();event.stopPropagation();selectedProductCat='${c}';renderPicker('product')">${c}</button>`).join('');
- }else if(type==='talk'){
-   selectedPostMember=selectedPostMember||currentMember||members[0].id;
-   box.style.display='block';
-   box.innerHTML=`<div class="member-pick-list">${members.map(m=>`<button type="button" class="member-pick-item ${selectedPostMember===m.id?'active':''}" onclick="event.preventDefault();event.stopPropagation();selectedPostMember='${m.id}';renderPicker('talk')"><span class="member-pick-photo">${media(m.photo)}</span><span>${m.name}</span></button>`).join('')}</div>`;
- }else if(type==='visibility'){
-   box.style.display='flex';
-   box.innerHTML=`<button type="button" class="pick-btn active" id="publicPick" onclick="event.preventDefault();this.classList.add('active');document.getElementById('memberPick').classList.remove('active')">전체공개</button><button type="button" class="pick-btn" id="memberPick" onclick="event.preventDefault();this.classList.add('active');document.getElementById('publicPick').classList.remove('active')">멤버십 공개</button>`;
- }else{
-   box.style.display='none';
-   box.innerHTML='';
- }
+ box.style.display='block';
+ box.innerHTML=`<div class="modal-field-label">상품 카테고리</div><button type="button" class="select-like" onclick="openSelectModal('product')"><span>${selectedProductCat}</span><span>⌄</span></button>`;
 }
-function openModal(title,a='',b='',c=''){document.getElementById('modalTitle').textContent=title;document.getElementById('mTitle').value=a;document.getElementById('mBody').value=b;document.getElementById('mMeta').value=c;document.getElementById('thumbBlock').style.display='block';document.getElementById('profileBlock').style.display='none';document.getElementById('mBody').style.display='block';document.getElementById('mMeta').style.display='block';document.getElementById('thumbPreview').innerHTML=tempImg?media(tempImg):'이미지 없음';document.getElementById('saveBtn').textContent='저장';renderPicker('none');document.getElementById('modal').classList.add('open')}
+document.addEventListener('click',e=>{if(e.target.id==='categoryModal')e.target.classList.remove('open')});
+
+function openModal(title,a='',b='',c=''){document.getElementById('modalTitle').textContent=title;document.getElementById('mTitle').value=a;document.getElementById('mBody').value=b;document.getElementById('mMeta').value=c;document.getElementById('thumbBlock').style.display='block';document.getElementById('profileBlock').style.display='none';document.getElementById('mBody').style.display='block';document.getElementById('mMeta').style.display='block';document.getElementById('thumbPreview').innerHTML=tempImg?media(tempImg):'이미지 없음';document.getElementById('saveBtn').textContent='저장';document.getElementById('pickerArea').style.display='none';document.getElementById('categoryFields').style.display='none';const cf=document.getElementById('categoryFields'); if(cf) cf.style.display='none'; document.getElementById('modal').classList.add('open')}
 window.closeModal=()=>document.getElementById('modal').classList.remove('open')
 window.pickThumb=async()=>{let u=await upload();if(u){tempImg=u;document.getElementById('thumbPreview').innerHTML=media(u)}}
 window.pickProfilePhoto=async()=>{let u=await upload();if(u){tempProfile=u;document.getElementById('profilePreview').innerHTML=media(u)}}
-window.openAddTalk=()=>{modalMode='talk';tempImg='';selectedPostMember=currentMember||members[0].id;openModal('TALK 게시글 추가','','','');renderPicker('talk');document.getElementById('mMeta').style.display='none'}
-window.openAddProduct=()=>{modalMode='product';tempImg='';selectedProductCat='PRODUCTS';openModal('상품 추가','','','');document.getElementById('mMeta').placeholder='가격';renderPicker('product')}
+window.openAddTalk=()=>{modalMode='talk';tempImg='';selectedPostMember=currentMember||members[0].id;selectedPostCategory='예능';openModal('TALK 게시글 추가','','','');document.getElementById('mMeta').style.display='none';document.getElementById('categoryFields').style.display='block';document.getElementById('visibilityRow').style.display='none';updateCategoryTexts()}
+window.openAddProduct=()=>{modalMode='product';tempImg='';selectedProductCat='PRODUCTS';openModal('상품 추가','','','');document.getElementById('mMeta').placeholder='가격';renderProductCategoryField()}
 window.openAddContent=()=>{modalMode='content';tempImg='';openModal('콘텐츠 추가','','','video');document.getElementById('mMeta').placeholder='카테고리 golden/video/atiny/log'}
-window.openAddContentFor=(cat)=>{modalMode='content';tempImg='';openModal('콘텐츠 추가','','',cat);document.getElementById('mMeta').placeholder='카테고리';renderPicker('visibility')}
+window.openAddContentFor=(cat)=>{modalMode='content';tempImg='';selectedVisibility='public';openModal('콘텐츠 추가','','',cat);document.getElementById('mMeta').placeholder='카테고리';document.getElementById('categoryFields').style.display='block';document.getElementById('memberLabel').style.display='none';document.getElementById('memberCategorySelect').style.display='none';document.getElementById('postLabel').style.display='none';document.getElementById('postCategorySelect').style.display='none';document.getElementById('visibilityRow').style.display='block';updateCategoryTexts()}
 window.openAddNotice=()=>{modalMode='notice';tempImg='';openModal('공지 추가','','','');document.getElementById('thumbBlock').style.display='none'}
 window.openJoin=()=>{modalMode='join';openModal('멤버십 가입 정보','','','');document.getElementById('thumbBlock').style.display='none';document.getElementById('mTitle').placeholder='이름';document.getElementById('mBody').placeholder='생년월일';document.getElementById('mMeta').placeholder='전화번호';document.getElementById('saveBtn').textContent='최종 결제 진행'}
 
@@ -299,7 +318,7 @@ window.saveModal=()=>{let title=document.getElementById('mTitle').value.trim(),b
   let p=products.find(x=>x.id===editId);
   if(p){p.name=title;p.body=body;p.price=meta||p.price;p.thumb=tempImg||p.thumb;p.cat=selectedProductCat||p.cat||'PRODUCTS';}
   closeModal();save();render();openProduct(editId);return;
-}if(modalMode==='talk'){let m=members.find(x=>x.id===selectedPostMember)||members.find(x=>x.id===currentMember)||members[0];let p={id:uid(),type:'talk',member:m.id,title,body,thumb:tempImg||'',likes:0,comments:0,author:'ME',created:'방금 작성'};posts.unshift(p);alerts.unshift({id:uid(),type:'게시글',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='content'){let p={id:uid(),type:'content',cat:meta||'video',title,body,thumb:tempImg||'',author:'ME',created:'방금 작성',visibility:(document.getElementById('memberPick')&&document.getElementById('memberPick').classList.contains('active'))?'member':'public'};posts.unshift(p);alerts.unshift({id:uid(),type:'콘텐츠',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});closeModal();save();render();go('shop');return}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});shopCat=selectedProductCat||'PRODUCTS';closeModal();save();render();go('shop');return}if(modalMode==='notice'){let n={id:uid(),title,body,meta:'KQ엔터테인먼트 · 방금'};notices.unshift(n);alerts.unshift({id:uid(),type:'공지',title,thumb:'🔔',time:'방금',read:false,source:n.id})}closeModal();render()}
+}if(modalMode==='talk'){let m=members.find(x=>x.id===selectedPostMember)||members.find(x=>x.id===currentMember)||members[0];let p={id:uid(),type:'talk',member:m.id,postCategory:selectedPostCategory,title,body,thumb:tempImg||'',likes:0,comments:0,author:'ME',created:'방금 작성'};posts.unshift(p);alerts.unshift({id:uid(),type:'게시글',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='content'){let p={id:uid(),type:'content',cat:meta||'video',title,body,thumb:tempImg||'',author:'ME',created:'방금 작성',visibility:selectedVisibility||'public'};posts.unshift(p);alerts.unshift({id:uid(),type:'콘텐츠',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});closeModal();save();render();go('shop');return}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});shopCat=selectedProductCat||'PRODUCTS';closeModal();save();render();go('shop');return}if(modalMode==='notice'){let n={id:uid(),title,body,meta:'KQ엔터테인먼트 · 방금'};notices.unshift(n);alerts.unshift({id:uid(),type:'공지',title,thumb:'🔔',time:'방금',read:false,source:n.id})}closeModal();render()}
 
 window.likePost=id=>{let p=posts.find(x=>x.id===id);p.likes=(p.likes||0)+1;renderTalk();save()}
 window.addComment=id=>{let body=prompt('댓글 내용');if(!body)return;let nick=prompt('닉네임')||profile.nickname||'익명';comments.unshift({id:uid(),post:id,nick,photo:profile.photo||'👤',body,time:'방금'});let p=posts.find(x=>x.id===id);p.comments=(p.comments||0)+1;save();openPost(id)}
