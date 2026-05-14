@@ -238,11 +238,12 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 .schedule-month{border:0;background:none;font-size:1.9rem;font-weight:900;letter-spacing:-.06em;line-height:1.05;color:inherit;padding:0;white-space:nowrap}
 .schedule-actions{display:flex;gap:12px;align-items:center;flex-shrink:0}.schedule-actions button{border:0;background:none;font-size:1.25rem;padding:2px}
 .schedule-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--line);padding-bottom:12px;color:#888;font-weight:800;font-size:.86rem}.schedule-week div{text-align:center}
-.schedule-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px 2px;margin-top:12px;max-width:100%;overflow:hidden}
-.schedule-day{height:112px;border-radius:18px;padding:8px 3px;position:relative;min-width:0;overflow:hidden}.schedule-day.blank{opacity:0}.schedule-day.today{background:#f1f1f1}.schedule-num{font-size:.92rem;font-weight:900;text-align:center;line-height:1.1;white-space:nowrap}.schedule-num.has-event::before{content:'• ';font-weight:900;color:#555}.schedule-event{display:block;max-width:100%;margin:9px auto 0;font-size:.62rem;background:#dcd8f5;padding:3px 5px;border-radius:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;color:#111}
-.schedule-list-view{padding-top:18px}.schedule-list-head{display:flex;justify-content:space-between;align-items:flex-end;margin:18px 0 14px}.schedule-list-date{font-size:1.55rem;font-weight:900;letter-spacing:-.05em}.schedule-list-full{font-size:1.05rem;color:#999}.schedule-card{border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px;background:#fff}.schedule-card-title{font-size:1.2rem;font-weight:900;line-height:1.35;letter-spacing:-.04em}.schedule-card-meta{margin-top:12px;color:#555;font-size:.98rem;line-height:1.7}.schedule-dot{display:inline-block;width:13px;height:13px;border-radius:50%;background:#c9cada;margin-right:10px;vertical-align:middle}.schedule-nav{border-top:1px solid var(--line);display:flex;justify-content:space-between;margin-top:36px;padding-top:26px}.schedule-nav button{height:52px;padding:0 24px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:1.05rem;font-weight:900;color:inherit}
+.schedule-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px 2px;margin-top:12px;width:100%;max-width:100%;overflow:hidden}
+.schedule-day{height:96px;border-radius:16px;padding:7px 2px;position:relative;min-width:0;overflow:hidden;border:1px solid transparent;background:transparent}.schedule-day.blank{opacity:0;pointer-events:none}.schedule-day.today{background:#f1f1f1}.schedule-day.selected{border-color:#111}.schedule-num{font-size:.86rem;font-weight:900;text-align:center;line-height:1.1;white-space:nowrap;letter-spacing:-.04em}.schedule-num.has-event::before{content:'• ';font-weight:900;color:#555}.schedule-event{display:block;max-width:100%;margin:8px auto 0;font-size:.56rem;background:#dcd8f5;padding:3px 4px;border-radius:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;color:#111}
+.schedule-selected{margin-top:18px;border-top:1px solid var(--line);padding-top:18px}.schedule-selected-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px}.schedule-selected-title{font-size:1.28rem;font-weight:900;letter-spacing:-.05em}.schedule-selected-date{font-size:.95rem;color:#999}.schedule-list-view{padding-top:18px}.schedule-list-head{display:flex;justify-content:space-between;align-items:flex-end;margin:18px 0 14px}.schedule-list-date{font-size:1.42rem;font-weight:900;letter-spacing:-.05em}.schedule-list-full{font-size:.98rem;color:#999}.schedule-card{border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px;background:#fff}.schedule-card-title{font-size:1.12rem;font-weight:900;line-height:1.35;letter-spacing:-.04em}.schedule-card-meta{margin-top:12px;color:#555;font-size:.94rem;line-height:1.7}.schedule-dot{display:inline-block;width:13px;height:13px;border-radius:50%;background:#c9cada;margin-right:10px;vertical-align:middle}.schedule-nav{border-top:1px solid var(--line);display:flex;justify-content:space-between;margin-top:36px;padding-top:26px}.schedule-nav button{height:52px;padding:0 24px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:1.05rem;font-weight:900;color:inherit}
 .schedule-filters{position:fixed;left:0;right:0;bottom:74px;height:68px;background:#fff;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center;overflow-x:auto;padding:10px 20px;z-index:160}.schedule-filters::-webkit-scrollbar{display:none}.schedule-filters button{height:42px;border-radius:999px;border:1px solid var(--line);background:#fff;padding:0 18px;font-weight:900;white-space:nowrap;font-size:.95rem}.schedule-filters .active{border-color:#111}.schedule-filter-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#f5b6c1;margin-right:8px}.dot-tv{background:#f3aab2}.dot-yt{background:#f1b7a4}.dot-radio{background:#ffd885}.dot-fan{background:#a9c4ed}
 .month-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:850;align-items:flex-end}.month-modal.open{display:flex}.month-panel{width:100%;background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 28px}.month-panel-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}.month-panel-top button{border:0;background:none;font-size:1.8rem;color:#777}.month-year{font-size:1.9rem;font-weight:900}.month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.month-option{height:66px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:1.45rem;font-weight:900;color:#111}.month-option.active{border:2px solid #111}.month-option.disabled{opacity:.35}
+@media (prefers-color-scheme: dark){.schedule-wrap,.schedule-filters,.month-panel{background:#0b0b0d}.schedule-day.today{background:#242428}.schedule-day.selected{border-color:#fff}.schedule-card{background:#151519}.schedule-card-meta{color:#ddd}.month-option{background:#151519;color:#f5f5f5;border-color:#29292e}.month-option.active{border-color:#fff}}
 .point-badge{display:inline-flex;align-items:center;height:30px;border-radius:999px;background:#f4f4f7;padding:0 12px;font-size:.85rem;font-weight:900;color:#555;margin-top:12px}
 @media(min-width:900px){.schedule-filters{left:50%;transform:translateX(-50%);max-width:500px}.month-modal{left:50%;transform:translateX(-50%);max-width:500px}}
 
@@ -272,6 +273,82 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 
 @media(min-width:900px){body{background:#efefef}.app{max-width:500px;margin:0 auto;background:#fff;min-height:100vh}.bottom-nav,.fixed-bar{left:50%;transform:translateX(-50%);max-width:500px}.shop-bottom{left:50%;transform:translateX(-50%);max-width:500px}.modal{left:50%;transform:translateX(-50%);max-width:500px}.fab{right:calc(50% - 230px)}}
 @media(min-width:900px) and (prefers-color-scheme: dark){body{background:#151515}.app{background:#0b0b0d}}
+
+/* FORCE SCHEDULE DARK MODE FIX - keeps calendar readable when phone/system is dark */
+@media (prefers-color-scheme: dark){
+  #schedule,
+  #schedule .schedule-wrap,
+  #schedule .schedule-filters,
+  #schedule .schedule-week,
+  #schedule .schedule-grid,
+  #schedule .schedule-selected,
+  #schedule .schedule-list-view{
+    background:#0b0b0d !important;
+    color:#f5f5f5 !important;
+  }
+  #schedule .schedule-month,
+  #schedule .schedule-actions button,
+  #schedule .schedule-nav button,
+  #schedule .schedule-filters button{
+    color:#f5f5f5 !important;
+    background:#0b0b0d !important;
+    border-color:#2b2b2f !important;
+  }
+  #schedule .schedule-week,
+  #schedule .schedule-selected,
+  #schedule .schedule-filters,
+  #schedule .schedule-nav{
+    border-color:#2b2b2f !important;
+  }
+  #schedule .schedule-week div,
+  #schedule .schedule-selected-date,
+  #schedule .schedule-list-full,
+  #schedule .meta{
+    color:#a7a7ad !important;
+  }
+  #schedule .schedule-day{
+    background:transparent !important;
+    color:#f5f5f5 !important;
+  }
+  #schedule .schedule-day.today{
+    background:#242428 !important;
+    color:#fff !important;
+  }
+  #schedule .schedule-day.selected{
+    border-color:#fff !important;
+    background:#16161a !important;
+  }
+  #schedule .schedule-num{color:#f5f5f5 !important;}
+  #schedule .schedule-num.has-event::before{color:#ff5b65 !important;}
+  #schedule .schedule-event{
+    background:#34304c !important;
+    color:#f5f5f5 !important;
+  }
+  #schedule .schedule-card{
+    background:#151519 !important;
+    color:#f5f5f5 !important;
+    border-color:#2b2b2f !important;
+  }
+  #schedule .schedule-card-meta{color:#d7d7dc !important;}
+  #schedule .schedule-dot{background:#8fa2cc !important;}
+  .month-modal{background:rgba(0,0,0,.65) !important;}
+  .month-panel{
+    background:#111114 !important;
+    color:#f5f5f5 !important;
+  }
+  .month-panel-top button,
+  .month-year{color:#f5f5f5 !important;}
+  .month-option{
+    background:#17171b !important;
+    color:#f5f5f5 !important;
+    border-color:#303036 !important;
+  }
+  .month-option.active{
+    border-color:#fff !important;
+    background:#242428 !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -331,7 +408,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 
 <section class="view" id="shop"><div class="section-title" style="padding:18px 20px 0"><span>SHOP</span><button class="primary" onclick="openAddProduct()">+ 상품 추가</button></div><div class="hero"><div class="hero-card"><h1>OUR ETERNAL<br>STAR ATINY</h1><p>Official Membership & Goods</p></div></div><div class="shop-tabs" id="shopTabs"></div><div class="section"><div class="grid" id="shopGrid"></div></div></section>
 <section class="view" id="shopDetail"><div id="shopDetailBox"></div></section>
-<section class="view" id="cart"><div class="section"><div class="section-title">장바구니</div><div class="meta" style="margin-bottom:14px">보유 포인트 ${points.toLocaleString('ko-KR')}P</div><div id="cartList"></div></div></section>
+<section class="view" id="cart"><div class="section"><div class="section-title">장바구니</div><div class="meta" id="cartPointInfo" style="margin-bottom:14px">보유 포인트 0P</div><div id="cartList"></div></div></section>
 <section class="view" id="alerts"><div class="section"><div class="section-title">알림 <button class="btn danger" onclick="clearAlerts()">초기화</button></div><div id="alertList"></div></div></section>
 
 <section class="view" id="my">
@@ -415,25 +492,36 @@ function payPhysicalProduct(item,qty=1){
   save();
   alert(`결제가 완료되었습니다.\n사용 포인트: ${use.toLocaleString('ko-KR')}P\n적립 포인트: ${earn.toLocaleString('ko-KR')}P`);
 }
-let scheduleYear=2026,scheduleMonth=5,scheduleMode='calendar';
+const scheduleNow=new Date();
+let scheduleYear=scheduleNow.getFullYear(),scheduleMonth=scheduleNow.getMonth()+1,scheduleMode='calendar',selectedScheduleDate='';
 const scheduleData=[{date:'2026-05-07',title:'전주국제영화제 <할루시네이션> GV',member:'홍중',time:'종일',cat:'FAN'},{date:'2026-05-17',title:'ASEA 2026',member:'',time:'종일',cat:'TV'}];
 const weekNames=['일','월','화','수','목','금','토'];
+const pad2=n=>String(n).padStart(2,'0');
+const dateKey=(y,m,d)=>`${y}-${pad2(m)}-${pad2(d)}`;
+const todayKey=()=>dateKey(scheduleNow.getFullYear(),scheduleNow.getMonth()+1,scheduleNow.getDate());
 function scheduleItems(){return scheduleData.filter(x=>{let d=new Date(x.date+'T00:00:00');return d.getFullYear()===scheduleYear && d.getMonth()+1===scheduleMonth})}
+function scheduleItemsByDate(date){return scheduleData.filter(x=>x.date===date)}
+function scheduleDateInfo(date){let d=new Date(date+'T00:00:00');return {day:d.getDate(),week:weekNames[d.getDay()],full:date.replaceAll('-','.')+'.'}}
+function renderScheduleCard(it){return `<div class="schedule-card"><div class="schedule-card-title"><span class="schedule-dot"></span>${it.title}</div><div class="schedule-card-meta">${it.member?it.member+'<br>':''}${it.time}</div></div>`}
 function renderSchedule(){
   const btn=document.getElementById('scheduleMonthBtn'), box=document.getElementById('scheduleBox'), tbtn=document.getElementById('scheduleToggleBtn'); if(!btn||!box)return;
   btn.textContent=`${scheduleMonth}월, ${scheduleYear}⌄`; if(tbtn)tbtn.textContent=scheduleMode==='calendar'?'📅':'🗓️';
   const items=scheduleItems();
+  if(selectedScheduleDate){const sd=new Date(selectedScheduleDate+'T00:00:00');if(sd.getFullYear()!==scheduleYear||sd.getMonth()+1!==scheduleMonth)selectedScheduleDate=''}
   if(scheduleMode==='list'){
-    box.innerHTML=`<div class="schedule-list-view">${items.map(it=>{let d=new Date(it.date+'T00:00:00');return `<div class="schedule-list-head"><div class="schedule-list-date">${d.getDate()}일 ${weekNames[d.getDay()]}요일</div><div class="schedule-list-full">${it.date.replaceAll('-','.')+'.'}</div></div><div class="schedule-card"><div class="schedule-card-title"><span class="schedule-dot"></span>${it.title}</div><div class="schedule-card-meta">${it.member?it.member+'<br>':''}${it.time}</div></div>`}).join('')||'<div class="meta">등록된 스케줄이 없습니다.</div>'}<div class="schedule-nav"><button onclick="moveScheduleMonth(-1)">이전달</button><button onclick="moveScheduleMonth(1)">다음달</button></div></div>`;return;
+    box.innerHTML=`<div class="schedule-list-view">${items.map(it=>{let inf=scheduleDateInfo(it.date);return `<div class="schedule-list-head"><div class="schedule-list-date">${inf.day}일 ${inf.week}요일</div><div class="schedule-list-full">${inf.full}</div></div>${renderScheduleCard(it)}`}).join('')||'<div class="meta">등록된 스케줄이 없습니다.</div>'}<div class="schedule-nav"><button onclick="moveScheduleMonth(-1)">이전달</button><button onclick="moveScheduleMonth(1)">다음달</button></div></div>`;return;
   }
-  const first=new Date(scheduleYear,scheduleMonth-1,1), last=new Date(scheduleYear,scheduleMonth,0), blanks=first.getDay();
+  const first=new Date(scheduleYear,scheduleMonth-1,1), last=new Date(scheduleYear,scheduleMonth,0), blanks=first.getDay(), tKey=todayKey();
   let cells=[];for(let i=0;i<blanks;i++)cells.push('<div class="schedule-day blank"></div>');
-  for(let d=1;d<=last.getDate();d++){let date=`${scheduleYear}-${String(scheduleMonth).padStart(2,'0')}-${String(d).padStart(2,'0')}`;let ev=items.find(x=>x.date===date);cells.push(`<div class="schedule-day ${d===14&&scheduleYear===2026&&scheduleMonth===5?'today':''}"><div class="schedule-num ${ev?'has-event':''}">${d}일</div>${ev?`<div class="schedule-event">${ev.title}</div>`:''}</div>`)}
-  box.innerHTML=`<div class="schedule-week"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div><div class="schedule-grid">${cells.join('')}</div>`;
+  for(let d=1;d<=last.getDate();d++){let date=dateKey(scheduleYear,scheduleMonth,d);let ev=items.find(x=>x.date===date);let cls=[date===tKey?'today':'',date===selectedScheduleDate?'selected':''].filter(Boolean).join(' ');cells.push(`<button type="button" class="schedule-day ${cls}" onclick="selectScheduleDate('${date}')"><div class="schedule-num ${ev?'has-event':''}">${d}일</div>${ev?`<div class="schedule-event">${ev.title}</div>`:''}</button>`)}
+  let selectedHtml='';
+  if(selectedScheduleDate){let inf=scheduleDateInfo(selectedScheduleDate), dayItems=scheduleItemsByDate(selectedScheduleDate);selectedHtml=`<div class="schedule-selected"><div class="schedule-selected-head"><div class="schedule-selected-title">${inf.day}일 ${inf.week}요일</div><div class="schedule-selected-date">${inf.full}</div></div>${dayItems.map(renderScheduleCard).join('')||'<div class="meta">이 날 등록된 스케줄이 없습니다.</div>'}</div>`}
+  box.innerHTML=`<div class="schedule-week"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div><div class="schedule-grid">${cells.join('')}</div>${selectedHtml}`;
 }
+window.selectScheduleDate=(date)=>{selectedScheduleDate=selectedScheduleDate===date?'':date;renderSchedule()}
 window.toggleScheduleMode=()=>{scheduleMode=scheduleMode==='calendar'?'list':'calendar';renderSchedule()}
-window.moveScheduleMonth=(n)=>{scheduleMonth+=n;if(scheduleMonth<1){scheduleMonth=12;scheduleYear--}if(scheduleMonth>12){scheduleMonth=1;scheduleYear++}renderSchedule()}
-window.openMonthPicker=()=>{const modal=document.getElementById('monthModal'),panel=document.getElementById('monthPanel');panel.innerHTML=`<div class="month-panel-top"><button onclick="scheduleYear--;openMonthPicker()">‹</button><div class="month-year">${scheduleYear}</div><button onclick="scheduleYear++;openMonthPicker()">›</button><button onclick="document.getElementById('monthModal').classList.remove('open')">×</button></div><div class="month-grid">${Array.from({length:12},(_,i)=>`<button class="month-option ${scheduleMonth===i+1?'active':''}" onclick="scheduleMonth=${i+1};document.getElementById('monthModal').classList.remove('open');renderSchedule()">${i+1}월</button>`).join('')}</div>`;modal.classList.add('open')}
+window.moveScheduleMonth=(n)=>{scheduleMonth+=n;if(scheduleMonth<1){scheduleMonth=12;scheduleYear--}if(scheduleMonth>12){scheduleMonth=1;scheduleYear++}selectedScheduleDate='';renderSchedule()}
+window.openMonthPicker=()=>{const modal=document.getElementById('monthModal'),panel=document.getElementById('monthPanel');panel.innerHTML=`<div class="month-panel-top"><button onclick="scheduleYear--;openMonthPicker()">‹</button><div class="month-year">${scheduleYear}</div><button onclick="scheduleYear++;openMonthPicker()">›</button><button onclick="document.getElementById('monthModal').classList.remove('open')">×</button></div><div class="month-grid">${Array.from({length:12},(_,i)=>`<button class="month-option ${scheduleMonth===i+1?'active':''}" onclick="scheduleMonth=${i+1};selectedScheduleDate='';document.getElementById('monthModal').classList.remove('open');renderSchedule()">${i+1}월</button>`).join('')}</div>`;modal.classList.add('open')}
 document.addEventListener('click',e=>{if(e.target.id==='monthModal')e.target.classList.remove('open')});
 
 
@@ -537,7 +625,7 @@ window.openBoardDetail=id=>{let b=boards.find(x=>x.id===id);document.getElementB
 
 window.openAlerts=()=>{alerts=alerts.map(a=>({...a,read:true}));renderAlerts();save();go('alerts')}
 window.clearAlerts=()=>{alerts=[];renderAlerts();save()}
-window.openCart=()=>{document.getElementById('cartList').innerHTML=cart.length?newest(cart).map(c=>`<div class="cart-row"><div class="cart-thumb">${media(c.thumb)}</div><div class="cart-main"><div class="cart-title">${c.name}</div><div class="cart-meta">${c.price} · 수량 ${c.qty}</div></div><button class="btn danger" onclick="cart=cart.filter(x=>x.id!==${c.id});openCart();save()">삭제</button></div>`).join('')+`<button class="primary" style="width:100%" onclick="checkout()">장바구니 결제하기</button>`:'<div class="meta">장바구니가 비어있습니다.</div>';go('cart')}
+window.openCart=()=>{const cp=document.getElementById('cartPointInfo');if(cp)cp.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`;document.getElementById('cartList').innerHTML=cart.length?newest(cart).map(c=>`<div class="cart-row"><div class="cart-thumb">${media(c.thumb)}</div><div class="cart-main"><div class="cart-title">${c.name}</div><div class="cart-meta">${c.price} · 수량 ${c.qty}</div></div><button class="btn danger" onclick="cart=cart.filter(x=>x.id!==${c.id});openCart();save()">삭제</button></div>`).join('')+`<button class="primary" style="width:100%" onclick="checkout()">장바구니 결제하기</button>`:'<div class="meta">장바구니가 비어있습니다.</div>';go('cart')}
 window.addCart=id=>{let p=products.find(x=>x.id===id);let c=cart.find(x=>x.id===id);if(c)c.qty++;else cart.push({id:p.id,name:p.name,price:p.price,thumb:p.thumb,qty:1});save();alert('장바구니에 담았습니다.')}
 window.buyProduct=id=>{let p=products.find(x=>x.id===id);if(p.membership){openJoin();return}payPhysicalProduct(p,1);render();}
 window.checkout=()=>{if(!cart.length)return; const total=cart.reduce((s,c)=>s+priceNum(c.price)*(c.qty||1),0); let use=0;if(points>0&&total>0&&confirm(`보유 포인트 ${points.toLocaleString('ko-KR')}P를 사용할까?`)){use=Math.min(points,total)} points-=use; let restUse=use; cart.forEach(c=>{let sub=priceNum(c.price)*(c.qty||1); let used=Math.min(restUse,sub); restUse-=used; let final=sub-used; let earned=Math.floor(final*0.01); points+=earned; orders.unshift({...c,id:uid(),date:new Date().toLocaleString(),usedPoint:used,earnedPoint:earned,paid:final})}); cart=[];save();alert('결제가 완료되었습니다.');openCart()}
