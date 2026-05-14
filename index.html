@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>ATEEZ Official Platform</title>
+<title>Official Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -587,26 +587,12 @@ html.force-dark .member-detail-btn{background:#8fa2cc!important;color:#fff!impor
   html:not(.force-light) .member-sub{color:#b7b7bf!important;}
 }
 
-
-
-/* FINAL ARTIST ENTRY FIX: always clean 2-column selection first */
-#artistSelect{background:inherit;color:inherit;}
-#artistSelect.active{display:block!important;}
-.app.artist-landing header,.app.artist-landing .bottom-nav,.app.artist-landing .fab{display:none!important;}
-.app.artist-landing{padding-bottom:0!important;}
-.artist-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
-.artist-card{position:relative!important;z-index:5!important;}
-.artist-hit-button{min-height:164px!important;position:relative!important;z-index:8!important;}
-.artist-avatar{pointer-events:none!important;}
-.artist-name{pointer-events:none!important;}
-@media(max-width:420px){.artist-select{padding:34px 18px 44px!important}.artist-avatar{width:126px!important;height:126px!important}.artist-hit-button{min-height:162px!important}}
-
 </style>
 </head>
 <body>
 <div class="app">
 <header>
-  <div class="logo" onclick="go('home')">ATEEZ</div>
+  <div class="logo" onclick="go('home')">ARTIST</div>
   <div class="header-actions">
     <button onclick="openAlerts()">🔔<span class="dot" id="alertDot"></span></button>
     <button onclick="go('schedule')">📅</button>
@@ -625,7 +611,7 @@ html.force-dark .member-detail-btn{background:#8fa2cc!important;color:#fff!impor
   </div>
 </section>
 <section class="view" id="home">
-  <div class="hero"><div class="hero-card"><h1>GOLDEN<br>HOUR</h1><p id="welcome">ATEEZ Official Platform</p><button class="primary" onclick="openMembership()">멤버십 가입하기</button></div></div>
+  <div class="hero"><div class="hero-card"><h1>GOLDEN<br>HOUR</h1><p id="welcome">Official Platform</p><button class="primary" onclick="openMembership()">멤버십 가입하기</button></div></div>
   <div class="section"><div class="section-title">LATEST CONTENTS</div><div class="grid" id="homeGrid"></div></div>
 </section>
 
@@ -667,7 +653,7 @@ html.force-dark .member-detail-btn{background:#8fa2cc!important;color:#fff!impor
   </div>
 </section>
 
-<section class="view" id="shop"><div class="section-title" style="padding:18px 20px 0"><span>SHOP</span><button class="primary" onclick="openAddProduct()">+ 상품 추가</button></div><div class="hero"><div class="hero-card"><h1>OUR ETERNAL<br>STAR ATINY</h1><p>Official Membership & Goods</p></div></div><div class="shop-tabs" id="shopTabs"></div><div class="section"><div class="grid" id="shopGrid"></div></div></section>
+<section class="view" id="shop"><div class="section-title" style="padding:18px 20px 0"><span>SHOP</span><button class="primary" onclick="openAddProduct()">+ 상품 추가</button></div><div class="hero"><div class="hero-card"><h1 id="shopHeroTitle">OFFICIAL<br>STORE</h1><p id="shopHeroSub">Official Membership & Goods</p></div></div><div class="shop-tabs" id="shopTabs"></div><div class="section"><div class="grid" id="shopGrid"></div></div></section>
 <section class="view" id="shopDetail"><div id="shopDetailBox"></div></section>
 <section class="view" id="cart"><div class="section"><div class="section-title">장바구니</div><div class="point-badge" id="cartPointBadge" style="margin:0 0 18px">보유 포인트 0P</div><div id="cartList"></div></div></section>
 <section class="view" id="alerts"><div class="section"><div class="section-title">알림 <button class="btn danger" onclick="clearAlerts()">초기화</button></div><div id="alertList"></div></div></section>
@@ -722,23 +708,22 @@ html.force-dark .member-detail-btn{background:#8fa2cc!important;color:#fff!impor
 <div style="display:flex;gap:10px"><button class="btn primary" id="saveBtn" onclick="saveModal()">저장</button><button class="btn light" onclick="closeModal()">취소</button></div>
 </div></div>
 
-<script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+const firebaseConfig={apiKey:"AIzaSyAA6mbdYfLrrgCJjN47PX91_mU7I53RiBs",authDomain:"site-c67b4.firebaseapp.com",projectId:"site-c67b4",storageBucket:"site-c67b4.firebasestorage.app",messagingSenderId:"744761377245",appId:"1:744761377245:web:3ddaee14f184716eeef634"};
 const CLOUDINARY_CLOUD='dbljkloal',CLOUDINARY_PRESET='clowofficial';
+const app=initializeApp(firebaseConfig),db=getFirestore(app);
 
 const LS=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');return Array.isArray(f)?(Array.isArray(v)&&v.length?v:f):(v||f)}catch(e){return f}};
 const defaultMembers=[{id:'hong',name:'홍중',photo:'🎤'},{id:'seong',name:'성화',photo:'🌟'},{id:'yunho',name:'윤호',photo:'🐶'},{id:'yeo',name:'여상',photo:'✨'},{id:'san',name:'산',photo:'⛰️'},{id:'mingi',name:'민기',photo:'🐥'},{id:'woo',name:'우영',photo:'🦊'},{id:'jong',name:'종호',photo:'🍎'}];
-const defaultProducts=[{id:80,name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',body:'1년 멤버십 상품입니다.',membership:true,cat:'MEMBERSHIP'},{id:79,name:'GOLDEN HOUR Pt.4 Album',price:'18,000원',thumb:'💿',body:'앨범 상품 상세페이지입니다.',cat:'ALBUM'},{id:78,name:'ANITEEZ Figure Set',price:'35,000원',thumb:'🧸',body:'굿즈 상품입니다.',cat:'PRODUCTS'}];
+const defaultProducts=[{id:80,name:'MEMBERSHIP',price:'20,000원',thumb:'💎',body:'1년 멤버십 상품입니다.',membership:true,cat:'MEMBERSHIP'},{id:79,name:'ALBUM',price:'18,000원',thumb:'💿',body:'앨범 상품 상세페이지입니다.',cat:'ALBUM'},{id:78,name:'OFFICIAL GOODS',price:'35,000원',thumb:'🧸',body:'굿즈 상품입니다.',cat:'PRODUCTS'}];
 const defaultPosts=[{id:300,type:'talk',member:'hong',title:'우리 티니들 간바떼!💪',body:'오늘도 힘내요.',thumb:'🎤',likes:2421,comments:3,author:'ME',created:'방금 작성'},{id:299,type:'talk',member:'seong',title:'오늘의 기록',body:'작은 순간도 나누고 싶어서 올려요.',thumb:'🌟',likes:10712,comments:1,author:'ME',created:'1일 전'},{id:298,type:'content',cat:'golden',title:'Adrenaline MAX ⚡ 보이스 비하인드',body:'비하인드 영상',thumb:'🎬',author:'ME',created:'1일 전'},{id:297,type:'content',cat:'video',title:"민기 'Dinero' Production Behind",body:'YouTube',thumb:'🎥',author:'ME',created:'2일 전'}];
-const defaultNotices=[{id:200,title:'편지 전달 주소 안내',body:'팬레터 전달 주소 및 유의사항 안내입니다.',meta:'KQ엔터테인먼트 · 3년 전'},{id:199,title:'오피셜 플랫폼 오픈 안내',body:'ATEEZ 공식 플랫폼이 오픈되었습니다.',meta:'KQ엔터테인먼트 · 3년 전'}];
-const defaultBoards=[{id:150,cat:'event',title:'다정 토끼 성화의 날 🐰🌸',body:'다정 토끼 성화의 생일을 축하합니다🎉\n\n성화의 생일을 맞아 이벤트를 진행합니다.',thumb:'🐰',date:'2026.04.02'},{id:149,cat:'broadcast',title:"260215(일) SBS '인기가요' 사전녹화 안내",body:'사전녹화 및 생방송 참여 명단 안내입니다.',thumb:'💚',date:'3달 전'},{id:148,cat:'notice',title:'THE WORLD EP.FIN : WILL 발매 안내',body:'안녕하세요.\nKQ엔터테인먼트입니다.\n\n발매 안내드립니다.',date:'2024.04.21'}];
+const defaultNotices=[{id:200,title:'편지 전달 주소 안내',body:'팬레터 전달 주소 및 유의사항 안내입니다.',meta:'관리자 · 3년 전'},{id:199,title:'오피셜 플랫폼 오픈 안내',body:'공식 플랫폼이 오픈되었습니다.',meta:'관리자 · 3년 전'}];
+const defaultBoards=[{id:150,cat:'event',title:'다정 토끼 성화의 날 🐰🌸',body:'다정 토끼 성화의 생일을 축하합니다🎉\n\n성화의 생일을 맞아 이벤트를 진행합니다.',thumb:'🐰',date:'2026.04.02'},{id:149,cat:'broadcast',title:"260215(일) SBS '인기가요' 사전녹화 안내",body:'사전녹화 및 생방송 참여 명단 안내입니다.',thumb:'💚',date:'3달 전'},{id:148,cat:'notice',title:'THE WORLD EP.FIN : WILL 발매 안내',body:'안녕하세요.\n관리자입니다.\n\n발매 안내드립니다.',date:'2024.04.21'}];
 const defaultSchedules=[{date:'2026-05-07',title:'전주국제영화제 <할루시네이션> GV',member:'홍중',time:'종일',cat:'FAN'},{date:'2026-05-17',title:'ASEA 2026',member:'',time:'종일',cat:'TV'}];
-const defaultArtists=[{id:'clow',name:'CLOW',photo:'C'},{id:'kinon',name:'KINON',photo:'K'},{id:'aven',name:'AVEN',photo:'A'}];
-let artists=LS('artists',defaultArtists);
-if(!Array.isArray(artists) || !artists.length || !['clow','kinon','aven'].every(id=>artists.some(a=>a.id===id))){
-  artists=[...defaultArtists];
-  localStorage.setItem('artists',JSON.stringify(artists));
-}
-let currentArtist='';
+let artists=LS('artists',[{id:'clow',name:'CLOW',photo:'C'},{id:'kinon',name:'KINON',photo:'K'},{id:'aven',name:'AVEN',photo:'A'}]);
+let currentArtist=localStorage.getItem('currentArtist')||'';
 const artistKey=(k)=>currentArtist?`artist_${currentArtist}_${k}`:k;
 
 let members=LS('members',defaultMembers);
@@ -777,9 +762,11 @@ function loadArtistData(){
   profile=LS(artistKey('profile'),{nickname:'',photo:'',name:'',birth:'',phone:''});
   membership=LS(artistKey('membership'),null); orders=LS(artistKey('orders'),[]); cart=LS(artistKey('cart'),[]); alerts=LS(artistKey('alerts'),[]); comments=LS(artistKey('comments'),[]);
   points=Number(localStorage.getItem(artistKey('points'))||0);
-  products=LS(artistKey('products'), currentArtist==='ateez'?LS('products',defaultProducts):defaultProducts.map(x=>({...x,id:x.id+Math.floor(Math.random()*9)})));
+  products=LS(artistKey('products'), currentArtist==='ateez'?LS('products',defaultProducts):makeDefaultProducts());
+  if(products.length<=3 && products.some(p=>/ATINY|ANITEEZ|GOLDEN HOUR Pt\.4/i.test(String(p.name||'')))) products=makeDefaultProducts();
   posts=LS(artistKey('posts'), currentArtist==='ateez'?LS('posts',defaultPosts):[]);
-  notices=LS(artistKey('notices'), currentArtist==='ateez'?LS('notices',defaultNotices):[{id:uid(),title:'플랫폼 오픈 안내',body:'새 아티스트 플랫폼이 오픈되었습니다.',meta:'관리자 · 방금',pinned:true}]);
+  notices=LS(artistKey('notices'), currentArtist==='ateez'?LS('notices',defaultNotices):makeDefaultNotice());
+  if(notices.length===1 && /새 아티스트|ATEEZ/i.test(String(notices[0].body||''))) notices=makeDefaultNotice();
   boards=LS(artistKey('boards'), currentArtist==='ateez'?LS('boards',defaultBoards):[]);
   scheduleData=LS(artistKey('schedules'), currentArtist==='ateez'?LS('schedules',defaultSchedules):[]);
   scheduleData=scheduleData.map(x=>x.id?x:{...x,id:uid()+Math.floor(Math.random()*999)});
@@ -905,12 +892,29 @@ window.removeBlogBlock=i=>{blogBlocks.splice(i,1);renderBlogEditor()}
 
 
 function currentArtistObj(){return artists.find(a=>a.id===currentArtist)||null}
+function artistDisplayName(){return (currentArtistObj()?.name||'ARTIST').toUpperCase()}
+function artistPlatformText(){return `${artistDisplayName()} Official Platform`}
+function makeDefaultProducts(){
+  const n=artistDisplayName();
+  return [
+    {id:80,name:`${n} MEMBERSHIP`,price:'20,000원',thumb:'💎',body:`${n} 1년 멤버십 상품입니다.`,membership:true,cat:'MEMBERSHIP'},
+    {id:79,name:`${n} ALBUM`,price:'18,000원',thumb:'💿',body:`${n} 앨범 상품 상세페이지입니다.`,cat:'ALBUM'},
+    {id:78,name:`${n} OFFICIAL GOODS`,price:'35,000원',thumb:'🧸',body:`${n} 공식 굿즈 상품입니다.`,cat:'PRODUCTS'}
+  ];
+}
+function makeDefaultNotice(){return [{id:uid(),title:'플랫폼 오픈 안내',body:`${artistDisplayName()} 공식 플랫폼이 오픈되었습니다.`,meta:'관리자 · 방금',pinned:true}]}
+function syncArtistNames(){
+  const n=artistDisplayName();
+  document.title=`${n} Official Platform`;
+  const shopTitle=document.getElementById('shopHeroTitle'); if(shopTitle)shopTitle.innerHTML=`${n}<br>OFFICIAL STORE`;
+  const shopSub=document.getElementById('shopHeroSub'); if(shopSub)shopSub.textContent=`${n} Official Membership & Goods`;
+}
 function syncArtistLandingChrome(){
   const app=document.querySelector('.app');
   const isLanding=!!document.getElementById('artistSelect')?.classList.contains('active');
   if(app)app.classList.toggle('artist-landing',isLanding);
   const logo=document.querySelector('.logo');
-  if(logo)logo.textContent=isLanding?'ARTIST':(currentArtistObj()?.name||'ATEEZ');
+  if(logo)logo.textContent=isLanding?'ARTIST':(currentArtistObj()?.name||'ARTIST');
   const fab=document.getElementById('fab');
   if(fab && isLanding)fab.style.display='none';
 }
@@ -921,13 +925,8 @@ function bindArtistGridTap(){
 
 function renderArtistSelect(){
   const box=document.getElementById('artistGrid'); if(!box)return;
-  const base=['clow','kinon','aven'];
-  artists.sort((a,b)=>{
-    const ai=base.indexOf(a.id), bi=base.indexOf(b.id);
-    return (ai<0?99:ai)-(bi<0?99:bi);
-  });
   box.innerHTML=artists.map(a=>`<div class="artist-card" data-artist-id="${a.id}">
-    <button type="button" class="artist-hit-button" data-artist-id="${a.id}" aria-label="${esc(a.name)} 플랫폼 입장">
+    <button type="button" class="artist-hit-button" onclick="selectArtist('${a.id}')" aria-label="${esc(a.name)} 플랫폼 입장">
       <div class="artist-avatar">${media(a.photo||'🎤')}</div>
       <div class="artist-name">${esc(a.name)}</div>
     </button>
@@ -938,12 +937,14 @@ function renderArtistSelect(){
   </div>`).join('')||'<div class="meta">아티스트가 없습니다.</div>';
 }
 window.selectArtist=(id)=>{
-  if(!id)return;
+  if(currentArtist && currentArtist!==id) save();
   currentArtist=id;
   localStorage.setItem('currentArtist',id);
   loadArtistData();
-  document.querySelector('.app')?.classList.remove('artist-landing');
-  go('home');
+  render();
+  let last=localStorage.getItem(artistKey('lastView'))||'home';
+  if(!last || last==='artistSelect' || !document.getElementById(last)) last='home';
+  go(last);
 }
 window.addArtist=()=>{
   const name=prompt('추가할 아티스트 이름을 입력해 주세요.'); if(!name)return;
@@ -971,15 +972,13 @@ window.deleteArtist=(id)=>{
   showArtistLanding();
 }
 
-function handleArtistTap(e){
-  const hit=e.target.closest('.artist-hit-button,.artist-card');
-  if(!hit || !document.getElementById('artistSelect')?.classList.contains('active'))return;
-  if(e.target.closest('.artist-actions'))return;
-  const id=hit.dataset.artistId || hit.closest('.artist-card')?.dataset.artistId;
-  if(id){e.preventDefault(); e.stopPropagation(); window.selectArtist(id);}
-}
-document.addEventListener('click',handleArtistTap,true);
-document.addEventListener('touchend',handleArtistTap,{capture:true,passive:false});
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.artist-hit-button');
+  if(!btn)return;
+  const card=btn.closest('.artist-card');
+  const id=card&&card.dataset.artistId;
+  if(id){e.preventDefault(); window.selectArtist(id);}
+},true);
 
 function showArtistLanding(){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
@@ -995,7 +994,7 @@ function go(id){
   if(id==='artistSelect'){save(); currentArtist=''; localStorage.removeItem('currentArtist'); renderArtistSelect(); showArtistLanding(); return;}
   if(!currentArtist){renderArtistSelect();showArtistLanding();return;}
   document.querySelector('.app').classList.remove('artist-landing');
-  const artist=currentArtistObj(); const logo=document.querySelector('.logo'); if(logo)logo.textContent=artist?artist.name:'ATEEZ';
+  const artist=currentArtistObj(); const logo=document.querySelector('.logo'); if(logo)logo.textContent=artist?artist.name:'ARTIST';
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   const target=document.getElementById(id)||document.getElementById('home'); target.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
@@ -1009,7 +1008,7 @@ function go(id){
 window.go=go;
 
 function render(){renderArtistSelect();renderProfile();renderHome();renderMembers();renderTalk();renderContents();renderShop();renderCommunity();renderSchedule();renderAlerts();syncArtistLandingChrome();save()}
-function renderProfile(){document.getElementById('welcome').textContent=profile.nickname?`${profile.nickname}님 환영합니다`:'ATEEZ Official Platform';document.getElementById('myNick').textContent=profile.nickname||'닉네임 미설정';document.getElementById('topProfile').innerHTML=profile.photo?media(profile.photo):'👤';const pb=document.getElementById('pointBadge');if(pb)pb.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`;const cp=document.getElementById('cartPointBadge');if(cp)cp.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`;const tl=document.getElementById('themeLabel');if(tl)tl.textContent=themeMode==='dark'?'다크':themeMode==='light'?'화이트':'시스템';applyTheme()}
+function renderProfile(){syncArtistNames();document.getElementById('welcome').textContent=profile.nickname?`${profile.nickname}님 환영합니다`:artistPlatformText();document.getElementById('myNick').textContent=profile.nickname||'닉네임 미설정';document.getElementById('topProfile').innerHTML=profile.photo?media(profile.photo):'👤';const pb=document.getElementById('pointBadge');if(pb)pb.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`;const cp=document.getElementById('cartPointBadge');if(cp)cp.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`;const tl=document.getElementById('themeLabel');if(tl)tl.textContent=themeMode==='dark'?'다크':themeMode==='light'?'화이트':'시스템';applyTheme()}
 function renderHome(){
   const list=newest(posts).filter(p=>p.type==='content').slice(0,4);
   const old=document.getElementById('homeGrid');
@@ -1020,7 +1019,7 @@ function renderHome(){
 function renderMembers(){document.getElementById('memberStrip').innerHTML=members.map(m=>`<button class="member-chip ${currentMember===m.id?'active':''}" onclick="toggleMember('${m.id}')"><div class="member-photo">${media(m.photo)}</div><div class="member-name">${m.name}</div></button>`).join('')+`<button class="member-setting-chip" onclick="openMemberSettings()" title="멤버 설정">⚙︎</button>`}
 window.toggleMember=id=>{currentMember=currentMember===id?null:id;renderMembers();renderTalk()}
 function renderTalk(){let list=newest(posts).filter(p=>p.type==='talk'&&(!currentMember||p.member===currentMember));document.getElementById('talkFeed').innerHTML=list.map(p=>{let m=members.find(x=>x.id===p.member)||members[0];let img=p.thumb?`<div class="feed-img">${media(p.thumb)}</div>`:'';return `<article class="feed-card" onclick="openPost(${p.id})"><div class="feed-head"><div class="feed-user"><div class="photo">${media(m.photo)}</div><div><div class="name">${m.name} <span class="check">✓</span></div><div class="feed-time">${timeAgo(createdTime(p))}</div></div></div><button class="more" onclick="event.stopPropagation();openMenu(event,'post',${p.id})">⋮</button></div>${img}<div class="feed-title">${p.title}</div><div class="react" onclick="event.stopPropagation()"><button onclick="likePost(${p.id})">♡ ${p.likes||0}</button><button onclick="addComment(${p.id})">💬 ${p.comments||0}</button></div></article>`}).join('')||'<div class="meta">게시글이 없습니다.</div>'}
-function renderContents(){let cats=[['golden','[GOLDEN HOUR]'],['video','VIDEO'],['atiny','ATINY ZONE'],['log','ATEEZ_log']];document.getElementById('contentSections').innerHTML=cats.map(([k,t])=>{let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===k).slice(0,4);return `<section class="content-section"><div class="content-head"><h2>${t}</h2><button class="btn light" onclick="openContentAll('${k}','${t}')">전체보기</button></div><div class="row-scroll">${list.map(p=>`<div onclick="openPost(${p.id})">${p.thumb?`<div class="wide-thumb">${media(p.thumb)}</div>`:''}<div class="wide-title">${p.title}</div><div class="meta">${timeAgo(createdTime(p))}</div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>'}</div></section>`}).join('')}
+function renderContents(){let cats=[['golden','[GOLDEN HOUR]'],['video','VIDEO'],['atiny','ATINY ZONE'],['log',`${artistDisplayName()}_log`]];document.getElementById('contentSections').innerHTML=cats.map(([k,t])=>{let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===k).slice(0,4);return `<section class="content-section"><div class="content-head"><h2>${t}</h2><button class="btn light" onclick="openContentAll('${k}','${t}')">전체보기</button></div><div class="row-scroll">${list.map(p=>`<div onclick="openPost(${p.id})">${p.thumb?`<div class="wide-thumb">${media(p.thumb)}</div>`:''}<div class="wide-title">${p.title}</div><div class="meta">${timeAgo(createdTime(p))}</div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>'}</div></section>`}).join('')}
 function renderShop(){
   let cats=['ALL','MEMBERSHIP','ALBUM','PRODUCTS'];
   document.getElementById('shopTabs').innerHTML=cats.map(c=>`<button class="${shopCat===c?'active':''}" onclick="setShopCat('${c}')">${c}</button>`).join('');
@@ -1048,7 +1047,7 @@ function renderCommunity(){
       <div class="community-item ${pin?'pinned-notice':''}" onclick="openNotice(${n.id})">
         <div class="community-main">
           <div class="community-title">${n.title}</div>
-          <div class="community-meta">${pin?'상단 고정 · ':''}${n.meta||'KQ엔터테인먼트 · 방금'}</div>
+          <div class="community-meta">${pin?'상단 고정 · ':''}${n.meta||'관리자 · 방금'}</div>
           <div class="community-preview">${n.body||''}</div>
         </div>
       </div>`;
@@ -1060,7 +1059,7 @@ function renderCommunity(){
       <div class="community-item" onclick="openBoardDetail(${b.id})">
         <div class="community-main">
           <div class="community-title">${b.title}</div>
-          <div class="community-meta">KQ엔터테인먼트 · ${b.date||'방금'}</div>
+          <div class="community-meta">관리자 · ${b.date||'방금'}</div>
           <div class="community-preview">${b.body||''}</div>
         </div>
         <div class="community-thumb">${media(b.thumb||'📝')}</div>
@@ -1074,7 +1073,7 @@ window.openPost=id=>{let p=posts.find(x=>x.id===id);if(!p)return;if(p.type==='ta
 
 
 window.openProduct=id=>{let p=products.find(x=>x.id===id);document.getElementById('shopDetailBox').innerHTML=`<div><button class="back" style="margin:16px" onclick="go('shop')">‹ SHOP</button><div class="shop-hero">${media(p.thumb)}</div><div class="shop-info"><div class="shop-title">${p.name}</div><div class="shop-price">${p.price}</div>${p.membership?'':`<div class="meta" style="margin-top:8px">결제 시 1% 포인트 적립 · 보유 ${points.toLocaleString('ko-KR')}P</div>`}<div class="shop-desc"><h2>상품 설명</h2>${renderBlocks(p,'shop')}</div><div class="actions"><button class="btn light" onclick="editProduct(${p.id})">수정</button><button class="btn danger" onclick="deleteProduct(${p.id})">삭제</button></div></div><div class="shop-bottom">${p.membership?'':`<button class="cart-btn" onclick="addCart(${p.id})">장바구니</button>`}<button class="buy-btn" onclick="buyProduct(${p.id})">구매하기</button></div></div>`;go('shopDetail')}
-window.openNotice=id=>{let n=notices.find(x=>x.id===id);document.getElementById('noticeDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('community')">‹ COMMUNITY</button><div class="detail-title notice-detail-title">${n.title}</div><div class="meta">${n.meta||'KQ엔터테인먼트 · 방금'}</div><div class="detail-body notice-detail-body">${esc(n.body||'')}</div><div class="actions"><button class="btn light notice-pin-btn" onclick="toggleNoticePin(${n.id})">${n.pinned?'고정 해제':'상단 고정'}</button><button class="btn light" onclick="editNotice(${n.id})">수정</button><button class="btn danger" onclick="deleteNotice(${n.id})">삭제</button></div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 14</span></div>`;go('noticeDetail')}
+window.openNotice=id=>{let n=notices.find(x=>x.id===id);document.getElementById('noticeDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('community')">‹ COMMUNITY</button><div class="detail-title notice-detail-title">${n.title}</div><div class="meta">${n.meta||'관리자 · 방금'}</div><div class="detail-body notice-detail-body">${esc(n.body||'')}</div><div class="actions"><button class="btn light notice-pin-btn" onclick="toggleNoticePin(${n.id})">${n.pinned?'고정 해제':'상단 고정'}</button><button class="btn light" onclick="editNotice(${n.id})">수정</button><button class="btn danger" onclick="deleteNotice(${n.id})">삭제</button></div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 14</span></div>`;go('noticeDetail')}
 window.openContentAll=(cat,title)=>{let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===cat);document.getElementById('contentAllBox').innerHTML=`<div class="section"><button class="back" onclick="go('contents')">‹ CONTENTS</button><h1>${title}</h1><button class="primary" style="margin-top:14px" onclick="openAddContentFor('${cat}')">+ 콘텐츠 추가</button></div><div class="all-grid">${list.map(p=>`<div onclick="openPost(${p.id})">${p.thumb?`<div class="wide-thumb">${media(p.thumb)}</div>`:''}<div class="wide-title">${p.title}</div><div class="meta">${timeAgo(createdTime(p))}</div></div>`).join('')}</div>`;go('contentAll')}
 window.openBoard=cat=>{let list=newest(boards).filter(b=>b.cat===cat);let title={notice:'# NOTICE',event:'# EVENT',broadcast:'# 공방공지'}[cat];document.getElementById('boardBox').innerHTML=`<div class="section"><button class="back" onclick="go('contents')">‹ CONTENTS</button><h1>${title}</h1><button class="primary" style="margin-top:14px" onclick="openAddContentFor('${cat}')">+ 콘텐츠 추가</button></div><div class="all-grid">${list.map(b=>`<div onclick="openBoardDetail(${b.id})"><div class="wide-thumb">${cat==='notice'?'':media(b.thumb)}</div><div class="wide-title">${b.title}</div><div class="meta">${b.date}</div></div>`).join('')}</div>`;go('board')}
 window.openBoardDetail=id=>{let b=boards.find(x=>x.id===id);document.getElementById('boardDetailBox').innerHTML=`<div class="talk-detail"><button class="back" onclick="go('community')">‹ COMMUNITY</button><div class="detail-title">${b.title}</div><div class="meta">${b.date}</div>${b.cat==='notice'?'':`<div class="big-media">${media(b.thumb)}</div>`}<div class="detail-body" style="font-size:1.35rem;margin-top:28px">${b.body}</div><div class="react"><button>👍 1691</button><button>💗 8712</button><button>🍿 392</button></div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 984</span></div>`;go('boardDetail')}
@@ -1092,7 +1091,7 @@ window.openMembershipDetail=()=>{
   if(!membership){openJoin();return}
   const start=membership.start?fmt(new Date(membership.start)):'2026.05.03';
   const end=membership.end?fmt(new Date(membership.end)):'2027.05.03';
-  document.getElementById('myDetailBox').innerHTML=`<div class="membership-detail-page"><button class="back" onclick="go('membership')">‹ BACK</button><h1>멤버십 상세</h1><div class="mem-section-title">상품 정보</div><div class="mem-info-grid"><div class="label2">멤버십 이름</div><div class="value2">ATINY MEMBERSHIP (단건 결제)</div><div class="label2">옵션</div><div class="value2">ATINY</div><div class="label2">이용 기간</div><div class="value2">${start} - ${end}</div></div><div class="mem-divider"></div><div class="mem-section-title">멤버십 정보</div><div class="mem-info-grid"><div class="label2">멤버십 번호</div><div class="value2"><u>${membership.code||code()}</u></div><div class="label2">이름</div><div class="value2">${esc(membership.name||profile.name||'')}</div><div class="label2">생년월일</div><div class="value2">${esc(membership.birth||profile.birth||'')}</div><div class="label2">전화번호</div><div class="value2">${esc(membership.phone||profile.phone||'')}</div></div><div class="mem-divider"></div><div class="mem-benefits"><div><span class="mem-hex"></span><span>디지털 멤버십 카드</span></div><div><span class="mem-hex"></span><span>멤버십 KIT 구매 기회 제공</span></div><div><span class="mem-hex"></span><span>멤버십 전용 상품 구매 기회 제공</span></div><div><span class="mem-hex"></span><span>KQ 주최 공연시 선예매 및 팬클럽 부스 이용 혜택</span></div><div><span class="mem-hex"></span><span>공식 플랫폼 내 멤버십 독점 콘텐츠 제공</span></div><div><span class="mem-hex"></span><span>공개방송 및 온/오프라인 이벤트 응모 및 참여 기회</span></div></div></div>`;
+  document.getElementById('myDetailBox').innerHTML=`<div class="membership-detail-page"><button class="back" onclick="go('membership')">‹ BACK</button><h1>멤버십 상세</h1><div class="mem-section-title">상품 정보</div><div class="mem-info-grid"><div class="label2">멤버십 이름</div><div class="value2">${artistDisplayName()} MEMBERSHIP (단건 결제)</div><div class="label2">옵션</div><div class="value2">${artistDisplayName()}</div><div class="label2">이용 기간</div><div class="value2">${start} - ${end}</div></div><div class="mem-divider"></div><div class="mem-section-title">멤버십 정보</div><div class="mem-info-grid"><div class="label2">멤버십 번호</div><div class="value2"><u>${membership.code||code()}</u></div><div class="label2">이름</div><div class="value2">${esc(membership.name||profile.name||'')}</div><div class="label2">생년월일</div><div class="value2">${esc(membership.birth||profile.birth||'')}</div><div class="label2">전화번호</div><div class="value2">${esc(membership.phone||profile.phone||'')}</div></div><div class="mem-divider"></div><div class="mem-benefits"><div><span class="mem-hex"></span><span>디지털 멤버십 카드</span></div><div><span class="mem-hex"></span><span>멤버십 KIT 구매 기회 제공</span></div><div><span class="mem-hex"></span><span>멤버십 전용 상품 구매 기회 제공</span></div><div><span class="mem-hex"></span><span>공연시 선예매 및 팬클럽 부스 이용 혜택</span></div><div><span class="mem-hex"></span><span>공식 플랫폼 내 멤버십 독점 콘텐츠 제공</span></div><div><span class="mem-hex"></span><span>공개방송 및 온/오프라인 이벤트 응모 및 참여 기회</span></div></div></div>`;
   go('myDetail');
 }
 
@@ -1118,10 +1117,10 @@ window.openMembership=()=>{
   <div class="member-card-wrap">
     <div class="member-flip">
       <div class="membership-card" onclick="this.classList.toggle('flip')">
-        <div class="face front"><span>ATINY MEMBERSHIP (단건<br>결제)<br><small>ATINY</small></span></div>
+        <div class="face front"><span>${artistDisplayName()} MEMBERSHIP (단건<br>결제)<br><small>${artistDisplayName()}</small></span></div>
         <div class="face backface">
           <div class="back-inner">
-            <div>ATINY MEMBERSHIP (단건 결제)<br>ATINY<br>${startTxt} - ${endTxt}</div>
+            <div>${artistDisplayName()} MEMBERSHIP (단건 결제)<br>${artistDisplayName()}<br>${startTxt} - ${endTxt}</div>
             <div style="margin-top:auto">
               <div class="label">멤버십 번호</div>
               <div class="big">${membership.code}</div>
@@ -1137,8 +1136,8 @@ window.openMembership=()=>{
       </div>
     </div>
     <div class="member-card-dot"></div>
-    <div class="member-title">ATINY MEMBERSHIP (단건 결제)</div>
-    <div class="member-sub">ATINY</div>
+    <div class="member-title">${artistDisplayName()} MEMBERSHIP (단건 결제)</div>
+    <div class="member-sub">${artistDisplayName()}</div>
     <button class="member-detail-btn" onclick="openMembershipDetail()">멤버십 상세 보기</button>
   </div>`;
   go('membership');
@@ -1208,15 +1207,15 @@ window.openAddContentFor=(cat)=>{editId=null;modalMode='content';tempImg='';sele
 window.openAddNotice=()=>{editId=null;modalMode='notice';tempImg='';openModal('공지 추가','','','');document.getElementById('thumbBlock').style.display='none'}
 window.openJoin=()=>{editId=null;modalMode='join';openModal('멤버십 가입 정보','','','');document.getElementById('thumbBlock').style.display='none';document.getElementById('mTitle').placeholder='이름';document.getElementById('mBody').placeholder='생년월일';document.getElementById('mMeta').placeholder='전화번호';document.getElementById('saveBtn').textContent='최종 결제 진행'}
 
-window.saveModal=()=>{let title=document.getElementById('mTitle').value.trim(),body=document.getElementById('mBody').value.trim(),meta=document.getElementById('mMeta').value.trim();if(modalMode==='profile'){profile.nickname=title;profile.photo=tempProfile;closeModal();render();return}if(modalMode==='editMember'){let m=members.find(x=>x.id===editId);if(m){m.name=title||m.name;m.photo=tempProfile||m.photo;}closeModal();save();render();openMemberSettings();return}if(modalMode==='join'){if(!title||!body||!meta)return alert('전부 입력해줘');let now=new Date(),end=new Date();end.setFullYear(now.getFullYear()+1);membership={name:title,birth:body,phone:meta,code:code(),start:now.toISOString(),end:end.toISOString()};orders.unshift({id:uid(),name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',qty:1,date:fmt(now)});closeModal();render();openMembership();return}if(!title)return alert('제목을 입력해 주세요');if(editId && (modalMode==='talk'||modalMode==='content')){let p=posts.find(x=>x.id===editId);if(p){p.title=title;p.body=body;p.thumb=tempImg||'';if(modalMode==='talk'){p.member=selectedPostMember||p.member}else{p.blocks=collectBlogBlocks();p.body=p.blocks.length?'':body;p.visibility=selectedVisibility||'public';}}closeModal();save();render();openPost(editId);editId=null;return}if(modalMode==='editNotice'){
+window.saveModal=()=>{let title=document.getElementById('mTitle').value.trim(),body=document.getElementById('mBody').value.trim(),meta=document.getElementById('mMeta').value.trim();if(modalMode==='profile'){profile.nickname=title;profile.photo=tempProfile;closeModal();render();return}if(modalMode==='editMember'){let m=members.find(x=>x.id===editId);if(m){m.name=title||m.name;m.photo=tempProfile||m.photo;}closeModal();save();render();openMemberSettings();return}if(modalMode==='join'){if(!title||!body||!meta)return alert('전부 입력해줘');let now=new Date(),end=new Date();end.setFullYear(now.getFullYear()+1);membership={name:title,birth:body,phone:meta,code:code(),start:now.toISOString(),end:end.toISOString()};orders.unshift({id:uid(),name:`${artistDisplayName()} MEMBERSHIP`,price:'20,000원',thumb:'💎',qty:1,date:fmt(now)});closeModal();render();openMembership();return}if(!title)return alert('제목을 입력해 주세요');if(editId && (modalMode==='talk'||modalMode==='content')){let p=posts.find(x=>x.id===editId);if(p){p.title=title;p.body=body;p.thumb=tempImg||'';if(modalMode==='talk'){p.member=selectedPostMember||p.member}else{p.blocks=collectBlogBlocks();p.body=p.blocks.length?'':body;p.visibility=selectedVisibility||'public';}}closeModal();save();render();openPost(editId);editId=null;return}if(modalMode==='editNotice'){
   let n=notices.find(x=>x.id===editId);
-  if(n){n.title=title;n.body=body;n.meta=n.meta||'KQ엔터테인먼트 · 방금';}
+  if(n){n.title=title;n.body=body;n.meta=n.meta||'관리자 · 방금';}
   closeModal();save();render();openNotice(editId);editId=null;return;
 }if(modalMode==='editProduct'){
   let p=products.find(x=>x.id===editId);
   if(p){let blocks=collectBlogBlocks();p.name=title;p.body=blocks.length?'':body;p.blocks=blocks;p.price=meta||p.price;p.thumb=tempImg||p.thumb;p.cat=selectedProductCat||p.cat||'PRODUCTS';}
   closeModal();save();render();openProduct(editId);return;
-}if(modalMode==='talk'){let m=members.find(x=>x.id===selectedPostMember)||members.find(x=>x.id===currentMember)||members[0];let p={id:uid(),type:'talk',member:m.id,title,body,thumb:tempImg||'',likes:0,comments:0,author:'ME',createdAt:new Date().toISOString()};posts.unshift(p);alerts.unshift({id:uid(),type:'게시글',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='content'){let blocks=collectBlogBlocks();let p={id:uid(),type:'content',cat:meta||'video',title,body:blocks.length?'':body,blocks,thumb:tempImg||'',author:'ME',createdAt:new Date().toISOString(),visibility:selectedVisibility||'public'};posts.unshift(p);alerts.unshift({id:uid(),type:'콘텐츠',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='magazine'){boards.unshift({id:uid(),cat:'magazine',title,body,thumb:tempImg||'📝',date:meta||'방금'});closeModal();save();render();go('community');return}if(modalMode==='product'){{let blocks=collectBlogBlocks();products.unshift({id:uid(),name:title,body:blocks.length?'':(body||'상품 설명'),blocks,price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});}closeModal();save();render();go('shop');return}if(modalMode==='product'){{let blocks=collectBlogBlocks();products.unshift({id:uid(),name:title,body:blocks.length?'':(body||'상품 설명'),blocks,price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});}shopCat=selectedProductCat||'PRODUCTS';closeModal();save();render();go('shop');return}if(modalMode==='notice'){let n={id:uid(),title,body,meta:'KQ엔터테인먼트 · 방금',pinned:false};notices.unshift(n);alerts.unshift({id:uid(),type:'공지',title,thumb:'🔔',time:'방금',read:false,source:n.id})}closeModal();render()}
+}if(modalMode==='talk'){let m=members.find(x=>x.id===selectedPostMember)||members.find(x=>x.id===currentMember)||members[0];let p={id:uid(),type:'talk',member:m.id,title,body,thumb:tempImg||'',likes:0,comments:0,author:'ME',createdAt:new Date().toISOString()};posts.unshift(p);alerts.unshift({id:uid(),type:'게시글',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='content'){let blocks=collectBlogBlocks();let p={id:uid(),type:'content',cat:meta||'video',title,body:blocks.length?'':body,blocks,thumb:tempImg||'',author:'ME',createdAt:new Date().toISOString(),visibility:selectedVisibility||'public'};posts.unshift(p);alerts.unshift({id:uid(),type:'콘텐츠',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='magazine'){boards.unshift({id:uid(),cat:'magazine',title,body,thumb:tempImg||'📝',date:meta||'방금'});closeModal();save();render();go('community');return}if(modalMode==='product'){{let blocks=collectBlogBlocks();products.unshift({id:uid(),name:title,body:blocks.length?'':(body||'상품 설명'),blocks,price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});}closeModal();save();render();go('shop');return}if(modalMode==='product'){{let blocks=collectBlogBlocks();products.unshift({id:uid(),name:title,body:blocks.length?'':(body||'상품 설명'),blocks,price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});}shopCat=selectedProductCat||'PRODUCTS';closeModal();save();render();go('shop');return}if(modalMode==='notice'){let n={id:uid(),title,body,meta:'관리자 · 방금',pinned:false};notices.unshift(n);alerts.unshift({id:uid(),type:'공지',title,thumb:'🔔',time:'방금',read:false,source:n.id})}closeModal();render()}
 
 window.likePost=id=>{let p=posts.find(x=>x.id===id);p.likes=(p.likes||0)+1;renderTalk();save()}
 window.addComment=id=>{let body=prompt('댓글 내용');if(!body)return;let nick=prompt('닉네임')||profile.nickname||'익명';comments.unshift({id:uid(),post:id,nick,photo:profile.photo||'👤',body,time:'방금'});let p=posts.find(x=>x.id===id);p.comments=(p.comments||0)+1;save();openPost(id)}
@@ -1262,16 +1261,14 @@ document.addEventListener('touchend',(()=>{let last=0;return e=>{const now=Date.
 applyTheme();
 
 function boot(){
-  // 시작은 항상 CLOW / KINON / AVEN 아티스트 선택 화면으로 고정
-  currentArtist='';
-  localStorage.removeItem('currentArtist');
   renderArtistSelect();
-  showArtistLanding();
+  if(currentArtist){loadArtistData();render();const last=localStorage.getItem(artistKey('lastView'))||'home';go(document.getElementById(last)?last:'home');}
+  else{showArtistLanding();}
 }
 
 async function upload(){return new Promise(resolve=>{let i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=async()=>{let f=i.files[0];if(!f)return resolve('');let fd=new FormData();fd.append('file',f);fd.append('upload_preset',CLOUDINARY_PRESET);try{let r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});let d=await r.json();resolve(d.secure_url||'')}catch(e){alert('업로드 실패');resolve('')}};i.click()})}
 
-boot();
+boot();console.log('Firebase + Cloudinary Connected',db);
 </script>
 </body>
 </html>
