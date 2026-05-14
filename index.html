@@ -388,6 +388,67 @@ html.force-dark body{background:#050505;color:#f5f5f5}html.force-dark .app,html.
 html.force-light body{background:#fff!important;color:#111!important}html.force-light .app,html.force-light header,html.force-light .bottom-nav,html.force-light .fixed-bar,html.force-light .shop-bottom,html.force-light .sheet,html.force-light .community-tabs,html.force-light .community-top,html.force-light .community-list,html.force-light .content-tabs-clean{background:#fff!important;color:#111!important}html.force-light header,html.force-light .bottom-nav,html.force-light .fixed-bar,html.force-light .shop-bottom,html.force-light .community-tabs,html.force-light .community-top,html.force-light .content-tabs-clean{border-color:#e5e5e5!important}html.force-light .hero-card,html.force-light .card,html.force-light .detail-card,html.force-light .my-row,html.force-light .cart-row,html.force-light .home-wide-card{background:#f5f5f7!important;border-color:#ececec!important;color:#111!important}html.force-light .hero-card{background:linear-gradient(135deg,#fff,#f2f2f2)!important}html.force-light .meta,html.force-light .cart-meta,html.force-light .community-meta,html.force-light .community-preview,html.force-light .hero-card p,html.force-light .home-wide-meta{color:#777!important}html.force-light .shop-tabs button.active{color:#111!important;border-bottom-color:#111!important}html.force-light .shop-tabs button{color:#888!important}html.force-light input,html.force-light textarea,html.force-light select{background:#fff!important;color:#111!important;border-color:#e5e5e5!important}
 @media (prefers-color-scheme: dark){.shop-tabs button.active{color:#fff!important;border-bottom-color:#fff!important}.shop-tabs button{color:#aaa!important}.schedule-card-actions button{background:#17171b;color:#f5f5f5;border-color:#303036}.pinned-notice{background:linear-gradient(135deg,#2b2410,#151519);border-color:#5e4b16}.notice-pin-btn{background:#3b3210!important;color:#fff!important;border-color:#6f5a19!important}#scheduleFormModal .sheet{background:#1c1c20;color:#fff}#scheduleFormModal input,#scheduleFormModal select{background:#2c2c30;color:#fff;border-color:#3a3a40}}
 
+
+/* USER PATCH 2: theme selector + light-mode readability fixes */
+.theme-choice-title{font-size:1rem;font-weight:900;padding:8px 6px 12px;color:inherit}
+html.force-light .support-faq details{background:#f7f7f8!important;border-color:#e6e6e8!important;color:#111!important}
+html.force-light .support-faq summary{color:#111!important}
+html.force-light .support-faq p{color:#555!important}
+html.force-light .detail-title,html.force-light .detail-body{color:#111!important}
+html.force-light #home .hero-card .primary,html.force-light .primary{background:#f0f0f2!important;color:#111!important;border:1px solid #e5e5e5!important;box-shadow:none!important}
+html.force-light .bottom-nav{background:rgba(255,255,255,.96)!important}
+html.force-light .nav-item,html.force-light .nav-item span{color:#8a8a8f!important;opacity:1!important}
+html.force-light .nav-item.active,html.force-light .nav-item.active span{color:#111!important}
+html.force-light .react button{background:#f3f3f5!important;color:#555!important;border-color:#e2e2e6!important}
+html.force-light .category-panel{background:#fff!important;color:#111!important;border-top:1px solid #ececec!important}
+html.force-light .category-option{background:#fff!important;color:#111!important}
+html.force-light .category-option.active{background:#111!important;color:#fff!important}
+@media (prefers-color-scheme: light){.support-faq details{color:#111}.support-faq summary{color:#111}.support-faq p{color:#555}.nav-item,.nav-item span{color:#8a8a8f}.nav-item.active,.nav-item.active span{color:#111}.react button{background:#f3f3f5;color:#555;border-color:#e2e2e6}}
+
+/* USER PATCH 3: 실제 적용용 강제 라이트/테마 선택 UI 보정 */
+html.force-light{--line:#e5e5e5!important;--card:#f7f7f8!important;--sub:#777!important;--danger:#e63946!important;--blue:#7f91b5!important;color-scheme:light!important;}
+html.force-dark{color-scheme:dark!important;}
+html.force-light body,html.force-light .app{background:#fff!important;color:#111!important;}
+html.force-light header,html.force-light .bottom-nav,html.force-light .fixed-bar,html.force-light .shop-bottom{background:rgba(255,255,255,.97)!important;color:#111!important;border-color:#e6e6e8!important;}
+html.force-light .hero-card,html.force-light .detail-card,html.force-light .card,html.force-light .my-row,html.force-light .cart-row,html.force-light .home-wide-card{background:#f7f7f8!important;color:#111!important;border-color:#e7e7ea!important;}
+html.force-light .hero-card{background:linear-gradient(135deg,#fff,#f3f3f4)!important;}
+html.force-light .primary,html.force-light #home .hero-card .primary{background:#e9e9ec!important;color:#111!important;border:1px solid #dcdce0!important;opacity:1!important;box-shadow:none!important;}
+html.force-light .bottom-nav .nav-item,html.force-light .bottom-nav .nav-item span{color:#777!important;opacity:1!important;}
+html.force-light .bottom-nav .nav-item.active,html.force-light .bottom-nav .nav-item.active span{color:#111!important;opacity:1!important;}
+html.force-light .react button,html.force-light .feed-card .react button{background:#f0f0f2!important;color:#666!important;border-color:#dedee3!important;}
+html.force-light .react button *,html.force-light .feed-card .react button *{color:#666!important;}
+html.force-light .support-faq details{background:#f7f7f8!important;border-color:#e2e2e6!important;color:#111!important;}
+html.force-light .support-faq summary{color:#111!important;opacity:1!important;}
+html.force-light .support-faq p{color:#4d4d52!important;}
+html.force-light .detail-title,html.force-light .detail-body,html.force-light #myDetail,html.force-light #myDetailBox{color:#111!important;}
+html.force-light .meta,html.force-light .cart-meta,html.force-light .community-meta,html.force-light .community-preview,html.force-light .hero-card p,html.force-light .home-wide-meta{color:#777!important;}
+html.force-light .category-modal{background:rgba(0,0,0,.25)!important;}
+html.force-light .category-panel{background:#fff!important;color:#111!important;border-top:1px solid #e6e6e8!important;}
+html.force-light .category-option{background:#fff!important;color:#111!important;}
+html.force-light .category-option.active{background:#111!important;color:#fff!important;}
+html.force-light .select-like{background:#fff!important;color:#111!important;border-color:#e1e1e5!important;}
+html.force-light .input,html.force-light .textarea,html.force-light input,html.force-light textarea,html.force-light select{background:#fff!important;color:#111!important;border-color:#e1e1e5!important;}
+html.force-light .feed-title,html.force-light .name{color:#111!important;}
+@media (prefers-color-scheme: dark){
+  html.force-light .support-faq details{background:#f7f7f8!important;color:#111!important;border-color:#e2e2e6!important;}
+  html.force-light .support-faq summary{color:#111!important;}
+  html.force-light .support-faq p{color:#4d4d52!important;}
+  html.force-light .primary,html.force-light #home .hero-card .primary{background:#e9e9ec!important;color:#111!important;border-color:#dcdce0!important;}
+  html.force-light .bottom-nav .nav-item,html.force-light .bottom-nav .nav-item span{color:#777!important;}
+  html.force-light .bottom-nav .nav-item.active,html.force-light .bottom-nav .nav-item.active span{color:#111!important;}
+  html.force-light .react button,html.force-light .feed-card .react button{background:#f0f0f2!important;color:#666!important;border-color:#dedee3!important;}
+}
+/* 시스템 라이트일 때도 고객센터/버튼/하단/리액션 가독성 고정 */
+@media (prefers-color-scheme: light){
+  .support-faq details{background:#f7f7f8!important;color:#111!important;border-color:#e2e2e6!important;}
+  .support-faq summary{color:#111!important;}
+  .support-faq p{color:#4d4d52!important;}
+  #home .hero-card .primary{background:#e9e9ec!important;color:#111!important;border:1px solid #dcdce0!important;}
+  .bottom-nav .nav-item,.bottom-nav .nav-item span{color:#777!important;opacity:1!important;}
+  .bottom-nav .nav-item.active,.bottom-nav .nav-item.active span{color:#111!important;}
+  .react button,.feed-card .react button{background:#f0f0f2!important;color:#666!important;border-color:#dedee3!important;}
+}
+
 </style>
 </head>
 <body>
@@ -512,7 +573,7 @@ const LS=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');return 
 let members=LS('members',[{id:'hong',name:'홍중',photo:'🎤'},{id:'seong',name:'성화',photo:'🌟'},{id:'yunho',name:'윤호',photo:'🐶'},{id:'yeo',name:'여상',photo:'✨'},{id:'san',name:'산',photo:'⛰️'},{id:'mingi',name:'민기',photo:'🐥'},{id:'woo',name:'우영',photo:'🦊'},{id:'jong',name:'종호',photo:'🍎'}]);
 let profile=LS('profile',{nickname:'',photo:'',name:'',birth:'',phone:''});
 let membership=LS('membership',null),orders=LS('orders',[]),cart=LS('cart',[]),alerts=LS('alerts',[]),comments=LS('comments',[]),points=Number(localStorage.getItem('points')||0);
-let themeMode=localStorage.getItem('themeMode')||'system';
+let themeMode=localStorage.getItem('themeMode')||localStorage.getItem('theme')||'system';
 let editingScheduleIndex=null;
 let products=LS('products',[{id:80,name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',body:'1년 멤버십 상품입니다.',membership:true,cat:'MEMBERSHIP'},{id:79,name:'GOLDEN HOUR Pt.4 Album',price:'18,000원',thumb:'💿',body:'앨범 상품 상세페이지입니다.',cat:'ALBUM'},{id:78,name:'ANITEEZ Figure Set',price:'35,000원',thumb:'🧸',body:'굿즈 상품입니다.',cat:'PRODUCTS'}]);
 let posts=LS('posts',[{id:300,type:'talk',member:'hong',title:'우리 티니들 간바떼!💪',body:'오늘도 힘내요.',thumb:'🎤',likes:2421,comments:3,author:'ME',created:'방금 작성'},{id:299,type:'talk',member:'seong',title:'오늘의 기록',body:'작은 순간도 나누고 싶어서 올려요.',thumb:'🌟',likes:10712,comments:1,author:'ME',created:'1일 전'},{id:298,type:'content',cat:'golden',title:'Adrenaline MAX ⚡ 보이스 비하인드',body:'비하인드 영상',thumb:'🎬',author:'ME',created:'1일 전'},{id:297,type:'content',cat:'video',title:"민기 'Dinero' Production Behind",body:'YouTube',thumb:'🎥',author:'ME',created:'2일 전'}]);
@@ -809,7 +870,8 @@ window.openSelectModal=function(type){
  if(type==='post') options=postCategoryOptions.map(v=>({label:v,value:v,active:selectedPostCategory===v}));
  if(type==='product') options=['MEMBERSHIP','ALBUM','PRODUCTS'].map(v=>({label:v,value:v,active:selectedProductCat===v}));
  if(type==='visibility') options=[{label:'전체공개',value:'public',active:selectedVisibility==='public'},{label:'멤버십 공개',value:'member',active:selectedVisibility==='member'}];
- panel.innerHTML=options.map(o=>`<button type="button" class="category-option ${o.active?'active':''}" onclick="chooseCategory('${type}','${o.value}')">${o.label}</button>`).join('');
+ if(type==='theme') options=[{label:'화이트',value:'light',active:themeMode==='light'},{label:'다크',value:'dark',active:themeMode==='dark'},{label:'시스템 설정 따르기',value:'system',active:themeMode==='system'}];
+ panel.innerHTML=(type==='theme'?'<div class="theme-choice-title">테마 선택</div>':'')+options.map(o=>`<button type="button" class="category-option ${o.active?'active':''}" onclick="chooseCategory('${type}','${o.value}')">${o.label}</button>`).join('');
  modal.classList.add('open');
 }
 window.chooseCategory=function(type,value){
@@ -817,6 +879,7 @@ window.chooseCategory=function(type,value){
  if(type==='post') selectedPostCategory=value;
  if(type==='product') selectedProductCat=value;
  if(type==='visibility') selectedVisibility=value;
+ if(type==='theme'){themeMode=value; localStorage.setItem('themeMode',themeMode); localStorage.setItem('theme',themeMode); applyTheme(); renderProfile();}
  document.getElementById('categoryModal').classList.remove('open');
  updateCategoryTexts();
  if(type==='product') renderProductCategoryField();
@@ -882,17 +945,13 @@ window.toggleNoticePin=id=>{
 }
 function applyTheme(){
   document.documentElement.classList.remove('force-dark','force-light');
+  document.documentElement.setAttribute('data-theme',themeMode);
   if(themeMode==='dark')document.documentElement.classList.add('force-dark');
   if(themeMode==='light')document.documentElement.classList.add('force-light');
+  localStorage.setItem('themeMode',themeMode);
 }
 window.openThemeSettings=()=>{
-  const next=prompt('테마를 입력해줘: 화이트 / 다크 / 시스템', themeMode==='dark'?'다크':themeMode==='light'?'화이트':'시스템');
-  if(!next)return;
-  const v=next.trim().toLowerCase();
-  if(['화이트','white','light'].includes(v))themeMode='light';
-  else if(['다크','dark'].includes(v))themeMode='dark';
-  else themeMode='system';
-  localStorage.setItem('themeMode',themeMode); applyTheme(); renderProfile();
+  openSelectModal('theme');
 }
 document.addEventListener('touchend',(()=>{let last=0;return e=>{const now=Date.now();if(now-last<320){e.preventDefault()}last=now}})(),{passive:false});
 applyTheme();
