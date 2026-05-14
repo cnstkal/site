@@ -51,7 +51,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
   gap:10px;
   overflow-x:auto;
   padding:14px 20px 6px;
-  border-bottom:1px solid var(--line);
+  border-bottom:0;
   background:#fff;
 }
 .content-tabs-clean::-webkit-scrollbar{display:none}
@@ -228,34 +228,23 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 .member-sub{font-size:1.05rem;color:#555;margin-top:10px}
 .member-detail-btn{width:100%;height:64px;border:0;border-radius:14px;background:#7d8fb7;color:#fff;font-size:1.2rem;font-weight:900;margin-top:48px}
 
-
+/* FIXED SELECT / BLOG EDITOR */
+.category-modal{display:none;position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.28);align-items:flex-end}.category-modal.open{display:flex}.category-panel{width:100%;background:#fff;border-radius:22px 22px 0 0;padding:14px;max-height:62vh;overflow:auto}.category-option{width:100%;height:48px;border:0;border-radius:14px;background:#fff;text-align:left;padding:0 14px;font-size:1rem;font-weight:900;color:#111}.category-option.active{background:#111;color:#fff}.modal-field-label{font-size:.78rem;font-weight:900;color:#777;margin:12px 2px 7px}.select-like{width:100%;min-height:48px;border:1px solid var(--line);border-radius:16px;background:#fff;padding:0 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;font-size:.95rem;font-weight:900;color:#111}.feed-time{font-size:.78rem;color:#999;margin-top:3px}.feed-img:empty,.big-media:empty{display:none}.blog-editor{display:none;border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:10px;background:#fafafa}.blog-toolbar{display:flex;gap:8px;margin-bottom:10px}.blog-toolbar button{height:38px;border-radius:999px;border:1px solid var(--line);background:#fff;font-weight:900;padding:0 12px}.blog-block{border:1px solid #ececec;border-radius:14px;background:#fff;padding:10px;margin-bottom:10px}.blog-block textarea{width:100%;min-height:86px;border:0;outline:0;resize:vertical;font-family:inherit;font-size:.95rem;line-height:1.55}.blog-img-preview{min-height:90px;border-radius:12px;background:#f1f1f1;display:grid;place-items:center;overflow:hidden;color:#888}.blog-img-preview img{width:100%;height:auto;display:block}.blog-remove{margin-top:8px;height:32px;border:0;border-radius:999px;background:#f5f5f5;padding:0 10px;font-weight:900;color:#999}.content-article{display:flex;flex-direction:column;gap:18px;margin-top:24px}.content-article-text{font-size:1rem;line-height:1.8;white-space:pre-line;color:#444}.content-article-img{border-radius:18px;overflow:hidden;background:#e8e8ec}.content-article-img img{width:100%;height:auto;display:block}.support-faq{display:flex;flex-direction:column;gap:10px;margin-top:16px}.support-faq details{background:var(--card);border:1px solid #ececec;border-radius:16px;padding:14px}.support-faq summary{font-weight:900;cursor:pointer}.support-faq p{margin-top:10px;color:#666;line-height:1.55}.support-form{margin-top:24px}
 
 
 /* SCHEDULE */
-.schedule-wrap{padding:20px 20px 120px;background:#fff;min-height:100vh}
-.schedule-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
-.schedule-month{font-size:2.3rem;font-weight:900;letter-spacing:-.06em}
-.schedule-icons{display:flex;gap:12px}
-.schedule-icons button{border:0;background:none;font-size:1.6rem}
-.schedule-week{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:14px;color:#999;font-weight:700}
-.schedule-week div{text-align:center}
-.schedule-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:12px 4px}
-.schedule-day{aspect-ratio:.8/1;border-radius:18px;padding:10px 6px;position:relative}
-.schedule-day.active{background:#f1f1f1}
-.schedule-num{font-size:1.1rem;font-weight:800}
-.schedule-event{margin-top:10px;font-size:.78rem;background:#dcd8f5;padding:4px 6px;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.schedule-list{margin-top:36px;border-top:1px solid var(--line);padding-top:26px}
-.schedule-card{border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:16px;background:#fff}
-.schedule-card-title{font-size:1.6rem;font-weight:900;line-height:1.3}
-.schedule-card-meta{margin-top:12px;color:#666;font-size:1rem}
-.schedule-nav{display:flex;justify-content:space-between;margin-top:30px}
-.schedule-nav button{height:58px;padding:0 28px;border-radius:16px;border:1px solid var(--line);background:#fff;font-size:1.2rem;font-weight:900}
-@media (prefers-color-scheme: dark){
-.schedule-wrap{background:#0b0b0d}
-.schedule-card{background:#151519}
-.schedule-day.active{background:#1b1b20}
-.schedule-nav button{background:#151519;color:#fff}
-}
+.schedule-wrap{padding:20px 20px 116px;background:#fff;min-height:100vh;overflow:hidden}
+.schedule-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;gap:12px}
+.schedule-month{border:0;background:none;font-size:1.9rem;font-weight:900;letter-spacing:-.06em;line-height:1.05;color:inherit;padding:0;white-space:nowrap}
+.schedule-actions{display:flex;gap:12px;align-items:center;flex-shrink:0}.schedule-actions button{border:0;background:none;font-size:1.25rem;padding:2px}
+.schedule-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--line);padding-bottom:12px;color:#888;font-weight:800;font-size:.86rem}.schedule-week div{text-align:center}
+.schedule-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px 2px;margin-top:12px;max-width:100%;overflow:hidden}
+.schedule-day{height:112px;border-radius:18px;padding:8px 3px;position:relative;min-width:0;overflow:hidden}.schedule-day.blank{opacity:0}.schedule-day.today{background:#f1f1f1}.schedule-num{font-size:.92rem;font-weight:900;text-align:center;line-height:1.1;white-space:nowrap}.schedule-num.has-event::before{content:'• ';font-weight:900;color:#555}.schedule-event{display:block;max-width:100%;margin:9px auto 0;font-size:.62rem;background:#dcd8f5;padding:3px 5px;border-radius:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;color:#111}
+.schedule-list-view{padding-top:18px}.schedule-list-head{display:flex;justify-content:space-between;align-items:flex-end;margin:18px 0 14px}.schedule-list-date{font-size:1.55rem;font-weight:900;letter-spacing:-.05em}.schedule-list-full{font-size:1.05rem;color:#999}.schedule-card{border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px;background:#fff}.schedule-card-title{font-size:1.2rem;font-weight:900;line-height:1.35;letter-spacing:-.04em}.schedule-card-meta{margin-top:12px;color:#555;font-size:.98rem;line-height:1.7}.schedule-dot{display:inline-block;width:13px;height:13px;border-radius:50%;background:#c9cada;margin-right:10px;vertical-align:middle}.schedule-nav{border-top:1px solid var(--line);display:flex;justify-content:space-between;margin-top:36px;padding-top:26px}.schedule-nav button{height:52px;padding:0 24px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:1.05rem;font-weight:900;color:inherit}
+.schedule-filters{position:fixed;left:0;right:0;bottom:74px;height:68px;background:#fff;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center;overflow-x:auto;padding:10px 20px;z-index:160}.schedule-filters::-webkit-scrollbar{display:none}.schedule-filters button{height:42px;border-radius:999px;border:1px solid var(--line);background:#fff;padding:0 18px;font-weight:900;white-space:nowrap;font-size:.95rem}.schedule-filters .active{border-color:#111}.schedule-filter-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#f5b6c1;margin-right:8px}.dot-tv{background:#f3aab2}.dot-yt{background:#f1b7a4}.dot-radio{background:#ffd885}.dot-fan{background:#a9c4ed}
+.month-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:850;align-items:flex-end}.month-modal.open{display:flex}.month-panel{width:100%;background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 28px}.month-panel-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}.month-panel-top button{border:0;background:none;font-size:1.8rem;color:#777}.month-year{font-size:1.9rem;font-weight:900}.month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.month-option{height:66px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:1.45rem;font-weight:900;color:#111}.month-option.active{border:2px solid #111}.month-option.disabled{opacity:.35}
+.point-badge{display:inline-flex;align-items:center;height:30px;border-radius:999px;background:#f4f4f7;padding:0 12px;font-size:.85rem;font-weight:900;color:#555;margin-top:12px}
+@media(min-width:900px){.schedule-filters{left:50%;transform:translateX(-50%);max-width:500px}.month-modal{left:50%;transform:translateX(-50%);max-width:500px}}
 
 @media (prefers-color-scheme: dark){
   :root{--line:#2b2b2f;--card:#1c1c20;--sub:#aaa;--danger:#ff5b65;--blue:#8fa2cc}
@@ -276,6 +265,9 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
   .menu{background:#17171b;border-color:#303036}.menu button{background:#17171b;color:#f5f5f5}
   .shop-desc{border-top-color:#1c1c20}.shop-hero{background:#17171b}
   .member-setting-chip{background:rgba(255,255,255,.08);color:#aaa}.member-setting-chip:hover{background:rgba(255,255,255,.14);color:#fff}
+  .category-panel,.select-like,.blog-editor,.blog-block,.blog-toolbar button{background:#17171b;color:#f5f5f5;border-color:#303036}
+  .category-option{background:#17171b;color:#f5f5f5}.category-option.active{background:#f5f5f5;color:#111}
+  .blog-img-preview{background:#222228}.content-article-text,.support-faq p{color:#ddd}
 }
 
 @media(min-width:900px){body{background:#efefef}.app{max-width:500px;margin:0 auto;background:#fff;min-height:100vh}.bottom-nav,.fixed-bar{left:50%;transform:translateX(-50%);max-width:500px}.shop-bottom{left:50%;transform:translateX(-50%);max-width:500px}.modal{left:50%;transform:translateX(-50%);max-width:500px}.fab{right:calc(50% - 230px)}}
@@ -304,7 +296,6 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 <section class="view" id="postDetail"><div id="postDetailBox"></div></section>
 
 <section class="view" id="contents">
-  <div class="section-title" style="padding:18px 20px 0"><span>CONTENTS</span></div>
   <div class="content-tabs-clean"><button onclick="openBoard('notice')">NOTICE</button><button onclick="openBoard('event')">EVENT</button><button onclick="openBoard('broadcast')">공방공지</button></div>
   <div id="contentSections"></div>
 </section>
@@ -325,83 +316,32 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 
 <section class="view" id="schedule">
   <div class="schedule-wrap">
-    <div class="schedule-top">
-      <div class="schedule-month">5월, 2026</div>
-      <div class="schedule-icons">
-        <button>📅</button>
-        <button>🗓️</button>
-        <button>⤴️</button>
+    <div class="schedule-head">
+      <button class="schedule-month" id="scheduleMonthBtn" onclick="openMonthPicker()">5월, 2026⌄</button>
+      <div class="schedule-actions">
+        <button id="scheduleToggleBtn" onclick="toggleScheduleMode()">📅</button>
       </div>
     </div>
-
-    <div class="schedule-week">
-      <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
-    </div>
-
-    <div class="schedule-grid">
-      <div class="schedule-day"></div>
-      <div class="schedule-day"></div>
-      <div class="schedule-day"></div>
-      <div class="schedule-day"></div>
-      <div class="schedule-day"><div class="schedule-num">1일</div></div>
-      <div class="schedule-day"><div class="schedule-num">2일</div></div>
-
-      <div class="schedule-day"><div class="schedule-num">3일</div></div>
-      <div class="schedule-day"><div class="schedule-num">4일</div></div>
-      <div class="schedule-day"><div class="schedule-num">5일</div></div>
-      <div class="schedule-day"><div class="schedule-num">6일</div></div>
-      <div class="schedule-day"><div class="schedule-num">7일</div><div class="schedule-event">전주국제영화제</div></div>
-      <div class="schedule-day"><div class="schedule-num">8일</div></div>
-      <div class="schedule-day"><div class="schedule-num">9일</div></div>
-
-      <div class="schedule-day"><div class="schedule-num">10일</div></div>
-      <div class="schedule-day"><div class="schedule-num">11일</div></div>
-      <div class="schedule-day"><div class="schedule-num">12일</div></div>
-      <div class="schedule-day"><div class="schedule-num">13일</div></div>
-      <div class="schedule-day active"><div class="schedule-num">14일</div></div>
-      <div class="schedule-day"><div class="schedule-num">15일</div></div>
-      <div class="schedule-day"><div class="schedule-num">16일</div></div>
-
-      <div class="schedule-day"><div class="schedule-num">17일</div><div class="schedule-event">ASEA 2026</div></div>
-      <div class="schedule-day"><div class="schedule-num">18일</div></div>
-      <div class="schedule-day"><div class="schedule-num">19일</div></div>
-      <div class="schedule-day"><div class="schedule-num">20일</div></div>
-      <div class="schedule-day"><div class="schedule-num">21일</div></div>
-      <div class="schedule-day"><div class="schedule-num">22일</div></div>
-      <div class="schedule-day"><div class="schedule-num">23일</div></div>
-    </div>
-
-    <div class="schedule-list">
-      <div class="schedule-card">
-        <div class="schedule-card-title">전주국제영화제 &lt;할루시네이션&gt; GV</div>
-        <div class="schedule-card-meta">홍중 · 종일</div>
-      </div>
-
-      <div class="schedule-card">
-        <div class="schedule-card-title">ASEA 2026</div>
-        <div class="schedule-card-meta">종일</div>
-      </div>
-
-      <div class="schedule-nav">
-        <button>이전달</button>
-        <button>다음달</button>
-      </div>
-    </div>
+    <div id="scheduleBox"></div>
+  </div>
+  <div class="schedule-filters">
+    <button class="active">전체</button><button><span class="schedule-filter-dot dot-tv"></span>TV</button><button><span class="schedule-filter-dot dot-yt"></span>YouTube</button><button><span class="schedule-filter-dot dot-radio"></span>RADIO</button><button><span class="schedule-filter-dot dot-fan"></span>FAN</button>
   </div>
 </section>
 
 <section class="view" id="shop"><div class="section-title" style="padding:18px 20px 0"><span>SHOP</span><button class="primary" onclick="openAddProduct()">+ 상품 추가</button></div><div class="hero"><div class="hero-card"><h1>OUR ETERNAL<br>STAR ATINY</h1><p>Official Membership & Goods</p></div></div><div class="shop-tabs" id="shopTabs"></div><div class="section"><div class="grid" id="shopGrid"></div></div></section>
 <section class="view" id="shopDetail"><div id="shopDetailBox"></div></section>
-<section class="view" id="cart"><div class="section"><div class="section-title">장바구니</div><div id="cartList"></div></div></section>
+<section class="view" id="cart"><div class="section"><div class="section-title">장바구니</div><div class="meta" style="margin-bottom:14px">보유 포인트 ${points.toLocaleString('ko-KR')}P</div><div id="cartList"></div></div></section>
 <section class="view" id="alerts"><div class="section"><div class="section-title">알림 <button class="btn danger" onclick="clearAlerts()">초기화</button></div><div id="alertList"></div></div></section>
 
 <section class="view" id="my">
-  <div class="hero"><div class="hero-card"><h1>MY<br>PAGE</h1><p id="myNick">닉네임 미설정</p><button class="primary" onclick="openProfile()">프로필 관리</button></div></div>
+  <div class="hero"><div class="hero-card"><h1>MY<br>PAGE</h1><p id="myNick">닉네임 미설정</p><div class="point-badge" id="pointBadge">0P</div><button class="primary" onclick="openProfile()">프로필 관리</button></div></div>
   <div class="my-menu">
     <div class="my-row" onclick="openMembership()">내 멤버십 <span>›</span></div>
     <div class="my-row" onclick="openOrders()">주문 내역 <span>›</span></div>
     <div class="my-row" onclick="openMyPosts()">내가 쓴 글 <span>›</span></div>
     <div class="my-row" onclick="openProfile()">내 정보 관리 <span>›</span></div>
+    <div class="my-row" onclick="openSupport()">고객센터 <span>›</span></div>
     <div class="my-row" style="color:var(--danger)" onclick="logout()">로그아웃 <span>›</span></div>
   </div>
 </section>
@@ -421,12 +361,14 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 
 <div class="menu" id="menu"></div>
 <div class="category-modal" id="categoryModal"><div class="category-panel" id="categoryPanel"></div></div>
+<div class="month-modal" id="monthModal"><div class="month-panel" id="monthPanel"></div></div>
 <div class="modal" id="modal"><div class="sheet">
 <h3 id="modalTitle">작성</h3>
 <div id="thumbBlock"><div class="preview" id="thumbPreview">이미지 없음</div><button class="btn light" style="width:100%;margin-bottom:10px" onclick="pickThumb()">이미지 첨부</button></div>
 <div id="profileBlock" style="display:none"><div class="preview" id="profilePreview">프로필 사진 없음</div><button class="btn light" style="width:100%;margin-bottom:10px" onclick="pickProfilePhoto()">프로필 사진 첨부</button></div>
 <div id="pickerArea" style="display:none"></div><div id="categoryFields" style="display:none"><div class="modal-field-label" id="memberLabel">멤버 카테고리</div><button type="button" class="select-like" id="memberCategorySelect" onclick="openSelectModal('member')"><span id="memberCategoryText">선택</span><span>⌄</span></button><div class="modal-field-label" id="postLabel">글 카테고리</div><button type="button" class="select-like" id="postCategorySelect" onclick="openSelectModal('post')"><span id="postCategoryText">예능</span><span>⌄</span></button><div id="visibilityRow"><div class="modal-field-label">공개 설정</div><button type="button" class="select-like" id="visibilitySelect" onclick="openSelectModal('visibility')"><span id="visibilityText">전체공개</span><span>⌄</span></button></div></div><input class="input" id="mTitle" placeholder="제목">
 <textarea class="textarea" id="mBody" placeholder="내용"></textarea>
+<div class="blog-editor" id="blogEditor"><div class="modal-field-label">본문 블록</div><div class="blog-toolbar"><button type="button" onclick="addBlogText()">+ 텍스트</button><button type="button" onclick="addBlogImage()">+ 사진</button></div><div id="blogBlocks"></div></div>
 <input class="input" id="mMeta" placeholder="메타/가격/전화번호">
 <div style="display:flex;gap:10px"><button class="btn primary" id="saveBtn" onclick="saveModal()">저장</button><button class="btn light" onclick="closeModal()">취소</button></div>
 </div></div>
@@ -441,26 +383,91 @@ const app=initializeApp(firebaseConfig),db=getFirestore(app);
 const LS=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');return Array.isArray(f)?(Array.isArray(v)&&v.length?v:f):(v||f)}catch(e){return f}};
 let members=LS('members',[{id:'hong',name:'홍중',photo:'🎤'},{id:'seong',name:'성화',photo:'🌟'},{id:'yunho',name:'윤호',photo:'🐶'},{id:'yeo',name:'여상',photo:'✨'},{id:'san',name:'산',photo:'⛰️'},{id:'mingi',name:'민기',photo:'🐥'},{id:'woo',name:'우영',photo:'🦊'},{id:'jong',name:'종호',photo:'🍎'}]);
 let profile=LS('profile',{nickname:'',photo:'',name:'',birth:'',phone:''});
-let membership=LS('membership',null),orders=LS('orders',[]),cart=LS('cart',[]),alerts=LS('alerts',[]),comments=LS('comments',[]);
+let membership=LS('membership',null),orders=LS('orders',[]),cart=LS('cart',[]),alerts=LS('alerts',[]),comments=LS('comments',[]),points=Number(localStorage.getItem('points')||0);
 let products=LS('products',[{id:80,name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',body:'1년 멤버십 상품입니다.',membership:true,cat:'MEMBERSHIP'},{id:79,name:'GOLDEN HOUR Pt.4 Album',price:'18,000원',thumb:'💿',body:'앨범 상품 상세페이지입니다.',cat:'ALBUM'},{id:78,name:'ANITEEZ Figure Set',price:'35,000원',thumb:'🧸',body:'굿즈 상품입니다.',cat:'PRODUCTS'}]);
 let posts=LS('posts',[{id:300,type:'talk',member:'hong',title:'우리 티니들 간바떼!💪',body:'오늘도 힘내요.',thumb:'🎤',likes:2421,comments:3,author:'ME',created:'방금 작성'},{id:299,type:'talk',member:'seong',title:'오늘의 기록',body:'작은 순간도 나누고 싶어서 올려요.',thumb:'🌟',likes:10712,comments:1,author:'ME',created:'1일 전'},{id:298,type:'content',cat:'golden',title:'Adrenaline MAX ⚡ 보이스 비하인드',body:'비하인드 영상',thumb:'🎬',author:'ME',created:'1일 전'},{id:297,type:'content',cat:'video',title:"민기 'Dinero' Production Behind",body:'YouTube',thumb:'🎥',author:'ME',created:'2일 전'}]);
 let notices=LS('notices',[{id:200,title:'편지 전달 주소 안내',body:'팬레터 전달 주소 및 유의사항 안내입니다.',meta:'KQ엔터테인먼트 · 3년 전'},{id:199,title:'오피셜 플랫폼 오픈 안내',body:'ATEEZ 공식 플랫폼이 오픈되었습니다.',meta:'KQ엔터테인먼트 · 3년 전'}]);
 let boards=LS('boards',[{id:150,cat:'event',title:'다정 토끼 성화의 날 🐰🌸',body:'다정 토끼 성화의 생일을 축하합니다🎉\\n\\n성화의 생일을 맞아 이벤트를 진행합니다.',thumb:'🐰',date:'2026.04.02'},{id:149,cat:'broadcast',title:"260215(일) SBS '인기가요' 사전녹화 안내",body:'사전녹화 및 생방송 참여 명단 안내입니다.',thumb:'💚',date:'3달 전'},{id:148,cat:'notice',title:'THE WORLD EP.FIN : WILL 발매 안내',body:'안녕하세요.\\nKQ엔터테인먼트입니다.\\n\\n발매 안내드립니다.',date:'2024.04.21'}]);
 
-let currentMember=null,shopCat='ALL',modalMode='',editId=null,tempImg='',tempProfile='',selectedProductCat='PRODUCTS',selectedPostMember='';
+let currentMember=null,shopCat='ALL',modalMode='',editId=null,tempImg='',tempProfile='',selectedProductCat='PRODUCTS',selectedPostMember='',blogBlocks=[];
 
-function save(){localStorage.setItem('members',JSON.stringify(members));localStorage.setItem('profile',JSON.stringify(profile));localStorage.setItem('membership',JSON.stringify(membership));localStorage.setItem('orders',JSON.stringify(orders));localStorage.setItem('cart',JSON.stringify(cart));localStorage.setItem('alerts',JSON.stringify(alerts));localStorage.setItem('comments',JSON.stringify(comments));localStorage.setItem('products',JSON.stringify(products));localStorage.setItem('posts',JSON.stringify(posts));localStorage.setItem('notices',JSON.stringify(notices));localStorage.setItem('boards',JSON.stringify(boards))}
+function save(){localStorage.setItem('members',JSON.stringify(members));localStorage.setItem('profile',JSON.stringify(profile));localStorage.setItem('membership',JSON.stringify(membership));localStorage.setItem('orders',JSON.stringify(orders));localStorage.setItem('cart',JSON.stringify(cart));localStorage.setItem('alerts',JSON.stringify(alerts));localStorage.setItem('comments',JSON.stringify(comments));localStorage.setItem('products',JSON.stringify(products));localStorage.setItem('posts',JSON.stringify(posts));localStorage.setItem('notices',JSON.stringify(notices));localStorage.setItem('boards',JSON.stringify(boards));localStorage.setItem('points',String(points))}
 const newest=a=>[...a].sort((x,y)=>(y.id||0)-(x.id||0));
 const media=v=>v&&String(v).startsWith('http')?`<img src="${v}">`:(v||'');
 const uid=()=>Date.now()+Math.floor(Math.random()*999);
 const code=()=>{const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ';let s='';for(let i=0;i<6;i++){s+=chars[Math.floor(Math.random()*chars.length)]}return s};
 const fmt=d=>d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
 
+const priceNum=v=>Number(String(v||'0').replace(/[^0-9]/g,''))||0;
+const money=n=>Number(n||0).toLocaleString('ko-KR')+'원';
+function payPhysicalProduct(item,qty=1){
+  const total=priceNum(item.price)*qty;
+  let use=0;
+  if(points>0 && total>0){
+    const ok=confirm(`보유 포인트 ${points.toLocaleString('ko-KR')}P를 사용할까?\n멤버십에는 사용 불가하고 실물 상품에만 사용돼.`);
+    if(ok) use=Math.min(points,total);
+  }
+  const final=Math.max(0,total-use);
+  points-=use;
+  const earn=Math.floor(final*0.01);
+  points+=earn;
+  orders.unshift({id:uid(),name:item.name,price:item.price,thumb:item.thumb,qty,date:new Date().toLocaleString(),usedPoint:use,earnedPoint:earn,paid:final});
+  save();
+  alert(`결제가 완료되었습니다.\n사용 포인트: ${use.toLocaleString('ko-KR')}P\n적립 포인트: ${earn.toLocaleString('ko-KR')}P`);
+}
+let scheduleYear=2026,scheduleMonth=5,scheduleMode='calendar';
+const scheduleData=[{date:'2026-05-07',title:'전주국제영화제 <할루시네이션> GV',member:'홍중',time:'종일',cat:'FAN'},{date:'2026-05-17',title:'ASEA 2026',member:'',time:'종일',cat:'TV'}];
+const weekNames=['일','월','화','수','목','금','토'];
+function scheduleItems(){return scheduleData.filter(x=>{let d=new Date(x.date+'T00:00:00');return d.getFullYear()===scheduleYear && d.getMonth()+1===scheduleMonth})}
+function renderSchedule(){
+  const btn=document.getElementById('scheduleMonthBtn'), box=document.getElementById('scheduleBox'), tbtn=document.getElementById('scheduleToggleBtn'); if(!btn||!box)return;
+  btn.textContent=`${scheduleMonth}월, ${scheduleYear}⌄`; if(tbtn)tbtn.textContent=scheduleMode==='calendar'?'📅':'🗓️';
+  const items=scheduleItems();
+  if(scheduleMode==='list'){
+    box.innerHTML=`<div class="schedule-list-view">${items.map(it=>{let d=new Date(it.date+'T00:00:00');return `<div class="schedule-list-head"><div class="schedule-list-date">${d.getDate()}일 ${weekNames[d.getDay()]}요일</div><div class="schedule-list-full">${it.date.replaceAll('-','.')+'.'}</div></div><div class="schedule-card"><div class="schedule-card-title"><span class="schedule-dot"></span>${it.title}</div><div class="schedule-card-meta">${it.member?it.member+'<br>':''}${it.time}</div></div>`}).join('')||'<div class="meta">등록된 스케줄이 없습니다.</div>'}<div class="schedule-nav"><button onclick="moveScheduleMonth(-1)">이전달</button><button onclick="moveScheduleMonth(1)">다음달</button></div></div>`;return;
+  }
+  const first=new Date(scheduleYear,scheduleMonth-1,1), last=new Date(scheduleYear,scheduleMonth,0), blanks=first.getDay();
+  let cells=[];for(let i=0;i<blanks;i++)cells.push('<div class="schedule-day blank"></div>');
+  for(let d=1;d<=last.getDate();d++){let date=`${scheduleYear}-${String(scheduleMonth).padStart(2,'0')}-${String(d).padStart(2,'0')}`;let ev=items.find(x=>x.date===date);cells.push(`<div class="schedule-day ${d===14&&scheduleYear===2026&&scheduleMonth===5?'today':''}"><div class="schedule-num ${ev?'has-event':''}">${d}일</div>${ev?`<div class="schedule-event">${ev.title}</div>`:''}</div>`)}
+  box.innerHTML=`<div class="schedule-week"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div><div class="schedule-grid">${cells.join('')}</div>`;
+}
+window.toggleScheduleMode=()=>{scheduleMode=scheduleMode==='calendar'?'list':'calendar';renderSchedule()}
+window.moveScheduleMonth=(n)=>{scheduleMonth+=n;if(scheduleMonth<1){scheduleMonth=12;scheduleYear--}if(scheduleMonth>12){scheduleMonth=1;scheduleYear++}renderSchedule()}
+window.openMonthPicker=()=>{const modal=document.getElementById('monthModal'),panel=document.getElementById('monthPanel');panel.innerHTML=`<div class="month-panel-top"><button onclick="scheduleYear--;openMonthPicker()">‹</button><div class="month-year">${scheduleYear}</div><button onclick="scheduleYear++;openMonthPicker()">›</button><button onclick="document.getElementById('monthModal').classList.remove('open')">×</button></div><div class="month-grid">${Array.from({length:12},(_,i)=>`<button class="month-option ${scheduleMonth===i+1?'active':''}" onclick="scheduleMonth=${i+1};document.getElementById('monthModal').classList.remove('open');renderSchedule()">${i+1}월</button>`).join('')}</div>`;modal.classList.add('open')}
+document.addEventListener('click',e=>{if(e.target.id==='monthModal')e.target.classList.remove('open')});
+
+
+const createdTime=p=>p.createdAt||p.created||'';
+function timeAgo(v){
+  if(!v) return '방금';
+  const d=new Date(v);
+  if(isNaN(d.getTime())) return String(v).replace(' 작성','');
+  const diff=Math.max(0,Date.now()-d.getTime());
+  const m=Math.floor(diff/60000),h=Math.floor(m/60),day=Math.floor(h/24),mon=Math.floor(day/30),yr=Math.floor(day/365);
+  if(m<1)return '방금'; if(m<60)return `${m}분 전`; if(h<24)return `${h}시간 전`; if(day<30)return `${day}일 전`; if(mon<12)return `${mon}개월 전`; return `${yr}년 전`;
+}
+function esc(v){return String(v||'').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));}
+function renderBlocks(p){
+  const blocks=Array.isArray(p.blocks)?p.blocks:[];
+  if(!blocks.length)return `<div class="detail-body">${esc(p.body||'')}</div>`;
+  return `<div class="content-article">${blocks.map(b=>b.type==='image'?`<div class="content-article-img">${media(b.value)}</div>`:`<div class="content-article-text">${esc(b.value)}</div>`).join('')}</div>`;
+}
+function renderBlogEditor(){
+  const box=document.getElementById('blogBlocks'); if(!box)return;
+  box.innerHTML=blogBlocks.map((b,i)=>`<div class="blog-block">${b.type==='image'?`<div class="blog-img-preview">${b.value?media(b.value):'이미지 없음'}</div><button type="button" class="blog-remove" onclick="replaceBlogImage(${i})">이미지 변경</button>`:`<textarea oninput="blogBlocks[${i}].value=this.value" placeholder="텍스트 입력">${esc(b.value)}</textarea>`}<button type="button" class="blog-remove" onclick="removeBlogBlock(${i})">삭제</button></div>`).join('')||'<div class="meta">텍스트/사진 블록을 원하는 순서대로 추가해줘.</div>';
+}
+function collectBlogBlocks(){return blogBlocks.map(b=>({...b,value:String(b.value||'').trim()})).filter(b=>b.value)}
+window.addBlogText=()=>{blogBlocks.push({type:'text',value:''});renderBlogEditor()}
+window.addBlogImage=async()=>{let u=await upload();if(u){blogBlocks.push({type:'image',value:u});renderBlogEditor()}}
+window.replaceBlogImage=async i=>{let u=await upload();if(u){blogBlocks[i].value=u;renderBlogEditor()}}
+window.removeBlogBlock=i=>{blogBlocks.splice(i,1);renderBlogEditor()}
+
+
 function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===id));document.getElementById('fab').style.display=id==='talk'?'block':'none';window.scrollTo(0,0);render()}
 window.go=go;
 
-function render(){renderProfile();renderHome();renderMembers();renderTalk();renderContents();renderShop();renderCommunity();renderAlerts();save()}
-function renderProfile(){document.getElementById('welcome').textContent=profile.nickname?`${profile.nickname}님 환영합니다`:'ATEEZ Official Platform';document.getElementById('myNick').textContent=profile.nickname||'닉네임 미설정';document.getElementById('topProfile').innerHTML=profile.photo?media(profile.photo):'👤'}
+function render(){renderProfile();renderHome();renderMembers();renderTalk();renderContents();renderShop();renderCommunity();renderSchedule();renderAlerts();save()}
+function renderProfile(){document.getElementById('welcome').textContent=profile.nickname?`${profile.nickname}님 환영합니다`:'ATEEZ Official Platform';document.getElementById('myNick').textContent=profile.nickname||'닉네임 미설정';document.getElementById('topProfile').innerHTML=profile.photo?media(profile.photo):'👤';const pb=document.getElementById('pointBadge');if(pb)pb.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`}
 function renderHome(){
   const list=newest(posts).filter(p=>p.type==='content').slice(0,4);
   const old=document.getElementById('homeGrid');
@@ -470,8 +477,8 @@ function renderHome(){
 }
 function renderMembers(){document.getElementById('memberStrip').innerHTML=members.map(m=>`<button class="member-chip ${currentMember===m.id?'active':''}" onclick="toggleMember('${m.id}')"><div class="member-photo">${media(m.photo)}</div><div class="member-name">${m.name}</div></button>`).join('')+`<button class="member-setting-chip" onclick="openMemberSettings()" title="멤버 설정">⚙︎</button>`}
 window.toggleMember=id=>{currentMember=currentMember===id?null:id;renderMembers();renderTalk()}
-function renderTalk(){let list=newest(posts).filter(p=>p.type==='talk'&&(!currentMember||p.member===currentMember));document.getElementById('talkFeed').innerHTML=list.map(p=>{let m=members.find(x=>x.id===p.member)||members[0];return `<article class="feed-card" onclick="openPost(${p.id})"><div class="feed-head"><div class="feed-user"><div class="photo">${media(m.photo)}</div><div class="name">${m.name} <span class="check">✓</span></div></div><button class="more" onclick="event.stopPropagation();openMenu(event,'post',${p.id})">⋮</button></div><div class="feed-img">${media(p.thumb)}</div><div class="feed-title">${p.title}</div><div class="react" onclick="event.stopPropagation()"><button onclick="likePost(${p.id})">♡ ${p.likes||0}</button><button onclick="addComment(${p.id})">💬 ${p.comments||0}</button></div></article>`}).join('')||'<div class="meta">게시글이 없습니다.</div>'}
-function renderContents(){let cats=[['golden','[GOLDEN HOUR]'],['video','VIDEO'],['atiny','ATINY ZONE'],['log','ATEEZ_log']];document.getElementById('contentSections').innerHTML=cats.map(([k,t])=>{let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===k).slice(0,4);return `<section class="content-section"><div class="content-head"><h2>${t}</h2><button class="btn light" onclick="openContentAll('${k}','${t}')">전체보기</button></div><div class="row-scroll">${list.map(p=>`<div onclick="openPost(${p.id})"><div class="wide-thumb">${media(p.thumb)}</div><div class="wide-title">${p.title}</div><div class="meta">${p.created}</div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>'}</div></section>`}).join('')}
+function renderTalk(){let list=newest(posts).filter(p=>p.type==='talk'&&(!currentMember||p.member===currentMember));document.getElementById('talkFeed').innerHTML=list.map(p=>{let m=members.find(x=>x.id===p.member)||members[0];let img=p.thumb?`<div class="feed-img">${media(p.thumb)}</div>`:'';return `<article class="feed-card" onclick="openPost(${p.id})"><div class="feed-head"><div class="feed-user"><div class="photo">${media(m.photo)}</div><div><div class="name">${m.name} <span class="check">✓</span></div><div class="feed-time">${timeAgo(createdTime(p))}</div></div></div><button class="more" onclick="event.stopPropagation();openMenu(event,'post',${p.id})">⋮</button></div>${img}<div class="feed-title">${p.title}</div><div class="react" onclick="event.stopPropagation()"><button onclick="likePost(${p.id})">♡ ${p.likes||0}</button><button onclick="addComment(${p.id})">💬 ${p.comments||0}</button></div></article>`}).join('')||'<div class="meta">게시글이 없습니다.</div>'}
+function renderContents(){let cats=[['golden','[GOLDEN HOUR]'],['video','VIDEO'],['atiny','ATINY ZONE'],['log','ATEEZ_log']];document.getElementById('contentSections').innerHTML=cats.map(([k,t])=>{let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===k).slice(0,4);return `<section class="content-section"><div class="content-head"><h2>${t}</h2><button class="btn light" onclick="openContentAll('${k}','${t}')">전체보기</button></div><div class="row-scroll">${list.map(p=>`<div onclick="openPost(${p.id})">${p.thumb?`<div class="wide-thumb">${media(p.thumb)}</div>`:''}<div class="wide-title">${p.title}</div><div class="meta">${timeAgo(createdTime(p))}</div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>'}</div></section>`}).join('')}
 function renderShop(){
   let cats=['ALL','MEMBERSHIP','ALBUM','PRODUCTS'];
   document.getElementById('shopTabs').innerHTML=cats.map(c=>`<button class="${shopCat===c?'active':''}" onclick="setShopCat('${c}')">${c}</button>`).join('');
@@ -519,11 +526,12 @@ function renderCommunity(){
   listBox.innerHTML=html||'<div class="meta" style="padding:40px 0">게시글이 없습니다.</div>';
 }
 
-window.openPost=id=>{let p=posts.find(x=>x.id===id);if(!p)return;if(p.type==='talk'){let m=members.find(x=>x.id===p.member)||members[0];let cs=comments.filter(c=>c.post===p.id);document.getElementById('postDetailBox').innerHTML=`<div class="talk-detail"><button class="back" onclick="go('talk')">‹ TALK</button><div class="feed-head"><div class="feed-user"><div class="photo">${media(m.photo)}</div><div><div class="name">${m.name} <span class="check">✓</span></div><div class="meta">1달 전</div></div></div><button class="more" onclick="openMenu(event,'post',${p.id})">⋮</button></div><div class="big-media">${media(p.thumb)}</div><div class="detail-title">${p.title}</div><div class="detail-body">${p.body}</div><div class="react"><button>👍 ${Math.floor((p.likes||0)*.2+100)}</button><button>💗 ${p.likes||0}</button><button>🍿 ${Math.floor((p.likes||0)*.04+200)}</button></div><div class="comment-box"><h2>댓글 ${cs.length}</h2><div class="cart-row" onclick="addComment(${p.id})">✎ 댓글 추가하기...</div>${cs.map(c=>`<div class="comment-row"><div class="comment-avatar">${media(c.photo||'👤')}</div><div style="flex:1"><div class="comment-meta">${c.nick} · ${c.time}</div><div class="comment-text">${c.body}</div></div><button class="more" onclick="openMenu(event,'comment',${c.id})">⋮</button></div>`).join('')}</div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 ${cs.length}</span><span style="margin-left:auto">⋮</span></div>`;go('postDetail');return}document.getElementById('postDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('contents')">‹ BACK</button><div class="detail-card"><div class="content-detail-img">${media(p.thumb)}</div><div class="detail-title">${p.title}</div><div class="detail-body">${p.body}</div><div class="actions"><button class="btn light" onclick="editPost(${p.id})">수정</button><button class="btn danger" onclick="deletePost(${p.id})">삭제</button></div></div></div>`;go('postDetail')}
+window.openPost=id=>{let p=posts.find(x=>x.id===id);if(!p)return;if(p.type==='talk'){let m=members.find(x=>x.id===p.member)||members[0];let cs=comments.filter(c=>c.post===p.id);let img=p.thumb?`<div class="big-media">${media(p.thumb)}</div>`:'';document.getElementById('postDetailBox').innerHTML=`<div class="talk-detail"><button class="back" onclick="go('talk')">‹ TALK</button><div class="feed-head"><div class="feed-user"><div class="photo">${media(m.photo)}</div><div><div class="name">${m.name} <span class="check">✓</span></div><div class="meta">${timeAgo(createdTime(p))}</div></div></div><button class="more" onclick="openMenu(event,'post',${p.id})">⋮</button></div>${img}<div class="detail-title">${p.title}</div><div class="detail-body">${esc(p.body)}</div><div class="react"><button>👍 ${Math.floor((p.likes||0)*.2+100)}</button><button>💗 ${p.likes||0}</button><button>🍿 ${Math.floor((p.likes||0)*.04+200)}</button></div><div class="comment-box"><h2>댓글 ${cs.length}</h2><div class="cart-row" onclick="addComment(${p.id})">✎ 댓글 추가하기...</div>${cs.map(c=>`<div class="comment-row"><div class="comment-avatar">${media(c.photo||'👤')}</div><div style="flex:1"><div class="comment-meta">${c.nick} · ${c.time}</div><div class="comment-text">${esc(c.body)}</div></div><button class="more" onclick="openMenu(event,'comment',${c.id})">⋮</button></div>`).join('')}</div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 ${cs.length}</span><span style="margin-left:auto">⋮</span></div>`;go('postDetail');return}document.getElementById('postDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('contents')">‹ BACK</button><div class="detail-card">${p.thumb?`<div class="content-detail-img">${media(p.thumb)}</div>`:''}<div class="detail-title">${p.title}</div>${renderBlocks(p)}<div class="actions"><button class="btn light" onclick="editPost(${p.id})">수정</button><button class="btn danger" onclick="deletePost(${p.id})">삭제</button></div></div></div>`;go('postDetail')}
 
-window.openProduct=id=>{let p=products.find(x=>x.id===id);document.getElementById('shopDetailBox').innerHTML=`<div><button class="back" style="margin:16px" onclick="go('shop')">‹ SHOP</button><div class="shop-hero">${media(p.thumb)}</div><div class="shop-info"><div class="shop-title">${p.name}</div><div class="shop-price">${p.price}</div><div class="shop-desc"><h2>상품 설명</h2><div class="detail-body">${p.body}</div></div><div class="actions"><button class="btn light" onclick="editProduct(${p.id})">수정</button><button class="btn danger" onclick="deleteProduct(${p.id})">삭제</button></div></div><div class="shop-bottom">${p.membership?'':`<button class="cart-btn" onclick="addCart(${p.id})">장바구니</button>`}<button class="buy-btn" onclick="buyProduct(${p.id})">구매하기</button></div></div>`;go('shopDetail')}
+
+window.openProduct=id=>{let p=products.find(x=>x.id===id);document.getElementById('shopDetailBox').innerHTML=`<div><button class="back" style="margin:16px" onclick="go('shop')">‹ SHOP</button><div class="shop-hero">${media(p.thumb)}</div><div class="shop-info"><div class="shop-title">${p.name}</div><div class="shop-price">${p.price}</div>${p.membership?'':`<div class="meta" style="margin-top:8px">결제 시 1% 포인트 적립 · 보유 ${points.toLocaleString('ko-KR')}P</div>`}<div class="shop-desc"><h2>상품 설명</h2><div class="detail-body">${p.body}</div></div><div class="actions"><button class="btn light" onclick="editProduct(${p.id})">수정</button><button class="btn danger" onclick="deleteProduct(${p.id})">삭제</button></div></div><div class="shop-bottom">${p.membership?'':`<button class="cart-btn" onclick="addCart(${p.id})">장바구니</button>`}<button class="buy-btn" onclick="buyProduct(${p.id})">구매하기</button></div></div>`;go('shopDetail')}
 window.openNotice=id=>{let n=notices.find(x=>x.id===id);document.getElementById('noticeDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('community')">‹ COMMUNITY</button><div class="detail-title">${n.title}</div><div class="meta">${n.meta}</div><div class="detail-body" style="font-size:1.35rem;margin-top:30px">${n.body}</div><div class="actions"><button class="btn light" onclick="editNotice(${n.id})">수정</button><button class="btn danger" onclick="deleteNotice(${n.id})">삭제</button></div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 14</span></div>`;go('noticeDetail')}
-window.openContentAll=(cat,title)=>{let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===cat);document.getElementById('contentAllBox').innerHTML=`<div class="section"><button class="back" onclick="go('contents')">‹ CONTENTS</button><h1>${title}</h1><button class="primary" style="margin-top:14px" onclick="openAddContentFor('${cat}')">+ 콘텐츠 추가</button></div><div class="all-grid">${list.map(p=>`<div onclick="openPost(${p.id})"><div class="wide-thumb">${media(p.thumb)}</div><div class="wide-title">${p.title}</div><div class="meta">${p.created}</div></div>`).join('')}</div>`;go('contentAll')}
+window.openContentAll=(cat,title)=>{let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===cat);document.getElementById('contentAllBox').innerHTML=`<div class="section"><button class="back" onclick="go('contents')">‹ CONTENTS</button><h1>${title}</h1><button class="primary" style="margin-top:14px" onclick="openAddContentFor('${cat}')">+ 콘텐츠 추가</button></div><div class="all-grid">${list.map(p=>`<div onclick="openPost(${p.id})">${p.thumb?`<div class="wide-thumb">${media(p.thumb)}</div>`:''}<div class="wide-title">${p.title}</div><div class="meta">${timeAgo(createdTime(p))}</div></div>`).join('')}</div>`;go('contentAll')}
 window.openBoard=cat=>{let list=newest(boards).filter(b=>b.cat===cat);let title={notice:'# NOTICE',event:'# EVENT',broadcast:'# 공방공지'}[cat];document.getElementById('boardBox').innerHTML=`<div class="section"><button class="back" onclick="go('contents')">‹ CONTENTS</button><h1>${title}</h1><button class="primary" style="margin-top:14px" onclick="openAddContentFor('${cat}')">+ 콘텐츠 추가</button></div><div class="all-grid">${list.map(b=>`<div onclick="openBoardDetail(${b.id})"><div class="wide-thumb">${cat==='notice'?'':media(b.thumb)}</div><div class="wide-title">${b.title}</div><div class="meta">${b.date}</div></div>`).join('')}</div>`;go('board')}
 window.openBoardDetail=id=>{let b=boards.find(x=>x.id===id);document.getElementById('boardDetailBox').innerHTML=`<div class="talk-detail"><button class="back" onclick="go('community')">‹ COMMUNITY</button><div class="detail-title">${b.title}</div><div class="meta">${b.date}</div>${b.cat==='notice'?'':`<div class="big-media">${media(b.thumb)}</div>`}<div class="detail-body" style="font-size:1.35rem;margin-top:28px">${b.body}</div><div class="react"><button>👍 1691</button><button>💗 8712</button><button>🍿 392</button></div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 984</span></div>`;go('boardDetail')}
 
@@ -531,8 +539,8 @@ window.openAlerts=()=>{alerts=alerts.map(a=>({...a,read:true}));renderAlerts();s
 window.clearAlerts=()=>{alerts=[];renderAlerts();save()}
 window.openCart=()=>{document.getElementById('cartList').innerHTML=cart.length?newest(cart).map(c=>`<div class="cart-row"><div class="cart-thumb">${media(c.thumb)}</div><div class="cart-main"><div class="cart-title">${c.name}</div><div class="cart-meta">${c.price} · 수량 ${c.qty}</div></div><button class="btn danger" onclick="cart=cart.filter(x=>x.id!==${c.id});openCart();save()">삭제</button></div>`).join('')+`<button class="primary" style="width:100%" onclick="checkout()">장바구니 결제하기</button>`:'<div class="meta">장바구니가 비어있습니다.</div>';go('cart')}
 window.addCart=id=>{let p=products.find(x=>x.id===id);let c=cart.find(x=>x.id===id);if(c)c.qty++;else cart.push({id:p.id,name:p.name,price:p.price,thumb:p.thumb,qty:1});save();alert('장바구니에 담았습니다.')}
-window.buyProduct=id=>{let p=products.find(x=>x.id===id);if(p.membership){openJoin();return}orders.unshift({id:uid(),name:p.name,price:p.price,thumb:p.thumb,qty:1,date:new Date().toLocaleString()});save();alert('결제가 완료되었습니다.')}
-window.checkout=()=>{cart.forEach(c=>orders.unshift({...c,id:uid(),date:new Date().toLocaleString()}));cart=[];save();alert('결제가 완료되었습니다.');openCart()}
+window.buyProduct=id=>{let p=products.find(x=>x.id===id);if(p.membership){openJoin();return}payPhysicalProduct(p,1);render();}
+window.checkout=()=>{if(!cart.length)return; const total=cart.reduce((s,c)=>s+priceNum(c.price)*(c.qty||1),0); let use=0;if(points>0&&total>0&&confirm(`보유 포인트 ${points.toLocaleString('ko-KR')}P를 사용할까?`)){use=Math.min(points,total)} points-=use; let restUse=use; cart.forEach(c=>{let sub=priceNum(c.price)*(c.qty||1); let used=Math.min(restUse,sub); restUse-=used; let final=sub-used; let earned=Math.floor(final*0.01); points+=earned; orders.unshift({...c,id:uid(),date:new Date().toLocaleString(),usedPoint:used,earnedPoint:earned,paid:final})}); cart=[];save();alert('결제가 완료되었습니다.');openCart()}
 
 
 window.openMembership=()=>{
@@ -583,13 +591,17 @@ window.openMembership=()=>{
   go('membership');
 }
 
-window.openOrders=()=>{document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="detail-title">주문 내역</div><button class="btn danger" onclick="orders=[];save();openOrders()">주문내역 초기화</button><div style="margin-top:16px">${orders.length?newest(orders).map(o=>`<div class="cart-row"><div class="cart-thumb">${media(o.thumb)}</div><div class="cart-main"><div class="cart-title">${o.name}</div><div class="cart-meta">${o.price} · 수량 ${o.qty||1} · ${o.date}</div></div></div>`).join(''):'<div class="meta">주문 내역이 없습니다.</div>'}</div></div>`;go('myDetail')}
+window.openOrders=()=>{document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="detail-title">주문 내역</div><button class="btn danger" onclick="orders=[];save();openOrders()">주문내역 초기화</button><div style="margin-top:16px">${orders.length?newest(orders).map(o=>`<div class="cart-row"><div class="cart-thumb">${media(o.thumb)}</div><div class="cart-main"><div class="cart-title">${o.name}</div><div class="cart-meta">${o.price} · 수량 ${o.qty||1} · ${o.date}${o.usedPoint?` · ${o.usedPoint.toLocaleString('ko-KR')}P 사용`:''}${o.earnedPoint?` · ${o.earnedPoint.toLocaleString('ko-KR')}P 적립`:''}</div></div></div>`).join(''):'<div class="meta">주문 내역이 없습니다.</div>'}</div></div>`;go('myDetail')}
 window.openMyPosts=()=>{let mine=newest(posts).filter(p=>p.author==='ME'||p.author===profile.nickname);document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="detail-title">내가 쓴 글</div>${mine.length?mine.map(p=>`<div class="cart-row" onclick="openPost(${p.id})"><div class="cart-thumb">${p.thumb?media(p.thumb):'📝'}</div><div class="cart-main"><div class="cart-title">${p.title}</div><div class="cart-meta">${p.created}</div></div></div>`).join(''):'<div class="meta">작성한 글이 없습니다.</div>'}</div>`;go('myDetail')}
 window.openMemberSettings=()=>{document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('talk')">‹ TALK</button><div class="detail-title">멤버 설정</div><div class="meta" style="margin-bottom:14px">토크 상단에 보이는 이름과 프로필 사진을 수정합니다.</div>${members.map(m=>`<div class="cart-row"><div class="cart-thumb">${media(m.photo)}</div><div class="cart-main"><div class="cart-title">${m.name}</div><div class="cart-meta">${m.id}</div></div><button class="btn light" onclick="editMember('${m.id}')">수정</button></div>`).join('')}</div>`;go('myDetail')}
 window.editMember=id=>{let m=members.find(x=>x.id===id);if(!m)return;modalMode='editMember';editId=id;tempProfile=m.photo||'';openModal('멤버 수정',m.name,'','');document.getElementById('profileBlock').style.display='block';document.getElementById('thumbBlock').style.display='none';document.getElementById('mBody').style.display='none';document.getElementById('mMeta').style.display='none';document.getElementById('profilePreview').innerHTML=tempProfile?media(tempProfile):'프로필 사진 없음'}
-window.openAddMagazine=()=>{modalMode='magazine';tempImg='';openModal('매거진 작성','','','');document.getElementById('mMeta').placeholder='날짜/메타';}
+window.openAddMagazine=()=>{editId=null;modalMode='magazine';tempImg='';openModal('매거진 작성','','','');document.getElementById('mMeta').placeholder='날짜/메타';}
 
-window.openProfile=()=>{modalMode='profile';tempProfile=profile.photo||'';openModal('프로필 관리',profile.nickname,'','');document.getElementById('profileBlock').style.display='block';document.getElementById('thumbBlock').style.display='none';document.getElementById('mBody').style.display='none';document.getElementById('mMeta').style.display='none';document.getElementById('profilePreview').innerHTML=tempProfile?media(tempProfile):'프로필 사진 없음'}
+
+window.openSupport=()=>{document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="detail-title">고객센터</div><div class="detail-body">자주 묻는 질문을 확인하거나 1대1 문의를 남길 수 있습니다.</div><div class="support-faq"><details open><summary>멤버십 가입 정보는 어디서 확인하나요?</summary><p>마이페이지의 내 멤버십에서 카드와 가입 정보를 확인할 수 있습니다.</p></details><details><summary>주문 내역은 어디서 보나요?</summary><p>마이페이지의 주문 내역에서 결제한 상품을 확인할 수 있습니다.</p></details><details><summary>토크 글은 이미지 없이도 올릴 수 있나요?</summary><p>가능합니다. 이미지 없이 작성하면 썸네일 영역 없이 글만 표시됩니다.</p></details></div><div class="support-form"><div class="detail-title" style="font-size:1.2rem">1대1 문의</div><input class="input" id="supportTitle" placeholder="문의 제목"><textarea class="textarea" id="supportBody" placeholder="문의 내용을 입력해 주세요"></textarea><button class="primary" style="width:100%" onclick="submitSupport()">문의 남기기</button></div></div>`;go('myDetail')}
+window.submitSupport=()=>{let t=document.getElementById('supportTitle').value.trim(),b=document.getElementById('supportBody').value.trim();if(!t||!b)return alert('문의 제목과 내용을 입력해줘');alerts.unshift({id:uid(),type:'문의',title:t,thumb:'🎧',time:'방금',read:false,source:null});save();alert('문의가 접수되었습니다.');openSupport()}
+
+window.openProfile=()=>{editId=null;modalMode='profile';tempProfile=profile.photo||'';openModal('프로필 관리',profile.nickname,'','');document.getElementById('profileBlock').style.display='block';document.getElementById('thumbBlock').style.display='none';document.getElementById('mBody').style.display='none';document.getElementById('mMeta').style.display='none';document.getElementById('profilePreview').innerHTML=tempProfile?media(tempProfile):'프로필 사진 없음'}
 window.logout=()=>{if(confirm('로그아웃할까요?')){profile={nickname:'',photo:'',name:'',birth:'',phone:''};membership=null;orders=[];cart=[];save();render();go('home')}}
 
 
@@ -630,22 +642,22 @@ function renderProductCategoryField(){
 }
 document.addEventListener('click',e=>{if(e.target.id==='categoryModal')e.target.classList.remove('open')});
 
-function openModal(title,a='',b='',c=''){document.getElementById('modalTitle').textContent=title;document.getElementById('mTitle').value=a;document.getElementById('mBody').value=b;document.getElementById('mMeta').value=c;document.getElementById('thumbBlock').style.display='block';document.getElementById('profileBlock').style.display='none';document.getElementById('mBody').style.display='block';document.getElementById('mMeta').style.display='block';document.getElementById('thumbPreview').innerHTML=tempImg?media(tempImg):'이미지 없음';document.getElementById('saveBtn').textContent='저장';document.getElementById('pickerArea').style.display='none';document.getElementById('categoryFields').style.display='none';const cf=document.getElementById('categoryFields'); if(cf) cf.style.display='none'; document.getElementById('modal').classList.add('open')}
+function openModal(title,a='',b='',c=''){document.getElementById('modalTitle').textContent=title;document.getElementById('mTitle').value=a;document.getElementById('mBody').value=b;document.getElementById('mMeta').value=c;document.getElementById('thumbBlock').style.display='block';document.getElementById('profileBlock').style.display='none';document.getElementById('mBody').style.display='block';document.getElementById('mMeta').style.display='block';document.getElementById('thumbPreview').innerHTML=tempImg?media(tempImg):'이미지 없음';document.getElementById('saveBtn').textContent='저장';document.getElementById('pickerArea').style.display='none';document.getElementById('categoryFields').style.display='none';document.getElementById('blogEditor').style.display='none';blogBlocks=[];renderBlogEditor();['memberLabel','memberCategorySelect','postLabel','postCategorySelect','visibilityRow'].forEach(id=>{let el=document.getElementById(id); if(el) el.style.display='';});const cf=document.getElementById('categoryFields'); if(cf) cf.style.display='none'; document.getElementById('modal').classList.add('open')}
 window.closeModal=()=>document.getElementById('modal').classList.remove('open')
 window.pickThumb=async()=>{let u=await upload();if(u){tempImg=u;document.getElementById('thumbPreview').innerHTML=media(u)}}
 window.pickProfilePhoto=async()=>{let u=await upload();if(u){tempProfile=u;document.getElementById('profilePreview').innerHTML=media(u)}}
-window.openAddTalk=()=>{modalMode='talk';tempImg='';selectedPostMember=currentMember||members[0].id;selectedPostCategory='예능';openModal('TALK 게시글 추가','','','');document.getElementById('mMeta').style.display='none';document.getElementById('categoryFields').style.display='block';document.getElementById('visibilityRow').style.display='none';updateCategoryTexts()}
-window.openAddProduct=()=>{modalMode='product';tempImg='';selectedProductCat='PRODUCTS';openModal('상품 추가','','','');document.getElementById('mMeta').placeholder='가격';renderProductCategoryField()}
-window.openAddContent=()=>{modalMode='content';tempImg='';openModal('콘텐츠 추가','','','video');document.getElementById('mMeta').placeholder='카테고리 golden/video/atiny/log'}
-window.openAddContentFor=(cat)=>{modalMode='content';tempImg='';selectedVisibility='public';openModal('콘텐츠 추가','','',cat);document.getElementById('mMeta').placeholder='카테고리';document.getElementById('categoryFields').style.display='block';document.getElementById('memberLabel').style.display='none';document.getElementById('memberCategorySelect').style.display='none';document.getElementById('postLabel').style.display='none';document.getElementById('postCategorySelect').style.display='none';document.getElementById('visibilityRow').style.display='block';updateCategoryTexts()}
-window.openAddNotice=()=>{modalMode='notice';tempImg='';openModal('공지 추가','','','');document.getElementById('thumbBlock').style.display='none'}
-window.openJoin=()=>{modalMode='join';openModal('멤버십 가입 정보','','','');document.getElementById('thumbBlock').style.display='none';document.getElementById('mTitle').placeholder='이름';document.getElementById('mBody').placeholder='생년월일';document.getElementById('mMeta').placeholder='전화번호';document.getElementById('saveBtn').textContent='최종 결제 진행'}
+window.openAddTalk=()=>{editId=null;modalMode='talk';tempImg='';selectedPostMember=currentMember||members[0].id;openModal('TALK 게시글 추가','','','');document.getElementById('mMeta').style.display='none';document.getElementById('categoryFields').style.display='block';document.getElementById('postLabel').style.display='none';document.getElementById('postCategorySelect').style.display='none';document.getElementById('visibilityRow').style.display='none';updateCategoryTexts()}
+window.openAddProduct=()=>{editId=null;modalMode='product';tempImg='';selectedProductCat='PRODUCTS';openModal('상품 추가','','','');document.getElementById('mMeta').placeholder='가격';renderProductCategoryField()}
+window.openAddContent=()=>{editId=null;modalMode='content';tempImg='';openModal('콘텐츠 추가','','','video');document.getElementById('mMeta').placeholder='카테고리 golden/video/atiny/log'}
+window.openAddContentFor=(cat)=>{editId=null;modalMode='content';tempImg='';selectedVisibility='public';openModal('콘텐츠 추가','','',cat);document.getElementById('mMeta').style.display='none';document.getElementById('categoryFields').style.display='block';document.getElementById('memberLabel').style.display='none';document.getElementById('memberCategorySelect').style.display='none';document.getElementById('postLabel').style.display='none';document.getElementById('postCategorySelect').style.display='none';document.getElementById('visibilityRow').style.display='block';document.getElementById('blogEditor').style.display='block';blogBlocks=[{type:'text',value:''}];renderBlogEditor();updateCategoryTexts()}
+window.openAddNotice=()=>{editId=null;modalMode='notice';tempImg='';openModal('공지 추가','','','');document.getElementById('thumbBlock').style.display='none'}
+window.openJoin=()=>{editId=null;modalMode='join';openModal('멤버십 가입 정보','','','');document.getElementById('thumbBlock').style.display='none';document.getElementById('mTitle').placeholder='이름';document.getElementById('mBody').placeholder='생년월일';document.getElementById('mMeta').placeholder='전화번호';document.getElementById('saveBtn').textContent='최종 결제 진행'}
 
-window.saveModal=()=>{let title=document.getElementById('mTitle').value.trim(),body=document.getElementById('mBody').value.trim(),meta=document.getElementById('mMeta').value.trim();if(modalMode==='profile'){profile.nickname=title;profile.photo=tempProfile;closeModal();render();return}if(modalMode==='editMember'){let m=members.find(x=>x.id===editId);if(m){m.name=title||m.name;m.photo=tempProfile||m.photo;}closeModal();save();render();openMemberSettings();return}if(modalMode==='join'){if(!title||!body||!meta)return alert('전부 입력해줘');let now=new Date(),end=new Date();end.setFullYear(now.getFullYear()+1);membership={name:title,birth:body,phone:meta,code:code(),start:now.toISOString(),end:end.toISOString()};orders.unshift({id:uid(),name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',qty:1,date:fmt(now)});closeModal();render();openMembership();return}if(!title)return alert('제목을 입력해줘');if(modalMode==='editProduct'){
+window.saveModal=()=>{let title=document.getElementById('mTitle').value.trim(),body=document.getElementById('mBody').value.trim(),meta=document.getElementById('mMeta').value.trim();if(modalMode==='profile'){profile.nickname=title;profile.photo=tempProfile;closeModal();render();return}if(modalMode==='editMember'){let m=members.find(x=>x.id===editId);if(m){m.name=title||m.name;m.photo=tempProfile||m.photo;}closeModal();save();render();openMemberSettings();return}if(modalMode==='join'){if(!title||!body||!meta)return alert('전부 입력해줘');let now=new Date(),end=new Date();end.setFullYear(now.getFullYear()+1);membership={name:title,birth:body,phone:meta,code:code(),start:now.toISOString(),end:end.toISOString()};orders.unshift({id:uid(),name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',qty:1,date:fmt(now)});closeModal();render();openMembership();return}if(!title)return alert('제목을 입력해줘');if(editId && (modalMode==='talk'||modalMode==='content')){let p=posts.find(x=>x.id===editId);if(p){p.title=title;p.body=body;p.thumb=tempImg||'';if(modalMode==='talk'){p.member=selectedPostMember||p.member}else{p.blocks=collectBlogBlocks();p.body=p.blocks.length?'':body;p.visibility=selectedVisibility||'public';}}closeModal();save();render();openPost(editId);editId=null;return}if(modalMode==='editProduct'){
   let p=products.find(x=>x.id===editId);
   if(p){p.name=title;p.body=body;p.price=meta||p.price;p.thumb=tempImg||p.thumb;p.cat=selectedProductCat||p.cat||'PRODUCTS';}
   closeModal();save();render();openProduct(editId);return;
-}if(modalMode==='talk'){let m=members.find(x=>x.id===selectedPostMember)||members.find(x=>x.id===currentMember)||members[0];let p={id:uid(),type:'talk',member:m.id,postCategory:selectedPostCategory,title,body,thumb:tempImg||'',likes:0,comments:0,author:'ME',created:'방금 작성'};posts.unshift(p);alerts.unshift({id:uid(),type:'게시글',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='content'){let p={id:uid(),type:'content',cat:meta||'video',title,body,thumb:tempImg||'',author:'ME',created:'방금 작성',visibility:selectedVisibility||'public'};posts.unshift(p);alerts.unshift({id:uid(),type:'콘텐츠',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='magazine'){boards.unshift({id:uid(),cat:'magazine',title,body,thumb:tempImg||'📝',date:meta||'방금'});closeModal();save();render();go('community');return}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});closeModal();save();render();go('shop');return}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});shopCat=selectedProductCat||'PRODUCTS';closeModal();save();render();go('shop');return}if(modalMode==='notice'){let n={id:uid(),title,body,meta:'KQ엔터테인먼트 · 방금'};notices.unshift(n);alerts.unshift({id:uid(),type:'공지',title,thumb:'🔔',time:'방금',read:false,source:n.id})}closeModal();render()}
+}if(modalMode==='talk'){let m=members.find(x=>x.id===selectedPostMember)||members.find(x=>x.id===currentMember)||members[0];let p={id:uid(),type:'talk',member:m.id,title,body,thumb:tempImg||'',likes:0,comments:0,author:'ME',createdAt:new Date().toISOString()};posts.unshift(p);alerts.unshift({id:uid(),type:'게시글',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='content'){let blocks=collectBlogBlocks();let p={id:uid(),type:'content',cat:meta||'video',title,body:blocks.length?'':body,blocks,thumb:tempImg||'',author:'ME',createdAt:new Date().toISOString(),visibility:selectedVisibility||'public'};posts.unshift(p);alerts.unshift({id:uid(),type:'콘텐츠',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='magazine'){boards.unshift({id:uid(),cat:'magazine',title,body,thumb:tempImg||'📝',date:meta||'방금'});closeModal();save();render();go('community');return}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});closeModal();save();render();go('shop');return}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});shopCat=selectedProductCat||'PRODUCTS';closeModal();save();render();go('shop');return}if(modalMode==='notice'){let n={id:uid(),title,body,meta:'KQ엔터테인먼트 · 방금'};notices.unshift(n);alerts.unshift({id:uid(),type:'공지',title,thumb:'🔔',time:'방금',read:false,source:n.id})}closeModal();render()}
 
 window.likePost=id=>{let p=posts.find(x=>x.id===id);p.likes=(p.likes||0)+1;renderTalk();save()}
 window.addComment=id=>{let body=prompt('댓글 내용');if(!body)return;let nick=prompt('닉네임')||profile.nickname||'익명';comments.unshift({id:uid(),post:id,nick,photo:profile.photo||'👤',body,time:'방금'});let p=posts.find(x=>x.id===id);p.comments=(p.comments||0)+1;save();openPost(id)}
@@ -653,7 +665,7 @@ window.openMenu=(e,type,id)=>{e.stopPropagation();let m=document.getElementById(
 window.menuEdit=(type,id)=>{document.getElementById('menu').classList.remove('open');if(type==='comment'){let c=comments.find(x=>x.id===id);c.nick=prompt('닉네임',c.nick)||c.nick;c.photo=prompt('프로필 사진 URL/이모지',c.photo)||c.photo;c.body=prompt('내용',c.body)||c.body;save();openPost(c.post)}else editPost(id)}
 window.menuDel=(type,id)=>{document.getElementById('menu').classList.remove('open');if(type==='comment'){let c=comments.find(x=>x.id===id);comments=comments.filter(x=>x.id!==id);save();openPost(c.post)}else deletePost(id)}
 document.addEventListener('click',e=>{if(!e.target.closest('#menu')&&!e.target.closest('.more'))document.getElementById('menu').classList.remove('open')})
-window.editPost=id=>{let p=posts.find(x=>x.id===id);modalMode=p.type;editId=id;tempImg=p.thumb;openModal('게시글 수정',p.title,p.body,p.cat||'')}
+window.editPost=id=>{let p=posts.find(x=>x.id===id);modalMode=p.type;editId=id;tempImg=p.thumb||'';openModal('게시글 수정',p.title,p.body,p.cat||'');if(p.type==='talk'){selectedPostMember=p.member||members[0].id;document.getElementById('mMeta').style.display='none';document.getElementById('categoryFields').style.display='block';document.getElementById('postLabel').style.display='none';document.getElementById('postCategorySelect').style.display='none';document.getElementById('visibilityRow').style.display='none';updateCategoryTexts()}else if(p.type==='content'){selectedVisibility=p.visibility||'public';document.getElementById('mMeta').style.display='none';document.getElementById('categoryFields').style.display='block';document.getElementById('memberLabel').style.display='none';document.getElementById('memberCategorySelect').style.display='none';document.getElementById('postLabel').style.display='none';document.getElementById('postCategorySelect').style.display='none';document.getElementById('visibilityRow').style.display='block';document.getElementById('blogEditor').style.display='block';blogBlocks=Array.isArray(p.blocks)&&p.blocks.length?p.blocks:[{type:'text',value:p.body||''}];renderBlogEditor();updateCategoryTexts()}}
 window.deletePost=id=>{let p=posts.find(x=>x.id===id);if(confirm('삭제할까요?')){posts=posts.filter(x=>x.id!==id);comments=comments.filter(c=>c.post!==id);alerts=alerts.filter(a=>a.source!==id);save();render();go(p.type==='content'?'contents':'talk')}}
 window.editProduct=id=>{
   const p=products.find(x=>x.id===id);
