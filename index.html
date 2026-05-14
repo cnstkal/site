@@ -46,7 +46,28 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 
 /* MY */
 .my-menu{padding:0 20px 28px}.my-row{background:var(--card);border:1px solid #ececec;border-radius:18px;padding:17px 16px;margin-bottom:10px;font-weight:900;display:flex;justify-content:space-between}.cart-row{display:flex;gap:14px;padding:14px;border:1px solid var(--line);border-radius:20px;background:#fff;margin-bottom:14px}.cart-thumb{width:82px;height:82px;border-radius:16px;background:#f4f4f4;display:grid;place-items:center;overflow:hidden;flex-shrink:0}.cart-main{flex:1}.cart-title{font-weight:900}.cart-meta{color:#888;font-size:.9rem;margin-top:8px}
-.membership-card{width:78%;max-width:330px;aspect-ratio:.72/1;margin:30px auto;position:relative;transform-style:preserve-3d;transition:.5s}.membership-card.flip{transform:rotateY(180deg)}.face{position:absolute;inset:0;border-radius:28px;backface-visibility:hidden;box-shadow:0 20px 40px #0001;display:grid;place-items:center;text-align:center;font-weight:900}.front{background:linear-gradient(135deg,#fff,#eef2f9)}.backface{background:#f2f1fa;transform:rotateY(180deg);padding:22px;text-align:left;display:block}.label{font-size:.8rem;margin-top:14px;color:#666}.big{font-size:1.35rem;font-weight:900}
+
+.member-page-head{display:flex;align-items:center;gap:10px;padding:24px 20px 8px}
+.member-page-head h1{font-size:2rem;font-weight:900;letter-spacing:-.05em}
+.member-pill{background:#eee;border-radius:999px;padding:6px 10px;font-size:.8rem;font-weight:800;color:#555}
+.member-card-wrap{padding:42px 20px 130px;text-align:center}
+.member-flip{perspective:1200px}
+.membership-card{width:78%;max-width:330px;aspect-ratio:.72/1;margin:0 auto 30px;position:relative;transform-style:preserve-3d;transition:transform .5s}
+.membership-card.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:28px;backface-visibility:hidden;box-shadow:0 24px 44px rgba(0,0,0,.08);overflow:hidden}
+.front{background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.95),rgba(255,255,255,.62) 38%,rgba(238,241,250,.70) 62%,rgba(255,255,255,.92)),radial-gradient(circle at 20% 80%,rgba(191,255,242,.55),transparent 28%),radial-gradient(circle at 80% 30%,rgba(214,219,255,.55),transparent 32%),linear-gradient(135deg,#fff,#eef2f8,#fff);display:flex;align-items:center;justify-content:center;text-align:center;color:#9c9c9c;font-size:1.25rem;font-weight:900;line-height:1.35}
+.front:before{content:"✦ ✧ ✶ ✧ ✦ ✧ ✶ ✦ ✧";position:absolute;inset:0;color:rgba(255,255,255,.8);font-size:1.4rem;letter-spacing:14px;line-height:2.5;filter:blur(.1px);opacity:.95}
+.front:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.35),rgba(255,255,255,0) 45%,rgba(255,255,255,.55));mix-blend-mode:screen}
+.front span{position:relative;z-index:1}
+.backface{transform:rotateY(180deg);background:#f2f1fa;text-align:left;display:flex}
+.backface:before{content:"";width:28%;background:rgba(0,0,0,.045);border-right:1px solid rgba(0,0,0,.06)}
+.back-inner{padding:26px 22px;flex:1;font-size:.95rem;line-height:1.45}
+.label{font-size:.82rem;margin-top:18px;color:#333}
+.big{font-size:1.35rem;font-weight:900;margin-top:4px;word-break:break-all}
+.member-card-dot{width:10px;height:10px;background:#111;border-radius:50%;margin:0 auto 34px}
+.member-title{font-size:1.35rem;font-weight:900;letter-spacing:-.04em}
+.member-sub{font-size:1.05rem;color:#555;margin-top:10px}
+.member-detail-btn{width:100%;height:64px;border:0;border-radius:14px;background:#7d8fb7;color:#fff;font-size:1.2rem;font-weight:900;margin-top:48px}
 
 @media(min-width:900px){body{background:#efefef}.app{max-width:500px;margin:0 auto;background:#fff;min-height:100vh}.bottom-nav,.fixed-bar{left:50%;transform:translateX(-50%);max-width:500px}.shop-bottom{left:50%;transform:translateX(-50%);max-width:500px}.modal{left:50%;transform:translateX(-50%);max-width:500px}.fab{right:calc(50% - 230px)}}
 </style>
@@ -146,7 +167,7 @@ function save(){localStorage.setItem('members',JSON.stringify(members));localSto
 const newest=a=>[...a].sort((x,y)=>(y.id||0)-(x.id||0));
 const media=v=>v&&String(v).startsWith('http')?`<img src="${v}">`:(v||'');
 const uid=()=>Date.now()+Math.floor(Math.random()*999);
-const code=()=>{let c='ABCDEFGHIJKLMNOPQRSTUVWXYZ',s='';for(let i=0;i<6;i++)s+=c[Math.floor(Math.random()*c.length)];return s};
+const code=()=>{const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ';let s='';for(let i=0;i<6;i++){s+=chars[Math.floor(Math.random()*chars.length)]}return s};
 const fmt=d=>d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
 
 function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===id));document.getElementById('fab').style.display=id==='talk'?'block':'none';window.scrollTo(0,0);render()}
@@ -178,7 +199,53 @@ window.addCart=id=>{let p=products.find(x=>x.id===id);let c=cart.find(x=>x.id===
 window.buyProduct=id=>{let p=products.find(x=>x.id===id);if(p.membership){openJoin();return}orders.unshift({id:uid(),name:p.name,price:p.price,thumb:p.thumb,qty:1,date:new Date().toLocaleString()});save();alert('결제가 완료되었습니다.')}
 window.checkout=()=>{cart.forEach(c=>orders.unshift({...c,id:uid(),date:new Date().toLocaleString()}));cart=[];save();alert('결제가 완료되었습니다.');openCart()}
 
-window.openMembership=()=>{if(!membership){document.getElementById('membershipBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="detail-card"><div class="detail-title">가입된 멤버십이 없습니다</div><div class="detail-body">멤버십 가입 후 카드가 생성됩니다.</div><button class="primary" style="width:100%;margin-top:20px" onclick="openJoin()">멤버십 가입하기</button></div></div>`;go('membership');return}document.getElementById('membershipBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="membership-card" onclick="this.classList.toggle('flip')"><div class="face front">ATINY MEMBERSHIP<br><br>ATINY</div><div class="face backface"><div class="label">멤버십 번호</div><div class="big">${membership.code}</div><div class="label">이름</div><div class="big">${membership.name}</div><div class="label">생년월일</div><div class="big">${membership.birth}</div><div class="label">전화번호</div><div class="big">${membership.phone}</div></div></div></div>`;go('membership')}
+
+window.openMembership=()=>{
+  if(membership && (!/^[A-Z]{6}$/.test(membership.code||''))){
+    membership.code=code();
+    save();
+  }
+  if(!membership){
+    document.getElementById('membershipBox').innerHTML=`<div class="member-page-head"><button class="back" onclick="go('my')">‹</button><h1>내 멤버십</h1></div><div class="detail"><div class="detail-card"><div class="detail-title">가입된 멤버십이 없습니다</div><div class="detail-body">멤버십 가입 후 카드가 생성됩니다.</div><button class="primary" style="width:100%;margin-top:20px" onclick="openJoin()">멤버십 가입하기</button></div></div>`;
+    go('membership');return;
+  }
+  const start=new Date(membership.start||Date.now());
+  const end=new Date(membership.end||Date.now());
+  const startTxt=fmt(start);
+  const endTxt=fmt(end);
+  document.getElementById('membershipBox').innerHTML=`
+  <div class="member-page-head">
+    <button class="back" onclick="go('my')">‹</button>
+    <h1>내 멤버십</h1>
+    <span class="member-pill">💎 ${startTxt}부터</span>
+  </div>
+  <div class="member-card-wrap">
+    <div class="member-flip">
+      <div class="membership-card" onclick="this.classList.toggle('flip')">
+        <div class="face front"><span>ATINY MEMBERSHIP (단건<br>결제)<br><small>ATINY</small></span></div>
+        <div class="face backface">
+          <div class="back-inner">
+            <div>ATINY MEMBERSHIP (단건 결제)<br>ATINY<br>${startTxt} - ${endTxt}</div>
+            <div class="label">멤버십 번호</div>
+            <div class="big">${membership.code}</div>
+            <div class="label">이름</div>
+            <div class="big">${membership.name||''}</div>
+            <div class="label">생년월일</div>
+            <div class="big">${membership.birth||''}</div>
+            <div class="label">전화번호</div>
+            <div class="big">${membership.phone||''}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="member-card-dot"></div>
+    <div class="member-title">ATINY MEMBERSHIP (단건 결제)</div>
+    <div class="member-sub">ATINY</div>
+    <button class="member-detail-btn">멤버십 상세 보기</button>
+  </div>`;
+  go('membership');
+}
+
 window.openOrders=()=>{document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="detail-title">주문 내역</div><button class="btn danger" onclick="orders=[];save();openOrders()">주문내역 초기화</button><div style="margin-top:16px">${orders.length?newest(orders).map(o=>`<div class="cart-row"><div class="cart-thumb">${media(o.thumb)}</div><div class="cart-main"><div class="cart-title">${o.name}</div><div class="cart-meta">${o.price} · 수량 ${o.qty||1} · ${o.date}</div></div></div>`).join(''):'<div class="meta">주문 내역이 없습니다.</div>'}</div></div>`;go('myDetail')}
 window.openMyPosts=()=>{let mine=newest(posts).filter(p=>p.author==='ME'||p.author===profile.nickname);document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="detail-title">내가 쓴 글</div>${mine.length?mine.map(p=>`<div class="cart-row" onclick="openPost(${p.id})"><div class="cart-thumb">${p.thumb?media(p.thumb):'📝'}</div><div class="cart-main"><div class="cart-title">${p.title}</div><div class="cart-meta">${p.created}</div></div></div>`).join(''):'<div class="meta">작성한 글이 없습니다.</div>'}</div>`;go('myDetail')}
 window.openProfile=()=>{modalMode='profile';tempProfile=profile.photo||'';openModal('프로필 관리',profile.nickname,'','');document.getElementById('profileBlock').style.display='block';document.getElementById('thumbBlock').style.display='none';document.getElementById('mBody').style.display='none';document.getElementById('mMeta').style.display='none';document.getElementById('profilePreview').innerHTML=tempProfile?media(tempProfile):'프로필 사진 없음'}
