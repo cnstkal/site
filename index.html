@@ -31,6 +31,36 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{height:44px;border-radius:999px;border:0;font-weight:900;padding:0 16px}.light{background:#fff;border:1px solid var(--line)}.danger{background:var(--danger);color:#fff}
 .modal{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.35);align-items:flex-end}.modal.open{display:flex}.sheet{width:100%;background:#fff;border-radius:24px 24px 0 0;padding:20px;max-height:88vh;overflow:auto}.sheet h3{font-size:1.1rem;margin-bottom:14px}.input,.textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:14px;font-family:inherit;font-size:.95rem;margin-bottom:10px}.textarea{min-height:120px;resize:vertical}.preview{height:92px;border:1px solid var(--line);background:#f5f5f5;border-radius:18px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:10px;color:#888}.preview img{width:100%;height:100%;object-fit:cover}
 
+
+/* HOME CONTENT CARDS */
+.home-list{display:flex;flex-direction:column;gap:22px}
+.home-content-card{background:#fff;border:1px solid #ededed;border-radius:24px;overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,.045)}
+.home-content-thumb{width:100%;aspect-ratio:16/9;background:#e8e8ec;display:grid;place-items:center;overflow:hidden;font-size:2.6rem;position:relative}
+.home-content-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.home-content-badge{position:absolute;right:14px;bottom:14px;background:rgba(0,0,0,.62);color:#fff;border-radius:999px;padding:7px 10px;font-size:.76rem;font-weight:800;backdrop-filter:blur(8px)}
+.home-content-info{padding:16px 16px 18px}
+.home-content-title{font-size:1.28rem;font-weight:900;line-height:1.28;letter-spacing:-.04em}
+.home-content-meta{margin-top:8px;color:#777;font-size:.92rem;font-weight:700}
+.home-content-desc{margin-top:14px;color:#555;font-size:.98rem;line-height:1.45;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* CONTENT CATEGORY PILLS */
+.content-tabs-clean{display:flex;gap:10px;overflow-x:auto;padding:18px 20px 8px;border-bottom:0;scrollbar-width:none}
+.content-tabs-clean::-webkit-scrollbar{display:none}
+.content-tabs-clean button{height:42px;border:1px solid #ddd;background:#f7f7f8;border-radius:999px;padding:0 18px;font-size:.9rem;font-weight:900;color:#333;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.035)}
+.content-tabs-clean button:active{transform:scale(.98);background:#111;color:#fff;border-color:#111}
+.content-section{padding-top:34px}
+.content-head h2{letter-spacing:-.04em}
+.content-head .btn{height:48px;min-width:104px;border-radius:999px;color:#2175d9;background:#fff;font-size:.92rem}
+.row-scroll{grid-auto-columns:78%;padding-bottom:4px;scrollbar-width:none}.row-scroll::-webkit-scrollbar{display:none}
+.wide-thumb{border-radius:18px;background:#e9e9ee}.wide-title{font-size:1.1rem;font-weight:900;letter-spacing:-.03em}.wide-title+.meta,.row-scroll .meta{font-size:.88rem}
+
+/* SELECT SHEET */
+.modal-field-label{font-size:.78rem;font-weight:900;color:#777;margin:8px 0 6px}
+.select-like{width:100%;height:48px;border:1px solid var(--line);background:#f7f7f8;border-radius:16px;margin-bottom:10px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;font-weight:900;color:#111}
+.category-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.34);z-index:700;align-items:flex-end}.category-modal.open{display:flex}
+.category-panel{width:100%;background:#fff;border-radius:24px 24px 0 0;padding:16px 20px 28px;box-shadow:0 -18px 50px rgba(0,0,0,.16)}
+.category-option{width:100%;height:52px;border:0;background:#fff;border-radius:14px;text-align:left;padding:0 14px;font-size:1rem;font-weight:900;color:#111}.category-option.active{background:#111;color:#fff}.category-option+ .category-option{margin-top:6px}
+
 /* TALK */
 .member-strip{display:flex;gap:18px;overflow-x:auto;padding:18px 20px;border-bottom:1px solid var(--line)}.member-strip::-webkit-scrollbar{display:none}.member-chip{border:0;background:none;min-width:72px;color:#777}.member-chip.active{color:#111}.member-photo{width:66px;height:66px;border-radius:50%;background:#e8e8ec;display:grid;place-items:center;font-size:1.7rem;margin:0 auto 8px;overflow:hidden;border:2px solid transparent}.member-chip.active .member-photo{border-color:#111}.member-name{font-size:.82rem;font-weight:900}
 .feed{padding:20px 20px 120px}.feed-card{padding:20px 0;border-bottom:1px solid var(--line);position:relative}.feed-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.feed-user{display:flex;gap:10px;align-items:center}.photo{width:44px;height:44px;border-radius:50%;background:#e8e8ec;display:grid;place-items:center;overflow:hidden}.name{font-weight:900;font-size:1.05rem}.check{background:#0b3b77;color:white;border-radius:50%;font-size:.72rem;padding:2px 5px}.more{border:0;background:none;font-size:1.5rem;color:#777}.feed-img{width:100%;aspect-ratio:1/1;border-radius:18px;background:#111;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:4rem;color:white}.feed-img img{width:100%;height:100%;object-fit:cover}.feed-title{font-size:1.28rem;font-weight:600;line-height:1.35;margin:14px 0}.react{display:flex;gap:10px;flex-wrap:wrap}.react button{height:38px;border-radius:999px;border:1px solid var(--line);background:#f8f8f8;font-weight:900;padding:0 14px}
@@ -69,7 +99,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 .member-sub{font-size:1.05rem;color:#555;margin-top:10px}
 .member-detail-btn{width:100%;height:64px;border:0;border-radius:14px;background:#7d8fb7;color:#fff;font-size:1.2rem;font-weight:900;margin-top:48px}
 
-@media(min-width:900px){body{background:#efefef}.app{max-width:500px;margin:0 auto;background:#fff;min-height:100vh}.bottom-nav,.fixed-bar{left:50%;transform:translateX(-50%);max-width:500px}.shop-bottom{left:50%;transform:translateX(-50%);max-width:500px}.modal{left:50%;transform:translateX(-50%);max-width:500px}.fab{right:calc(50% - 230px)}}
+@media(min-width:900px){body{background:#efefef}.app{max-width:500px;margin:0 auto;background:#fff;min-height:100vh}.bottom-nav,.fixed-bar{left:50%;transform:translateX(-50%);max-width:500px}.shop-bottom{left:50%;transform:translateX(-50%);max-width:500px}.modal,.category-modal{left:50%;transform:translateX(-50%);max-width:500px}.fab{right:calc(50% - 230px)}}
 </style>
 </head>
 <body>
@@ -176,18 +206,18 @@ window.go=go;
 function render(){renderProfile();renderHome();renderMembers();renderTalk();renderContents();renderShop();renderNotices();renderAlerts();save()}
 function renderProfile(){document.getElementById('welcome').textContent=profile.nickname?`${profile.nickname}님 환영합니다`:'ATEEZ Official Platform';document.getElementById('myNick').textContent=profile.nickname||'닉네임 미설정';document.getElementById('topProfile').innerHTML=profile.photo?media(profile.photo):'👤'}
 function renderHome(){
-  const list=newest(posts).filter(p=>p.type==='content').slice(0,4);
+  const list=newest(posts).filter(p=>p.type==='content').slice(0,8);
   const old=document.getElementById('homeGrid');
   if(old && !old.classList.contains('home-list')) old.outerHTML='<div class="home-list" id="homeGrid"></div>';
   const box=document.getElementById('homeGrid');
-  box.innerHTML=list.map(p=>`<div class="home-wide-card" onclick="openPost(${p.id})"><div class="home-wide-thumb">${media(p.thumb)}</div><div class="home-wide-main"><div class="home-wide-title">${p.title}</div><div class="home-wide-meta">${p.created||p.body||''}</div></div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>';
+  box.innerHTML=list.map(p=>{const kind=(p.body||'').toLowerCase().includes('youtube')?'YouTube':'CONTENT';return `<article class="home-content-card" onclick="openPost(${p.id})"><div class="home-content-thumb">${media(p.thumb)}<span class="home-content-badge">${kind}</span></div><div class="home-content-info"><div class="home-content-title">${p.title}</div><div class="home-content-meta">${p.created||'방금 작성'} · ${kind}</div>${p.body?`<div class="home-content-desc">${p.body}</div>`:''}</div></article>`}).join('')||'<div class="meta">콘텐츠가 없습니다.</div>';
 }
 function renderMembers(){document.getElementById('memberStrip').innerHTML=members.map(m=>`<button class="member-chip ${currentMember===m.id?'active':''}" onclick="toggleMember('${m.id}')"><div class="member-photo">${media(m.photo)}</div><div class="member-name">${m.name}</div></button>`).join('')}
 window.toggleMember=id=>{currentMember=currentMember===id?null:id;renderMembers();renderTalk()}
 function renderTalk(){let list=newest(posts).filter(p=>p.type==='talk'&&(!currentMember||p.member===currentMember));document.getElementById('talkFeed').innerHTML=list.map(p=>{let m=members.find(x=>x.id===p.member)||members[0];return `<article class="feed-card" onclick="openPost(${p.id})"><div class="feed-head"><div class="feed-user"><div class="photo">${media(m.photo)}</div><div class="name">${m.name} <span class="check">✓</span></div></div><button class="more" onclick="event.stopPropagation();openMenu(event,'post',${p.id})">⋮</button></div><div class="feed-img">${media(p.thumb)}</div><div class="feed-title">${p.title}</div><div class="meta">좋아요 ${p.likes||0} · 댓글 ${p.comments||0}</div><div class="react" onclick="event.stopPropagation()"><button onclick="likePost(${p.id})">♡ ${p.likes||0}</button><button onclick="addComment(${p.id})">💬 ${p.comments||0}</button></div></article>`}).join('')||'<div class="meta">게시글이 없습니다.</div>'}
 function renderContents(){let cats=[['golden','[GOLDEN HOUR]'],['video','VIDEO'],['atiny','ATINY ZONE'],['log','ATEEZ_log']];document.getElementById('contentSections').innerHTML=cats.map(([k,t])=>{let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===k).slice(0,4);return `<section class="content-section"><div class="content-head"><h2>${t}</h2><button class="btn light" onclick="openContentAll('${k}','${t}')">전체보기</button></div><div class="row-scroll">${list.map(p=>`<div onclick="openPost(${p.id})"><div class="wide-thumb">${media(p.thumb)}</div><div class="wide-title">${p.title}</div><div class="meta">${p.created}</div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>'}</div></section>`}).join('')}
 function renderShop(){
-  let cats=['ALL','MEMBERSHIP','ALBUM','PRODUCTS','TICKET'];
+  let cats=['ALL','MEMBERSHIP','ALBUM','PRODUCTS'];
   document.getElementById('shopTabs').innerHTML=cats.map(c=>`<button class="${shopCat===c?'active':''}" onclick="setShopCat('${c}')">${c}</button>`).join('');
   let list=newest(products).filter(p=>shopCat==='ALL'||(p.cat||'PRODUCTS')===shopCat);
   document.getElementById('shopGrid').innerHTML=list.map(p=>`<div class="card" onclick="openProduct(${p.id})"><div class="thumb">${media(p.thumb)}</div><div class="info"><div class="title">${p.name}</div><div class="meta">${p.price}</div></div></div>`).join('')||'<div class="meta">상품이 없습니다.</div>';
@@ -281,7 +311,7 @@ window.openSelectModal=function(type){
  let options=[];
  if(type==='member') options=members.map(m=>({label:m.name,value:m.id,active:selectedPostMember===m.id}));
  if(type==='post') options=postCategoryOptions.map(v=>({label:v,value:v,active:selectedPostCategory===v}));
- if(type==='product') options=['MEMBERSHIP','ALBUM','PRODUCTS','TICKET'].map(v=>({label:v,value:v,active:selectedProductCat===v}));
+ if(type==='product') options=['MEMBERSHIP','ALBUM','PRODUCTS'].map(v=>({label:v,value:v,active:selectedProductCat===v}));
  if(type==='visibility') options=[{label:'전체공개',value:'public',active:selectedVisibility==='public'},{label:'멤버십 공개',value:'member',active:selectedVisibility==='member'}];
  panel.innerHTML=options.map(o=>`<button type="button" class="category-option ${o.active?'active':''}" onclick="chooseCategory('${type}','${o.value}')">${o.label}</button>`).join('');
  modal.classList.add('open');
@@ -316,9 +346,9 @@ window.openJoin=()=>{modalMode='join';openModal('멤버십 가입 정보','','',
 
 window.saveModal=()=>{let title=document.getElementById('mTitle').value.trim(),body=document.getElementById('mBody').value.trim(),meta=document.getElementById('mMeta').value.trim();if(modalMode==='profile'){profile.nickname=title;profile.photo=tempProfile;closeModal();render();return}if(modalMode==='join'){if(!title||!body||!meta)return alert('전부 입력해줘');let now=new Date(),end=new Date();end.setFullYear(now.getFullYear()+1);membership={name:title,birth:body,phone:meta,code:code(),start:now.toISOString(),end:end.toISOString()};orders.unshift({id:uid(),name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',qty:1,date:fmt(now)});closeModal();render();openMembership();return}if(!title)return alert('제목을 입력해줘');if(modalMode==='editProduct'){
   let p=products.find(x=>x.id===editId);
-  if(p){p.name=title;p.body=body;p.price=meta||p.price;p.thumb=tempImg||p.thumb;p.cat=selectedProductCat||p.cat||'PRODUCTS';}
+  if(p){const cat=selectedProductCat||p.cat||'PRODUCTS';p.name=title;p.body=body;p.price=meta||p.price;p.thumb=tempImg||p.thumb;p.cat=cat;p.membership=cat==='MEMBERSHIP';}
   closeModal();save();render();openProduct(editId);return;
-}if(modalMode==='talk'){let m=members.find(x=>x.id===selectedPostMember)||members.find(x=>x.id===currentMember)||members[0];let p={id:uid(),type:'talk',member:m.id,postCategory:selectedPostCategory,title,body,thumb:tempImg||'',likes:0,comments:0,author:'ME',created:'방금 작성'};posts.unshift(p);alerts.unshift({id:uid(),type:'게시글',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='content'){let p={id:uid(),type:'content',cat:meta||'video',title,body,thumb:tempImg||'',author:'ME',created:'방금 작성',visibility:selectedVisibility||'public'};posts.unshift(p);alerts.unshift({id:uid(),type:'콘텐츠',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});closeModal();save();render();go('shop');return}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});shopCat=selectedProductCat||'PRODUCTS';closeModal();save();render();go('shop');return}if(modalMode==='notice'){let n={id:uid(),title,body,meta:'KQ엔터테인먼트 · 방금'};notices.unshift(n);alerts.unshift({id:uid(),type:'공지',title,thumb:'🔔',time:'방금',read:false,source:n.id})}closeModal();render()}
+}if(modalMode==='talk'){let m=members.find(x=>x.id===selectedPostMember)||members.find(x=>x.id===currentMember)||members[0];let p={id:uid(),type:'talk',member:m.id,postCategory:selectedPostCategory,title,body,thumb:tempImg||'',likes:0,comments:0,author:'ME',created:'방금 작성'};posts.unshift(p);alerts.unshift({id:uid(),type:'게시글',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='content'){let p={id:uid(),type:'content',cat:meta||'video',title,body,thumb:tempImg||'',author:'ME',created:'방금 작성',visibility:selectedVisibility||'public'};posts.unshift(p);alerts.unshift({id:uid(),type:'콘텐츠',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='product'){const cat=selectedProductCat||'PRODUCTS';products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat,membership:cat==='MEMBERSHIP'});shopCat=cat;closeModal();save();render();go('shop');return}if(modalMode==='notice'){let n={id:uid(),title,body,meta:'KQ엔터테인먼트 · 방금'};notices.unshift(n);alerts.unshift({id:uid(),type:'공지',title,thumb:'🔔',time:'방금',read:false,source:n.id})}closeModal();render()}
 
 window.likePost=id=>{let p=posts.find(x=>x.id===id);p.likes=(p.likes||0)+1;renderTalk();save()}
 window.addComment=id=>{let body=prompt('댓글 내용');if(!body)return;let nick=prompt('닉네임')||profile.nickname||'익명';comments.unshift({id:uid(),post:id,nick,photo:profile.photo||'👤',body,time:'방금'});let p=posts.find(x=>x.id===id);p.comments=(p.comments||0)+1;save();openPost(id)}
@@ -336,7 +366,7 @@ window.editProduct=id=>{
   tempImg=p.thumb||'';
   selectedProductCat=p.cat||'PRODUCTS';
   openModal('상품 수정',p.name||'',p.body||'',p.price||'');
-  renderPicker('product');
+  renderProductCategoryField();
   document.getElementById('mMeta').placeholder='가격';
   document.getElementById('thumbPreview').innerHTML=tempImg?media(tempImg):'이미지 없음';
 }
