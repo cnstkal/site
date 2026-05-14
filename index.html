@@ -32,7 +32,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 .modal{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.35);align-items:flex-end}.modal.open{display:flex}.sheet{width:100%;background:#fff;border-radius:24px 24px 0 0;padding:20px;max-height:88vh;overflow:auto}.sheet h3{font-size:1.1rem;margin-bottom:14px}.input,.textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:14px;font-family:inherit;font-size:.95rem;margin-bottom:10px}.textarea{min-height:120px;resize:vertical}.preview{height:92px;border:1px solid var(--line);background:#f5f5f5;border-radius:18px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:10px;color:#888}.preview img{width:100%;height:100%;object-fit:cover}
 
 /* TALK */
-.member-strip{display:flex;gap:18px;overflow-x:auto;padding:18px 20px;border-bottom:1px solid var(--line)}.member-strip::-webkit-scrollbar{display:none}.member-chip{border:0;background:none;min-width:72px;color:#777}.member-chip.active{color:#111}.member-photo{width:66px;height:66px;border-radius:50%;background:#e8e8ec;display:grid;place-items:center;font-size:1.7rem;margin:0 auto 8px;overflow:hidden;border:2px solid transparent}.member-chip.active .member-photo{border-color:#111}.member-name{font-size:.82rem;font-weight:900}
+.member-strip{display:flex;gap:18px;overflow-x:auto;padding:18px 20px;border-bottom:1px solid var(--line)}.member-strip::-webkit-scrollbar{display:none}.member-chip{border:0;background:none;min-width:72px;color:#777}.member-chip.active{color:#111}.member-photo{width:66px;height:66px;border-radius:50%;background:#e8e8ec;display:grid;place-items:center;font-size:1.7rem;margin:0 auto 8px;overflow:hidden;border:2px solid transparent}.member-chip.active .member-photo{border-color:#111}.member-name{font-size:.82rem;font-weight:900}.member-setting-chip{border:0;background:rgba(0,0,0,.04);color:#999;min-width:46px;height:46px;border-radius:999px;margin:auto 0;font-size:1rem;align-self:center;opacity:.55}.member-setting-chip:hover{opacity:1;background:rgba(0,0,0,.08);color:#111}
 .feed{padding:20px 20px 120px}.feed-card{padding:20px 0;border-bottom:1px solid var(--line);position:relative}.feed-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.feed-user{display:flex;gap:10px;align-items:center}.photo{width:44px;height:44px;border-radius:50%;background:#e8e8ec;display:grid;place-items:center;overflow:hidden}.name{font-weight:900;font-size:1.05rem}.check{background:#0b3b77;color:white;border-radius:50%;font-size:.72rem;padding:2px 5px}.more{border:0;background:none;font-size:1.5rem;color:#777}.feed-img{width:100%;aspect-ratio:1/1;border-radius:18px;background:#111;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:4rem;color:white}.feed-img img{width:100%;height:100%;object-fit:cover}.feed-title{font-size:1.28rem;font-weight:600;line-height:1.35;margin:14px 0}.react{display:flex;gap:10px;flex-wrap:wrap}.react button{height:38px;border-radius:999px;border:1px solid var(--line);background:#f8f8f8;font-weight:900;padding:0 14px}
 .menu{display:none;position:absolute;background:#fff;border:1px solid var(--line);box-shadow:0 12px 28px rgba(0,0,0,.15);border-radius:14px;padding:8px;z-index:900}.menu.open{display:block}.menu button{display:block;width:120px;height:38px;border:0;background:#fff;text-align:left;padding:0 12px;font-weight:900;border-radius:10px}.menu button.danger{color:var(--danger)}
 .talk-detail{padding:20px 20px 130px}.big-media{width:100%;border-radius:18px;background:#111;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:4rem;color:white;margin-bottom:20px}.big-media img{width:100%;height:auto;display:block}.comment-box{background:#f7f7f7;margin:30px -20px -130px;padding:26px 20px 150px}.comment-row{display:flex;gap:12px;margin-bottom:24px;position:relative}.comment-avatar{width:34px;height:34px;border-radius:50%;background:#d9ddff;display:grid;place-items:center;overflow:hidden;flex-shrink:0}.comment-meta{font-size:.92rem;color:#888;margin-bottom:6px}.comment-text{font-size:1rem;line-height:1.5}.fixed-bar{position:fixed;left:0;right:0;bottom:74px;background:#fff;border-top:1px solid var(--line);padding:14px 20px;display:flex;gap:28px;font-weight:900;z-index:180}
@@ -228,7 +228,30 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 .member-sub{font-size:1.05rem;color:#555;margin-top:10px}
 .member-detail-btn{width:100%;height:64px;border:0;border-radius:14px;background:#7d8fb7;color:#fff;font-size:1.2rem;font-weight:900;margin-top:48px}
 
+
+@media (prefers-color-scheme: dark){
+  :root{--line:#2b2b2f;--card:#1c1c20;--sub:#aaa;--danger:#ff5b65;--blue:#8fa2cc}
+  body{background:#050505;color:#f5f5f5}
+  .app,header,.bottom-nav,.fixed-bar,.shop-bottom,.sheet,.community-tabs,.community-top,.community-list,.content-tabs-clean{background:#0b0b0d;color:#f5f5f5}
+  header,.bottom-nav,.fixed-bar,.shop-bottom,.community-tabs,.community-top,.content-tabs-clean{border-color:#26262a}
+  .hero-card,.card,.detail-card,.my-row,.cart-row,.home-wide-card{background:#151519;border-color:#29292e}
+  .hero-card{background:linear-gradient(135deg,#19191d,#0d0d10)}
+  .thumb,.wide-thumb,.home-wide-thumb,.preview,.photo,.member-photo,.cart-thumb,.community-thumb{background:#222228;color:#ddd}
+  .meta,.cart-meta,.community-meta,.community-preview,.hero-card p,.home-wide-meta{color:#aaa}
+  .detail-body{color:#ddd}
+  .primary,.fab{background:#f5f5f5;color:#0b0b0d}
+  .light,.community-top .community-write,.content-tabs-clean button,.react button,.cart-btn{background:#17171b;color:#f5f5f5;border-color:#303036}
+  .nav-item{color:#aaa}.nav-item.active,.community-tabs button.active{color:#fff}
+  .community-tabs button{color:#777}.community-tabs button.active::after{background:#fff}
+  .feed-card,.community-item{border-color:#26262a}
+  .comment-box{background:#111114}
+  .menu{background:#17171b;border-color:#303036}.menu button{background:#17171b;color:#f5f5f5}
+  .shop-desc{border-top-color:#1c1c20}.shop-hero{background:#17171b}
+  .member-setting-chip{background:rgba(255,255,255,.08);color:#aaa}.member-setting-chip:hover{background:rgba(255,255,255,.14);color:#fff}
+}
+
 @media(min-width:900px){body{background:#efefef}.app{max-width:500px;margin:0 auto;background:#fff;min-height:100vh}.bottom-nav,.fixed-bar{left:50%;transform:translateX(-50%);max-width:500px}.shop-bottom{left:50%;transform:translateX(-50%);max-width:500px}.modal{left:50%;transform:translateX(-50%);max-width:500px}.fab{right:calc(50% - 230px)}}
+@media(min-width:900px) and (prefers-color-scheme: dark){body{background:#151515}.app{background:#0b0b0d}}
 </style>
 </head>
 <body>
@@ -262,10 +285,8 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 
 <section class="view" id="community">
   <div class="community-tabs">
-    <button class="active" data-community="notice" onclick="setCommunityTab('notice',this)">NOTICE</button>
-    <button data-community="talk" onclick="setCommunityTab('talk',this)">FREE TALK</button>
-    <button data-community="event" onclick="setCommunityTab('event',this)">EVENT</button>
-    <button data-community="broadcast" onclick="setCommunityTab('broadcast',this)">공방공지</button>
+    <button class="active" data-community="notice" onclick="setCommunityTab('notice',this)">공지</button>
+    <button data-community="magazine" onclick="setCommunityTab('magazine',this)">매거진</button>
   </div>
   <div class="community-top" id="communityTop"></div>
   <div class="community-list" id="communityList"></div>
@@ -350,9 +371,9 @@ function renderHome(){
   const box=document.getElementById('homeGrid');
   box.innerHTML=list.map(p=>`<div class="home-wide-card" onclick="openPost(${p.id})"><div class="home-wide-thumb">${media(p.thumb)}</div><div class="home-wide-main"><div class="home-wide-title">${p.title}</div><div class="home-wide-meta">${p.created||p.body||''}</div></div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>';
 }
-function renderMembers(){document.getElementById('memberStrip').innerHTML=members.map(m=>`<button class="member-chip ${currentMember===m.id?'active':''}" onclick="toggleMember('${m.id}')"><div class="member-photo">${media(m.photo)}</div><div class="member-name">${m.name}</div></button>`).join('')}
+function renderMembers(){document.getElementById('memberStrip').innerHTML=members.map(m=>`<button class="member-chip ${currentMember===m.id?'active':''}" onclick="toggleMember('${m.id}')"><div class="member-photo">${media(m.photo)}</div><div class="member-name">${m.name}</div></button>`).join('')+`<button class="member-setting-chip" onclick="openMemberSettings()" title="멤버 설정">⚙︎</button>`}
 window.toggleMember=id=>{currentMember=currentMember===id?null:id;renderMembers();renderTalk()}
-function renderTalk(){let list=newest(posts).filter(p=>p.type==='talk'&&(!currentMember||p.member===currentMember));document.getElementById('talkFeed').innerHTML=list.map(p=>{let m=members.find(x=>x.id===p.member)||members[0];return `<article class="feed-card" onclick="openPost(${p.id})"><div class="feed-head"><div class="feed-user"><div class="photo">${media(m.photo)}</div><div class="name">${m.name} <span class="check">✓</span></div></div><button class="more" onclick="event.stopPropagation();openMenu(event,'post',${p.id})">⋮</button></div><div class="feed-img">${media(p.thumb)}</div><div class="feed-title">${p.title}</div><div class="meta">좋아요 ${p.likes||0} · 댓글 ${p.comments||0}</div><div class="react" onclick="event.stopPropagation()"><button onclick="likePost(${p.id})">♡ ${p.likes||0}</button><button onclick="addComment(${p.id})">💬 ${p.comments||0}</button></div></article>`}).join('')||'<div class="meta">게시글이 없습니다.</div>'}
+function renderTalk(){let list=newest(posts).filter(p=>p.type==='talk'&&(!currentMember||p.member===currentMember));document.getElementById('talkFeed').innerHTML=list.map(p=>{let m=members.find(x=>x.id===p.member)||members[0];return `<article class="feed-card" onclick="openPost(${p.id})"><div class="feed-head"><div class="feed-user"><div class="photo">${media(m.photo)}</div><div class="name">${m.name} <span class="check">✓</span></div></div><button class="more" onclick="event.stopPropagation();openMenu(event,'post',${p.id})">⋮</button></div><div class="feed-img">${media(p.thumb)}</div><div class="feed-title">${p.title}</div><div class="react" onclick="event.stopPropagation()"><button onclick="likePost(${p.id})">♡ ${p.likes||0}</button><button onclick="addComment(${p.id})">💬 ${p.comments||0}</button></div></article>`}).join('')||'<div class="meta">게시글이 없습니다.</div>'}
 function renderContents(){let cats=[['golden','[GOLDEN HOUR]'],['video','VIDEO'],['atiny','ATINY ZONE'],['log','ATEEZ_log']];document.getElementById('contentSections').innerHTML=cats.map(([k,t])=>{let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===k).slice(0,4);return `<section class="content-section"><div class="content-head"><h2>${t}</h2><button class="btn light" onclick="openContentAll('${k}','${t}')">전체보기</button></div><div class="row-scroll">${list.map(p=>`<div onclick="openPost(${p.id})"><div class="wide-thumb">${media(p.thumb)}</div><div class="wide-title">${p.title}</div><div class="meta">${p.created}</div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>'}</div></section>`}).join('')}
 function renderShop(){
   let cats=['ALL','MEMBERSHIP','ALBUM','PRODUCTS'];
@@ -372,56 +393,34 @@ function renderCommunity(){
   const listBox=document.getElementById('communityList');
   const top=document.getElementById('communityTop');
   if(!listBox||!top)return;
-
   let html='';
   if(communityTab==='notice'){
     top.innerHTML=`<span>공지 보기</span><button class="community-write" onclick="openAddNotice()">+ 공지</button>`;
     html=newest(notices).map(n=>`
       <div class="community-item" onclick="openNotice(${n.id})">
         <div class="community-main">
-          <div class="community-title">${n.title}<span class="community-count">[${Math.floor((n.id||1)%170)+14}]</span></div>
+          <div class="community-title">${n.title}</div>
           <div class="community-meta">${n.meta||'KQ엔터테인먼트 · 방금'}</div>
           <div class="community-preview">${n.body||''}</div>
         </div>
       </div>
     `).join('');
   }
-
-  if(communityTab==='talk'){
-    top.innerHTML=`<span>포스트 보기</span><button class="community-write" onclick="openAddTalk()">+ 글쓰기</button>`;
-    html=newest(posts).filter(p=>p.type==='talk').map(p=>{
-      const m=members.find(x=>x.id===p.member)||members[0];
-      return `
-      <div class="community-item" onclick="openPost(${p.id})">
-        <div class="community-main">
-          <div class="community-title">${p.title}<span class="community-count">[${p.comments||0}]</span></div>
-          <div class="community-meta">${m.name} · ${p.created||'방금'} · 반응 ${p.likes||0}</div>
-          <div class="community-preview">${p.body||''}</div>
-        </div>
-        <div class="community-thumb">${media(p.thumb||m.photo||'💬')}</div>
-      </div>`;
-    }).join('');
-  }
-
-  if(communityTab==='event' || communityTab==='broadcast'){
-    const label=communityTab==='event'?'이벤트 보기':'공방공지 보기';
-    top.innerHTML=`<span>${label}</span><button class="community-write" onclick="openAddContentFor('${communityTab}')">+ 작성</button>`;
-    html=newest(boards).filter(b=>b.cat===communityTab).map(b=>`
+  if(communityTab==='magazine'){
+    top.innerHTML=`<span>매거진 보기</span><button class="community-write" onclick="openAddMagazine()">+ 매거진</button>`;
+    html=newest(boards).filter(b=>['magazine','event','broadcast'].includes(b.cat)).map(b=>`
       <div class="community-item" onclick="openBoardDetail(${b.id})">
         <div class="community-main">
-          <div class="community-title">${b.title}<span class="community-count">[${Math.floor((b.id||1)%90)+10}]</span></div>
-          <div class="community-meta">KQ엔터테인먼트 · ${b.date||'방금'} · 반응 ${Math.floor((b.id||1)%900)+100}</div>
+          <div class="community-title">${b.title}</div>
+          <div class="community-meta">KQ엔터테인먼트 · ${b.date||'방금'}</div>
           <div class="community-preview">${b.body||''}</div>
         </div>
         <div class="community-thumb">${media(b.thumb||'📝')}</div>
       </div>
     `).join('');
   }
-
   listBox.innerHTML=html||'<div class="meta" style="padding:40px 0">게시글이 없습니다.</div>';
 }
-function renderNotices(){document.getElementById('noticeList').innerHTML=newest(notices).map(n=>`<div class="cart-row" onclick="openNotice(${n.id})"><div class="cart-main"><div class="cart-title">${n.title}</div><div class="cart-meta">${n.meta}</div></div></div>`).join('')}
-function renderAlerts(){alerts=alerts.filter(a=>!a.source||posts.some(p=>p.id===a.source)||notices.some(n=>n.id===a.source));document.getElementById('alertDot').classList.toggle('on',alerts.some(a=>!a.read));let box=document.getElementById('alertList');if(box)box.innerHTML=alerts.length?newest(alerts).map(a=>`<div class="cart-row"><div class="cart-thumb">${media(a.thumb||'🔔')}</div><div class="cart-main"><div class="cart-title">${a.title}</div><div class="cart-meta">${a.type} · ${a.time}</div></div></div>`).join(''):'<div class="meta">알림이 없습니다.</div>'}
 
 window.openPost=id=>{let p=posts.find(x=>x.id===id);if(!p)return;if(p.type==='talk'){let m=members.find(x=>x.id===p.member)||members[0];let cs=comments.filter(c=>c.post===p.id);document.getElementById('postDetailBox').innerHTML=`<div class="talk-detail"><button class="back" onclick="go('talk')">‹ TALK</button><div class="feed-head"><div class="feed-user"><div class="photo">${media(m.photo)}</div><div><div class="name">${m.name} <span class="check">✓</span></div><div class="meta">1달 전</div></div></div><button class="more" onclick="openMenu(event,'post',${p.id})">⋮</button></div><div class="big-media">${media(p.thumb)}</div><div class="detail-title">${p.title}</div><div class="detail-body">${p.body}</div><div class="react"><button>👍 ${Math.floor((p.likes||0)*.2+100)}</button><button>💗 ${p.likes||0}</button><button>🍿 ${Math.floor((p.likes||0)*.04+200)}</button></div><div class="comment-box"><h2>댓글 ${cs.length}</h2><div class="cart-row" onclick="addComment(${p.id})">✎ 댓글 추가하기...</div>${cs.map(c=>`<div class="comment-row"><div class="comment-avatar">${media(c.photo||'👤')}</div><div style="flex:1"><div class="comment-meta">${c.nick} · ${c.time}</div><div class="comment-text">${c.body}</div></div><button class="more" onclick="openMenu(event,'comment',${c.id})">⋮</button></div>`).join('')}</div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 ${cs.length}</span><span style="margin-left:auto">⋮</span></div>`;go('postDetail');return}document.getElementById('postDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('contents')">‹ BACK</button><div class="detail-card"><div class="content-detail-img">${media(p.thumb)}</div><div class="detail-title">${p.title}</div><div class="detail-body">${p.body}</div><div class="actions"><button class="btn light" onclick="editPost(${p.id})">수정</button><button class="btn danger" onclick="deletePost(${p.id})">삭제</button></div></div></div>`;go('postDetail')}
 
@@ -429,7 +428,7 @@ window.openProduct=id=>{let p=products.find(x=>x.id===id);document.getElementByI
 window.openNotice=id=>{let n=notices.find(x=>x.id===id);document.getElementById('noticeDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('community')">‹ COMMUNITY</button><div class="detail-title">${n.title}</div><div class="meta">${n.meta}</div><div class="detail-body" style="font-size:1.35rem;margin-top:30px">${n.body}</div><div class="actions"><button class="btn light" onclick="editNotice(${n.id})">수정</button><button class="btn danger" onclick="deleteNotice(${n.id})">삭제</button></div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 14</span></div>`;go('noticeDetail')}
 window.openContentAll=(cat,title)=>{let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===cat);document.getElementById('contentAllBox').innerHTML=`<div class="section"><button class="back" onclick="go('contents')">‹ CONTENTS</button><h1>${title}</h1><button class="primary" style="margin-top:14px" onclick="openAddContentFor('${cat}')">+ 콘텐츠 추가</button></div><div class="all-grid">${list.map(p=>`<div onclick="openPost(${p.id})"><div class="wide-thumb">${media(p.thumb)}</div><div class="wide-title">${p.title}</div><div class="meta">${p.created}</div></div>`).join('')}</div>`;go('contentAll')}
 window.openBoard=cat=>{let list=newest(boards).filter(b=>b.cat===cat);let title={notice:'# NOTICE',event:'# EVENT',broadcast:'# 공방공지'}[cat];document.getElementById('boardBox').innerHTML=`<div class="section"><button class="back" onclick="go('contents')">‹ CONTENTS</button><h1>${title}</h1><button class="primary" style="margin-top:14px" onclick="openAddContentFor('${cat}')">+ 콘텐츠 추가</button></div><div class="all-grid">${list.map(b=>`<div onclick="openBoardDetail(${b.id})"><div class="wide-thumb">${cat==='notice'?'':media(b.thumb)}</div><div class="wide-title">${b.title}</div><div class="meta">${b.date}</div></div>`).join('')}</div>`;go('board')}
-window.openBoardDetail=id=>{let b=boards.find(x=>x.id===id);document.getElementById('boardDetailBox').innerHTML=`<div class="talk-detail"><button class="back" onclick="openBoard('${b.cat}')">‹ BACK</button><div class="detail-title">${b.title}</div><div class="meta">${b.date}</div>${b.cat==='notice'?'':`<div class="big-media">${media(b.thumb)}</div>`}<div class="detail-body" style="font-size:1.35rem;margin-top:28px">${b.body}</div><div class="react"><button>👍 1691</button><button>💗 8712</button><button>🍿 392</button></div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 984</span></div>`;go('boardDetail')}
+window.openBoardDetail=id=>{let b=boards.find(x=>x.id===id);document.getElementById('boardDetailBox').innerHTML=`<div class="talk-detail"><button class="back" onclick="go('community')">‹ COMMUNITY</button><div class="detail-title">${b.title}</div><div class="meta">${b.date}</div>${b.cat==='notice'?'':`<div class="big-media">${media(b.thumb)}</div>`}<div class="detail-body" style="font-size:1.35rem;margin-top:28px">${b.body}</div><div class="react"><button>👍 1691</button><button>💗 8712</button><button>🍿 392</button></div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 984</span></div>`;go('boardDetail')}
 
 window.openAlerts=()=>{alerts=alerts.map(a=>({...a,read:true}));renderAlerts();save();go('alerts')}
 window.clearAlerts=()=>{alerts=[];renderAlerts();save()}
@@ -489,6 +488,10 @@ window.openMembership=()=>{
 
 window.openOrders=()=>{document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="detail-title">주문 내역</div><button class="btn danger" onclick="orders=[];save();openOrders()">주문내역 초기화</button><div style="margin-top:16px">${orders.length?newest(orders).map(o=>`<div class="cart-row"><div class="cart-thumb">${media(o.thumb)}</div><div class="cart-main"><div class="cart-title">${o.name}</div><div class="cart-meta">${o.price} · 수량 ${o.qty||1} · ${o.date}</div></div></div>`).join(''):'<div class="meta">주문 내역이 없습니다.</div>'}</div></div>`;go('myDetail')}
 window.openMyPosts=()=>{let mine=newest(posts).filter(p=>p.author==='ME'||p.author===profile.nickname);document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="detail-title">내가 쓴 글</div>${mine.length?mine.map(p=>`<div class="cart-row" onclick="openPost(${p.id})"><div class="cart-thumb">${p.thumb?media(p.thumb):'📝'}</div><div class="cart-main"><div class="cart-title">${p.title}</div><div class="cart-meta">${p.created}</div></div></div>`).join(''):'<div class="meta">작성한 글이 없습니다.</div>'}</div>`;go('myDetail')}
+window.openMemberSettings=()=>{document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('talk')">‹ TALK</button><div class="detail-title">멤버 설정</div><div class="meta" style="margin-bottom:14px">토크 상단에 보이는 이름과 프로필 사진을 수정합니다.</div>${members.map(m=>`<div class="cart-row"><div class="cart-thumb">${media(m.photo)}</div><div class="cart-main"><div class="cart-title">${m.name}</div><div class="cart-meta">${m.id}</div></div><button class="btn light" onclick="editMember('${m.id}')">수정</button></div>`).join('')}</div>`;go('myDetail')}
+window.editMember=id=>{let m=members.find(x=>x.id===id);if(!m)return;modalMode='editMember';editId=id;tempProfile=m.photo||'';openModal('멤버 수정',m.name,'','');document.getElementById('profileBlock').style.display='block';document.getElementById('thumbBlock').style.display='none';document.getElementById('mBody').style.display='none';document.getElementById('mMeta').style.display='none';document.getElementById('profilePreview').innerHTML=tempProfile?media(tempProfile):'프로필 사진 없음'}
+window.openAddMagazine=()=>{modalMode='magazine';tempImg='';openModal('매거진 작성','','','');document.getElementById('mMeta').placeholder='날짜/메타';}
+
 window.openProfile=()=>{modalMode='profile';tempProfile=profile.photo||'';openModal('프로필 관리',profile.nickname,'','');document.getElementById('profileBlock').style.display='block';document.getElementById('thumbBlock').style.display='none';document.getElementById('mBody').style.display='none';document.getElementById('mMeta').style.display='none';document.getElementById('profilePreview').innerHTML=tempProfile?media(tempProfile):'프로필 사진 없음'}
 window.logout=()=>{if(confirm('로그아웃할까요?')){profile={nickname:'',photo:'',name:'',birth:'',phone:''};membership=null;orders=[];cart=[];save();render();go('home')}}
 
@@ -541,11 +544,11 @@ window.openAddContentFor=(cat)=>{modalMode='content';tempImg='';selectedVisibili
 window.openAddNotice=()=>{modalMode='notice';tempImg='';openModal('공지 추가','','','');document.getElementById('thumbBlock').style.display='none'}
 window.openJoin=()=>{modalMode='join';openModal('멤버십 가입 정보','','','');document.getElementById('thumbBlock').style.display='none';document.getElementById('mTitle').placeholder='이름';document.getElementById('mBody').placeholder='생년월일';document.getElementById('mMeta').placeholder='전화번호';document.getElementById('saveBtn').textContent='최종 결제 진행'}
 
-window.saveModal=()=>{let title=document.getElementById('mTitle').value.trim(),body=document.getElementById('mBody').value.trim(),meta=document.getElementById('mMeta').value.trim();if(modalMode==='profile'){profile.nickname=title;profile.photo=tempProfile;closeModal();render();return}if(modalMode==='join'){if(!title||!body||!meta)return alert('전부 입력해줘');let now=new Date(),end=new Date();end.setFullYear(now.getFullYear()+1);membership={name:title,birth:body,phone:meta,code:code(),start:now.toISOString(),end:end.toISOString()};orders.unshift({id:uid(),name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',qty:1,date:fmt(now)});closeModal();render();openMembership();return}if(!title)return alert('제목을 입력해줘');if(modalMode==='editProduct'){
+window.saveModal=()=>{let title=document.getElementById('mTitle').value.trim(),body=document.getElementById('mBody').value.trim(),meta=document.getElementById('mMeta').value.trim();if(modalMode==='profile'){profile.nickname=title;profile.photo=tempProfile;closeModal();render();return}if(modalMode==='editMember'){let m=members.find(x=>x.id===editId);if(m){m.name=title||m.name;m.photo=tempProfile||m.photo;}closeModal();save();render();openMemberSettings();return}if(modalMode==='join'){if(!title||!body||!meta)return alert('전부 입력해줘');let now=new Date(),end=new Date();end.setFullYear(now.getFullYear()+1);membership={name:title,birth:body,phone:meta,code:code(),start:now.toISOString(),end:end.toISOString()};orders.unshift({id:uid(),name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',qty:1,date:fmt(now)});closeModal();render();openMembership();return}if(!title)return alert('제목을 입력해줘');if(modalMode==='editProduct'){
   let p=products.find(x=>x.id===editId);
   if(p){p.name=title;p.body=body;p.price=meta||p.price;p.thumb=tempImg||p.thumb;p.cat=selectedProductCat||p.cat||'PRODUCTS';}
   closeModal();save();render();openProduct(editId);return;
-}if(modalMode==='talk'){let m=members.find(x=>x.id===selectedPostMember)||members.find(x=>x.id===currentMember)||members[0];let p={id:uid(),type:'talk',member:m.id,postCategory:selectedPostCategory,title,body,thumb:tempImg||'',likes:0,comments:0,author:'ME',created:'방금 작성'};posts.unshift(p);alerts.unshift({id:uid(),type:'게시글',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='content'){let p={id:uid(),type:'content',cat:meta||'video',title,body,thumb:tempImg||'',author:'ME',created:'방금 작성',visibility:selectedVisibility||'public'};posts.unshift(p);alerts.unshift({id:uid(),type:'콘텐츠',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});closeModal();save();render();go('shop');return}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});shopCat=selectedProductCat||'PRODUCTS';closeModal();save();render();go('shop');return}if(modalMode==='notice'){let n={id:uid(),title,body,meta:'KQ엔터테인먼트 · 방금'};notices.unshift(n);alerts.unshift({id:uid(),type:'공지',title,thumb:'🔔',time:'방금',read:false,source:n.id})}closeModal();render()}
+}if(modalMode==='talk'){let m=members.find(x=>x.id===selectedPostMember)||members.find(x=>x.id===currentMember)||members[0];let p={id:uid(),type:'talk',member:m.id,postCategory:selectedPostCategory,title,body,thumb:tempImg||'',likes:0,comments:0,author:'ME',created:'방금 작성'};posts.unshift(p);alerts.unshift({id:uid(),type:'게시글',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='content'){let p={id:uid(),type:'content',cat:meta||'video',title,body,thumb:tempImg||'',author:'ME',created:'방금 작성',visibility:selectedVisibility||'public'};posts.unshift(p);alerts.unshift({id:uid(),type:'콘텐츠',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='magazine'){boards.unshift({id:uid(),cat:'magazine',title,body,thumb:tempImg||'📝',date:meta||'방금'});closeModal();save();render();go('community');return}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});closeModal();save();render();go('shop');return}if(modalMode==='product'){products.unshift({id:uid(),name:title,body:body||'상품 설명',price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});shopCat=selectedProductCat||'PRODUCTS';closeModal();save();render();go('shop');return}if(modalMode==='notice'){let n={id:uid(),title,body,meta:'KQ엔터테인먼트 · 방금'};notices.unshift(n);alerts.unshift({id:uid(),type:'공지',title,thumb:'🔔',time:'방금',read:false,source:n.id})}closeModal();render()}
 
 window.likePost=id=>{let p=posts.find(x=>x.id===id);p.likes=(p.likes||0)+1;renderTalk();save()}
 window.addComment=id=>{let body=prompt('댓글 내용');if(!body)return;let nick=prompt('닉네임')||profile.nickname||'익명';comments.unshift({id:uid(),post:id,nick,photo:profile.photo||'👤',body,time:'방금'});let p=posts.find(x=>x.id===id);p.comments=(p.comments||0)+1;save();openPost(id)}
