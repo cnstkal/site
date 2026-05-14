@@ -475,6 +475,23 @@ html.force-light #modal .primary,html.force-light #saveBtn{background:#111!impor
 html.force-light #modal .light{background:#f0f0f2!important;color:#111!important;border-color:#dedee3!important;}
 @media(max-width:420px){.blog-style-row{grid-template-columns:1fr!important;}}
 
+
+/* ARTIST SELECT + VIEW PERSIST */
+.artist-select{padding:28px 20px 120px;min-height:calc(100vh - 60px);background:inherit;color:inherit}
+.artist-select h1{font-size:2.15rem;font-weight:900;letter-spacing:-.06em;margin:20px 0 8px}
+.artist-select .artist-sub{font-size:1rem;color:var(--sub);line-height:1.5;margin-bottom:28px}
+.artist-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 14px;align-items:start}
+.artist-card{width:100%;border:0;background:transparent;color:inherit;border-radius:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;box-shadow:none}
+.artist-avatar{width:82px;height:82px;border-radius:50%;background:#eee;display:grid;place-items:center;font-size:2rem;overflow:hidden;flex-shrink:0;border:1px solid var(--line)}
+.artist-avatar img{width:100%;height:100%;object-fit:cover}
+.artist-name{font-size:1rem;font-weight:900;letter-spacing:-.04em;line-height:1.2;word-break:keep-all}
+.artist-meta{display:none}
+.artist-add{height:54px;border-radius:18px;border:1px dashed var(--line);background:transparent;color:inherit;font-weight:900;font-size:1rem;margin-top:26px;width:100%}
+.app.artist-landing header .header-actions,.app.artist-landing .bottom-nav{display:none!important}
+.app.artist-landing{padding-bottom:0}
+html.force-light .artist-card,html.force-light .artist-add{background:#fff;color:#111;border-color:#e5e5e5}
+html.force-dark .artist-card{background:#151519;color:#f5f5f5;border-color:#2b2b2f}
+
 </style>
 </head>
 <body>
@@ -490,7 +507,15 @@ html.force-light #modal .light{background:#f0f0f2!important;color:#111!important
 </header>
 
 <main>
-<section class="view active" id="home">
+<section class="view active" id="artistSelect">
+  <div class="artist-select">
+    <h1>ARTIST</h1>
+    <div class="artist-sub">입장할 아티스트 플랫폼을 선택해 주세요.</div>
+    <div class="artist-grid" id="artistGrid"></div>
+    <button class="artist-add" onclick="addArtist()">＋ 아티스트 추가</button>
+  </div>
+</section>
+<section class="view" id="home">
   <div class="hero"><div class="hero-card"><h1>GOLDEN<br>HOUR</h1><p id="welcome">ATEEZ Official Platform</p><button class="primary" onclick="openMembership()">멤버십 가입하기</button></div></div>
   <div class="section"><div class="section-title">LATEST CONTENTS</div><div class="grid" id="homeGrid"></div></div>
 </section>
@@ -596,19 +621,61 @@ const CLOUDINARY_CLOUD='dbljkloal',CLOUDINARY_PRESET='clowofficial';
 const app=initializeApp(firebaseConfig),db=getFirestore(app);
 
 const LS=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');return Array.isArray(f)?(Array.isArray(v)&&v.length?v:f):(v||f)}catch(e){return f}};
-let members=LS('members',[{id:'hong',name:'홍중',photo:'🎤'},{id:'seong',name:'성화',photo:'🌟'},{id:'yunho',name:'윤호',photo:'🐶'},{id:'yeo',name:'여상',photo:'✨'},{id:'san',name:'산',photo:'⛰️'},{id:'mingi',name:'민기',photo:'🐥'},{id:'woo',name:'우영',photo:'🦊'},{id:'jong',name:'종호',photo:'🍎'}]);
+const defaultMembers=[{id:'hong',name:'홍중',photo:'🎤'},{id:'seong',name:'성화',photo:'🌟'},{id:'yunho',name:'윤호',photo:'🐶'},{id:'yeo',name:'여상',photo:'✨'},{id:'san',name:'산',photo:'⛰️'},{id:'mingi',name:'민기',photo:'🐥'},{id:'woo',name:'우영',photo:'🦊'},{id:'jong',name:'종호',photo:'🍎'}];
+const defaultProducts=[{id:80,name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',body:'1년 멤버십 상품입니다.',membership:true,cat:'MEMBERSHIP'},{id:79,name:'GOLDEN HOUR Pt.4 Album',price:'18,000원',thumb:'💿',body:'앨범 상품 상세페이지입니다.',cat:'ALBUM'},{id:78,name:'ANITEEZ Figure Set',price:'35,000원',thumb:'🧸',body:'굿즈 상품입니다.',cat:'PRODUCTS'}];
+const defaultPosts=[{id:300,type:'talk',member:'hong',title:'우리 티니들 간바떼!💪',body:'오늘도 힘내요.',thumb:'🎤',likes:2421,comments:3,author:'ME',created:'방금 작성'},{id:299,type:'talk',member:'seong',title:'오늘의 기록',body:'작은 순간도 나누고 싶어서 올려요.',thumb:'🌟',likes:10712,comments:1,author:'ME',created:'1일 전'},{id:298,type:'content',cat:'golden',title:'Adrenaline MAX ⚡ 보이스 비하인드',body:'비하인드 영상',thumb:'🎬',author:'ME',created:'1일 전'},{id:297,type:'content',cat:'video',title:"민기 'Dinero' Production Behind",body:'YouTube',thumb:'🎥',author:'ME',created:'2일 전'}];
+const defaultNotices=[{id:200,title:'편지 전달 주소 안내',body:'팬레터 전달 주소 및 유의사항 안내입니다.',meta:'KQ엔터테인먼트 · 3년 전'},{id:199,title:'오피셜 플랫폼 오픈 안내',body:'ATEEZ 공식 플랫폼이 오픈되었습니다.',meta:'KQ엔터테인먼트 · 3년 전'}];
+const defaultBoards=[{id:150,cat:'event',title:'다정 토끼 성화의 날 🐰🌸',body:'다정 토끼 성화의 생일을 축하합니다🎉\n\n성화의 생일을 맞아 이벤트를 진행합니다.',thumb:'🐰',date:'2026.04.02'},{id:149,cat:'broadcast',title:"260215(일) SBS '인기가요' 사전녹화 안내",body:'사전녹화 및 생방송 참여 명단 안내입니다.',thumb:'💚',date:'3달 전'},{id:148,cat:'notice',title:'THE WORLD EP.FIN : WILL 발매 안내',body:'안녕하세요.\nKQ엔터테인먼트입니다.\n\n발매 안내드립니다.',date:'2024.04.21'}];
+const defaultSchedules=[{date:'2026-05-07',title:'전주국제영화제 <할루시네이션> GV',member:'홍중',time:'종일',cat:'FAN'},{date:'2026-05-17',title:'ASEA 2026',member:'',time:'종일',cat:'TV'}];
+let artists=LS('artists',[{id:'clow',name:'CLOW',photo:'C'},{id:'kinon',name:'KINON',photo:'K'},{id:'aven',name:'AVEN',photo:'A'}]);
+let currentArtist=localStorage.getItem('currentArtist')||'';
+const artistKey=(k)=>currentArtist?`artist_${currentArtist}_${k}`:k;
+
+let members=LS('members',defaultMembers);
 let profile=LS('profile',{nickname:'',photo:'',name:'',birth:'',phone:''});
 let membership=LS('membership',null),orders=LS('orders',[]),cart=LS('cart',[]),alerts=LS('alerts',[]),comments=LS('comments',[]),points=Number(localStorage.getItem('points')||0);
 let themeMode=localStorage.getItem('themeMode')||localStorage.getItem('theme')||'system';
 let editingScheduleIndex=null;
-let products=LS('products',[{id:80,name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',body:'1년 멤버십 상품입니다.',membership:true,cat:'MEMBERSHIP'},{id:79,name:'GOLDEN HOUR Pt.4 Album',price:'18,000원',thumb:'💿',body:'앨범 상품 상세페이지입니다.',cat:'ALBUM'},{id:78,name:'ANITEEZ Figure Set',price:'35,000원',thumb:'🧸',body:'굿즈 상품입니다.',cat:'PRODUCTS'}]);
-let posts=LS('posts',[{id:300,type:'talk',member:'hong',title:'우리 티니들 간바떼!💪',body:'오늘도 힘내요.',thumb:'🎤',likes:2421,comments:3,author:'ME',created:'방금 작성'},{id:299,type:'talk',member:'seong',title:'오늘의 기록',body:'작은 순간도 나누고 싶어서 올려요.',thumb:'🌟',likes:10712,comments:1,author:'ME',created:'1일 전'},{id:298,type:'content',cat:'golden',title:'Adrenaline MAX ⚡ 보이스 비하인드',body:'비하인드 영상',thumb:'🎬',author:'ME',created:'1일 전'},{id:297,type:'content',cat:'video',title:"민기 'Dinero' Production Behind",body:'YouTube',thumb:'🎥',author:'ME',created:'2일 전'}]);
-let notices=LS('notices',[{id:200,title:'편지 전달 주소 안내',body:'팬레터 전달 주소 및 유의사항 안내입니다.',meta:'KQ엔터테인먼트 · 3년 전'},{id:199,title:'오피셜 플랫폼 오픈 안내',body:'ATEEZ 공식 플랫폼이 오픈되었습니다.',meta:'KQ엔터테인먼트 · 3년 전'}]);
-let boards=LS('boards',[{id:150,cat:'event',title:'다정 토끼 성화의 날 🐰🌸',body:'다정 토끼 성화의 생일을 축하합니다🎉\\n\\n성화의 생일을 맞아 이벤트를 진행합니다.',thumb:'🐰',date:'2026.04.02'},{id:149,cat:'broadcast',title:"260215(일) SBS '인기가요' 사전녹화 안내",body:'사전녹화 및 생방송 참여 명단 안내입니다.',thumb:'💚',date:'3달 전'},{id:148,cat:'notice',title:'THE WORLD EP.FIN : WILL 발매 안내',body:'안녕하세요.\\nKQ엔터테인먼트입니다.\\n\\n발매 안내드립니다.',date:'2024.04.21'}]);
+let products=LS('products',defaultProducts);
+let posts=LS('posts',defaultPosts);
+let notices=LS('notices',defaultNotices);
+let boards=LS('boards',defaultBoards);
 
 let currentMember=null,shopCat='ALL',modalMode='',editId=null,tempImg='',tempProfile='',selectedProductCat='PRODUCTS',selectedPostMember='',blogBlocks=[];
 
-function save(){localStorage.setItem('themeMode',themeMode);localStorage.setItem('members',JSON.stringify(members));localStorage.setItem('profile',JSON.stringify(profile));localStorage.setItem('membership',JSON.stringify(membership));localStorage.setItem('orders',JSON.stringify(orders));localStorage.setItem('cart',JSON.stringify(cart));localStorage.setItem('alerts',JSON.stringify(alerts));localStorage.setItem('comments',JSON.stringify(comments));localStorage.setItem('products',JSON.stringify(products));localStorage.setItem('posts',JSON.stringify(posts));localStorage.setItem('notices',JSON.stringify(notices));localStorage.setItem('boards',JSON.stringify(boards));localStorage.setItem('points',String(points));localStorage.setItem('schedules',JSON.stringify(scheduleData))}
+function save(){
+  localStorage.setItem('themeMode',themeMode);
+  localStorage.setItem('artists',JSON.stringify(artists));
+  localStorage.setItem('currentArtist',currentArtist||'');
+  if(!currentArtist)return;
+  localStorage.setItem(artistKey('members'),JSON.stringify(members));
+  localStorage.setItem(artistKey('profile'),JSON.stringify(profile));
+  localStorage.setItem(artistKey('membership'),JSON.stringify(membership));
+  localStorage.setItem(artistKey('orders'),JSON.stringify(orders));
+  localStorage.setItem(artistKey('cart'),JSON.stringify(cart));
+  localStorage.setItem(artistKey('alerts'),JSON.stringify(alerts));
+  localStorage.setItem(artistKey('comments'),JSON.stringify(comments));
+  localStorage.setItem(artistKey('products'),JSON.stringify(products));
+  localStorage.setItem(artistKey('posts'),JSON.stringify(posts));
+  localStorage.setItem(artistKey('notices'),JSON.stringify(notices));
+  localStorage.setItem(artistKey('boards'),JSON.stringify(boards));
+  localStorage.setItem(artistKey('points'),String(points));
+  localStorage.setItem(artistKey('schedules'),JSON.stringify(scheduleData));
+}
+function loadArtistData(){
+  members=LS(artistKey('members'), currentArtist==='ateez'?LS('members',defaultMembers):defaultMembers);
+  profile=LS(artistKey('profile'),{nickname:'',photo:'',name:'',birth:'',phone:''});
+  membership=LS(artistKey('membership'),null); orders=LS(artistKey('orders'),[]); cart=LS(artistKey('cart'),[]); alerts=LS(artistKey('alerts'),[]); comments=LS(artistKey('comments'),[]);
+  points=Number(localStorage.getItem(artistKey('points'))||0);
+  products=LS(artistKey('products'), currentArtist==='ateez'?LS('products',defaultProducts):defaultProducts.map(x=>({...x,id:x.id+Math.floor(Math.random()*9)})));
+  posts=LS(artistKey('posts'), currentArtist==='ateez'?LS('posts',defaultPosts):[]);
+  notices=LS(artistKey('notices'), currentArtist==='ateez'?LS('notices',defaultNotices):[{id:uid(),title:'플랫폼 오픈 안내',body:'새 아티스트 플랫폼이 오픈되었습니다.',meta:'관리자 · 방금',pinned:true}]);
+  boards=LS(artistKey('boards'), currentArtist==='ateez'?LS('boards',defaultBoards):[]);
+  scheduleData=LS(artistKey('schedules'), currentArtist==='ateez'?LS('schedules',defaultSchedules):[]);
+  scheduleData=scheduleData.map(x=>x.id?x:{...x,id:uid()+Math.floor(Math.random()*999)});
+  currentMember=null; shopCat='ALL'; selectedScheduleDate='';
+}
+
 const newest=a=>[...a].sort((x,y)=>(y.id||0)-(x.id||0));
 const media=v=>v&&String(v).startsWith('http')?`<img src="${v}">`:(v||'');
 const uid=()=>Date.now()+Math.floor(Math.random()*999);
@@ -634,7 +701,7 @@ function payPhysicalProduct(item,qty=1){
 }
 const scheduleNow=new Date();
 let scheduleYear=new Date().getFullYear(),scheduleMonth=new Date().getMonth()+1,scheduleMode='calendar',selectedScheduleDate='';
-let scheduleData=LS('schedules',[{date:'2026-05-07',title:'전주국제영화제 <할루시네이션> GV',member:'홍중',time:'종일',cat:'FAN'},{date:'2026-05-17',title:'ASEA 2026',member:'',time:'종일',cat:'TV'}]);
+let scheduleData=LS('schedules',defaultSchedules);
 scheduleData=scheduleData.map(x=>x.id?x:{...x,id:uid()+Math.floor(Math.random()*999)});
 const weekNames=['일','월','화','수','목','금','토'];
 const pad2=n=>String(n).padStart(2,'0');
@@ -689,11 +756,12 @@ window.saveScheduleForm=()=>{
   const time=document.getElementById('sfTime').value.trim()||'종일';
   if(!date||!title){alert('날짜와 스케줄 이름을 입력해줘.');return}
   const item={date,title,member,time,cat};
-  if(editingScheduleIndex===null) scheduleData.push(item); else scheduleData[editingScheduleIndex]=item;
+  if(editingScheduleIndex===null) scheduleData.push({...item,id:uid()}); else scheduleData[editingScheduleIndex]={...item,id:scheduleData[editingScheduleIndex]?.id||uid()};
   const d=new Date(date+'T00:00:00');scheduleYear=d.getFullYear();scheduleMonth=d.getMonth()+1;selectedScheduleDate=date;
   closeScheduleForm();save();renderSchedule();
 }
-window.deleteSchedule=(idx)=>{if(idx<0)return;if(confirm('스케줄을 삭제할까요?')){const it=scheduleData[idx];scheduleData.splice(idx,1);if(it&&selectedScheduleDate===it.date&&scheduleItemsByDate(it.date).length===0)selectedScheduleDate='';save();renderSchedule();}}
+window.editSchedule=(id)=>{const idx=scheduleData.findIndex(x=>x.id===id); if(idx>=0)openScheduleForm(idx)}
+window.deleteSchedule=(id)=>{const idx=scheduleData.findIndex(x=>x.id===id);if(idx<0)return;if(confirm('스케줄을 삭제할까요?')){const it=scheduleData[idx];scheduleData.splice(idx,1);if(it&&selectedScheduleDate===it.date&&scheduleItemsByDate(it.date).length===0)selectedScheduleDate='';save();renderSchedule();}}
 document.addEventListener('click',e=>{if(e.target.id==='monthModal')e.target.classList.remove('open')});
 
 
@@ -717,7 +785,7 @@ function renderBlocks(p,mode='content'){
 }
 function renderBlogEditor(){
   const box=document.getElementById('blogBlocks'); if(!box)return;
-  box.innerHTML=blogBlocks.map((b,i)=>`<div class="blog-block">${b.type==='image'?`<div class="blog-img-preview">${b.value?media(b.value):'이미지 없음'}</div><button type="button" class="blog-remove" onclick="replaceBlogImage(${i})">이미지 변경</button>`:`<textarea oninput="blogBlocks[${i}].value=this.value" placeholder="텍스트 입력">${esc(b.value)}</textarea><div class="blog-style-row"><input placeholder="글씨색 예: #b33420" value="${esc(b.color||'')}" oninput="blogBlocks[${i}].color=this.value"><input placeholder="배경색 예: #ffd35a" value="${esc(b.bg||'')}" oninput="blogBlocks[${i}].bg=this.value"></div>`}<button type="button" class="blog-remove" onclick="removeBlogBlock(${i})">삭제</button></div>`).join('')||'<div class="meta">텍스트/사진 블록을 원하는 순서대로 추가해줘. 텍스트 블록마다 글씨색/배경색 지정 가능.</div>';
+  box.innerHTML=blogBlocks.map((b,i)=>`<div class="blog-block">${b.type==='image'?`<div class="blog-img-preview">${b.value?media(b.value):'이미지 없음'}</div><button type="button" class="blog-remove" onclick="replaceBlogImage(${i})">이미지 변경</button>`:`<textarea oninput="blogBlocks[${i}].value=this.value" placeholder="텍스트 입력">${esc(b.value)}</textarea><div class="blog-style-row"><input placeholder="글씨색 예: #b33420" value="${esc(b.color||'')}" oninput="blogBlocks[${i}].color=this.value"><input placeholder="배경색 예: #ffd35a" value="${esc(b.bg||'')}" oninput="blogBlocks[${i}].bg=this.value"></div>`}<button type="button" class="blog-remove" onclick="removeBlogBlock(${i})">삭제</button></div>`).join('')||'<div class="meta">텍스트/사진 블록을 원하는 순서대로 추가해 주세요. 텍스트 블록마다 글씨색/배경색 지정 가능.</div>';
 }
 function collectBlogBlocks(){return blogBlocks.map(b=>({...b,value:String(b.value||'').trim(),color:String(b.color||'').trim(),bg:String(b.bg||'').trim()})).filter(b=>b.value)}
 window.addBlogText=()=>{blogBlocks.push({type:'text',value:''});renderBlogEditor()}
@@ -726,10 +794,53 @@ window.replaceBlogImage=async i=>{let u=await upload();if(u){blogBlocks[i].value
 window.removeBlogBlock=i=>{blogBlocks.splice(i,1);renderBlogEditor()}
 
 
-function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===id));document.getElementById('fab').style.display=id==='talk'?'block':'none';window.scrollTo(0,0);render()}
+function currentArtistObj(){return artists.find(a=>a.id===currentArtist)||null}
+function renderArtistSelect(){
+  const box=document.getElementById('artistGrid'); if(!box)return;
+  box.innerHTML=artists.map(a=>`<button class="artist-card" onclick="selectArtist('${a.id}')"><div class="artist-avatar">${media(a.photo||'🎤')}</div><div class="artist-name">${esc(a.name)}</div></button>`).join('')||'<div class="meta">아티스트가 없습니다.</div>';
+}
+window.selectArtist=(id)=>{
+  if(currentArtist && currentArtist!==id) save();
+  currentArtist=id;
+  localStorage.setItem('currentArtist',id);
+  loadArtistData();
+  render();
+  const last=localStorage.getItem(artistKey('lastView'))||'home';
+  go(document.getElementById(last)?last:'home');
+}
+window.addArtist=()=>{
+  const name=prompt('추가할 아티스트 이름을 입력해 주세요.'); if(!name)return;
+  const photo=prompt('대표 이미지 URL 또는 이모지','🎤')||'🎤';
+  const id='artist_'+Date.now();
+  artists.push({id,name,photo});
+  localStorage.setItem('artists',JSON.stringify(artists));
+  renderArtistSelect();
+}
+function showArtistLanding(){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('artistSelect').classList.add('active');
+  document.querySelector('.app').classList.add('artist-landing');
+  const logo=document.querySelector('.logo'); if(logo)logo.textContent='ARTIST';
+  const fab=document.getElementById('fab'); if(fab)fab.style.display='none';
+}
+
+
+function go(id){
+  if(id==='artistSelect'){save(); currentArtist=''; localStorage.removeItem('currentArtist'); renderArtistSelect(); showArtistLanding(); return;}
+  if(!currentArtist){renderArtistSelect();showArtistLanding();return;}
+  document.querySelector('.app').classList.remove('artist-landing');
+  const artist=currentArtistObj(); const logo=document.querySelector('.logo'); if(logo)logo.textContent=artist?artist.name:'ATEEZ';
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const target=document.getElementById(id)||document.getElementById('home'); target.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  document.getElementById('fab').style.display=id==='talk'?'block':'none';
+  localStorage.setItem(artistKey('lastView'),id);
+  window.scrollTo(0,0);
+  render();
+}
 window.go=go;
 
-function render(){renderProfile();renderHome();renderMembers();renderTalk();renderContents();renderShop();renderCommunity();renderSchedule();renderAlerts();save()}
+function render(){renderArtistSelect();renderProfile();renderHome();renderMembers();renderTalk();renderContents();renderShop();renderCommunity();renderSchedule();renderAlerts();save()}
 function renderProfile(){document.getElementById('welcome').textContent=profile.nickname?`${profile.nickname}님 환영합니다`:'ATEEZ Official Platform';document.getElementById('myNick').textContent=profile.nickname||'닉네임 미설정';document.getElementById('topProfile').innerHTML=profile.photo?media(profile.photo):'👤';const pb=document.getElementById('pointBadge');if(pb)pb.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`;const cp=document.getElementById('cartPointBadge');if(cp)cp.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`;const tl=document.getElementById('themeLabel');if(tl)tl.textContent=themeMode==='dark'?'다크':themeMode==='light'?'화이트':'시스템';applyTheme()}
 function renderHome(){
   const list=newest(posts).filter(p=>p.type==='content').slice(0,4);
@@ -873,7 +984,7 @@ window.openAddMagazine=()=>{editId=null;modalMode='magazine';tempImg='';openModa
 
 
 window.openSupport=()=>{document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="detail-title">고객센터</div><div class="detail-body">자주 묻는 질문을 확인하거나 1대1 문의를 남길 수 있습니다.</div><div class="support-faq"><details open><summary>멤버십 가입 정보는 어디서 확인하나요?</summary><p>마이페이지의 내 멤버십에서 카드와 가입 정보를 확인할 수 있습니다.</p></details><details><summary>주문 내역은 어디서 보나요?</summary><p>마이페이지의 주문 내역에서 결제한 상품을 확인할 수 있습니다.</p></details><details><summary>토크 글은 이미지 없이도 올릴 수 있나요?</summary><p>가능합니다. 이미지 없이 작성하면 썸네일 영역 없이 글만 표시됩니다.</p></details></div><div class="support-form"><div class="detail-title" style="font-size:1.2rem">1대1 문의</div><input class="input" id="supportTitle" placeholder="문의 제목"><textarea class="textarea" id="supportBody" placeholder="문의 내용을 입력해 주세요"></textarea><button class="primary" style="width:100%" onclick="submitSupport()">문의 남기기</button></div></div>`;go('myDetail')}
-window.submitSupport=()=>{let t=document.getElementById('supportTitle').value.trim(),b=document.getElementById('supportBody').value.trim();if(!t||!b)return alert('문의 제목과 내용을 입력해줘');alerts.unshift({id:uid(),type:'문의',title:t,thumb:'🎧',time:'방금',read:false,source:null});save();alert('문의가 접수되었습니다.');openSupport()}
+window.submitSupport=()=>{let t=document.getElementById('supportTitle').value.trim(),b=document.getElementById('supportBody').value.trim();if(!t||!b)return alert('문의 제목과 내용을 입력해 주세요');alerts.unshift({id:uid(),type:'문의',title:t,thumb:'🎧',time:'방금',read:false,source:null});save();alert('문의가 접수되었습니다.');openSupport()}
 
 window.openProfile=()=>{editId=null;modalMode='profile';tempProfile=profile.photo||'';openModal('프로필 관리',profile.nickname,'','');document.getElementById('profileBlock').style.display='block';document.getElementById('thumbBlock').style.display='none';document.getElementById('mBody').style.display='none';document.getElementById('mMeta').style.display='none';document.getElementById('profilePreview').innerHTML=tempProfile?media(tempProfile):'프로필 사진 없음'}
 window.logout=()=>{if(confirm('로그아웃할까요?')){profile={nickname:'',photo:'',name:'',birth:'',phone:''};membership=null;orders=[];cart=[];save();render();go('home')}}
@@ -929,7 +1040,7 @@ window.openAddContentFor=(cat)=>{editId=null;modalMode='content';tempImg='';sele
 window.openAddNotice=()=>{editId=null;modalMode='notice';tempImg='';openModal('공지 추가','','','');document.getElementById('thumbBlock').style.display='none'}
 window.openJoin=()=>{editId=null;modalMode='join';openModal('멤버십 가입 정보','','','');document.getElementById('thumbBlock').style.display='none';document.getElementById('mTitle').placeholder='이름';document.getElementById('mBody').placeholder='생년월일';document.getElementById('mMeta').placeholder='전화번호';document.getElementById('saveBtn').textContent='최종 결제 진행'}
 
-window.saveModal=()=>{let title=document.getElementById('mTitle').value.trim(),body=document.getElementById('mBody').value.trim(),meta=document.getElementById('mMeta').value.trim();if(modalMode==='profile'){profile.nickname=title;profile.photo=tempProfile;closeModal();render();return}if(modalMode==='editMember'){let m=members.find(x=>x.id===editId);if(m){m.name=title||m.name;m.photo=tempProfile||m.photo;}closeModal();save();render();openMemberSettings();return}if(modalMode==='join'){if(!title||!body||!meta)return alert('전부 입력해줘');let now=new Date(),end=new Date();end.setFullYear(now.getFullYear()+1);membership={name:title,birth:body,phone:meta,code:code(),start:now.toISOString(),end:end.toISOString()};orders.unshift({id:uid(),name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',qty:1,date:fmt(now)});closeModal();render();openMembership();return}if(!title)return alert('제목을 입력해줘');if(editId && (modalMode==='talk'||modalMode==='content')){let p=posts.find(x=>x.id===editId);if(p){p.title=title;p.body=body;p.thumb=tempImg||'';if(modalMode==='talk'){p.member=selectedPostMember||p.member}else{p.blocks=collectBlogBlocks();p.body=p.blocks.length?'':body;p.visibility=selectedVisibility||'public';}}closeModal();save();render();openPost(editId);editId=null;return}if(modalMode==='editNotice'){
+window.saveModal=()=>{let title=document.getElementById('mTitle').value.trim(),body=document.getElementById('mBody').value.trim(),meta=document.getElementById('mMeta').value.trim();if(modalMode==='profile'){profile.nickname=title;profile.photo=tempProfile;closeModal();render();return}if(modalMode==='editMember'){let m=members.find(x=>x.id===editId);if(m){m.name=title||m.name;m.photo=tempProfile||m.photo;}closeModal();save();render();openMemberSettings();return}if(modalMode==='join'){if(!title||!body||!meta)return alert('전부 입력해줘');let now=new Date(),end=new Date();end.setFullYear(now.getFullYear()+1);membership={name:title,birth:body,phone:meta,code:code(),start:now.toISOString(),end:end.toISOString()};orders.unshift({id:uid(),name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',qty:1,date:fmt(now)});closeModal();render();openMembership();return}if(!title)return alert('제목을 입력해 주세요');if(editId && (modalMode==='talk'||modalMode==='content')){let p=posts.find(x=>x.id===editId);if(p){p.title=title;p.body=body;p.thumb=tempImg||'';if(modalMode==='talk'){p.member=selectedPostMember||p.member}else{p.blocks=collectBlogBlocks();p.body=p.blocks.length?'':body;p.visibility=selectedVisibility||'public';}}closeModal();save();render();openPost(editId);editId=null;return}if(modalMode==='editNotice'){
   let n=notices.find(x=>x.id===editId);
   if(n){n.title=title;n.body=body;n.meta=n.meta||'KQ엔터테인먼트 · 방금';}
   closeModal();save();render();openNotice(editId);editId=null;return;
@@ -982,9 +1093,15 @@ window.openThemeSettings=()=>{
 document.addEventListener('touchend',(()=>{let last=0;return e=>{const now=Date.now();if(now-last<320){e.preventDefault()}last=now}})(),{passive:false});
 applyTheme();
 
+function boot(){
+  renderArtistSelect();
+  if(currentArtist){loadArtistData();render();const last=localStorage.getItem(artistKey('lastView'))||'home';go(document.getElementById(last)?last:'home');}
+  else{showArtistLanding();}
+}
+
 async function upload(){return new Promise(resolve=>{let i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=async()=>{let f=i.files[0];if(!f)return resolve('');let fd=new FormData();fd.append('file',f);fd.append('upload_preset',CLOUDINARY_PRESET);try{let r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});let d=await r.json();resolve(d.secure_url||'')}catch(e){alert('업로드 실패');resolve('')}};i.click()})}
 
-render();console.log('Firebase + Cloudinary Connected',db);
+boot();console.log('Firebase + Cloudinary Connected',db);
 </script>
 </body>
 </html>
