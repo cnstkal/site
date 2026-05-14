@@ -294,6 +294,64 @@ let posts=JSON.parse(localStorage.getItem('posts')||'null')||[
 {id:7,type:'content',category:'stars',title:'[👻] MY BESTIES #JONGHO',body:'1일 전',thumb:'⭐',duration:'YouTube'}
 ];
 
+
+function ensureArray(name, fallback){
+ let value;
+ try{ value=JSON.parse(localStorage.getItem(name)||'null'); }catch(e){ value=null; }
+ if(!Array.isArray(value) || value.length===0){
+   localStorage.setItem(name, JSON.stringify(fallback));
+   return fallback;
+ }
+ return value;
+}
+
+function repairData(){
+ const fallbackPosts=[
+  {id:Date.now()+100,type:'talk',memberId:'hongjoong',memberName:'홍중',title:'우리 티니들 간바떼!💪',body:'오늘도 힘내요. 티니들 덕분에 하루가 좋아졌어요.',thumb:'🎤',likes:2421,comments:1387,createdAt:'방금 작성',author:'ME'},
+  {id:Date.now()+99,type:'talk',memberId:'seonghwa',memberName:'성화',title:'오늘의 기록',body:'작은 순간도 티니들과 나누고 싶어서 올려요.',thumb:'🌟',likes:10712,comments:623,createdAt:'1일 전',author:'ME'},
+  {id:Date.now()+98,type:'content',category:'golden',title:'Adrenaline MAX ⚡ 보이스 비하인드 ✌️',body:'다시봐도 뭔가 방전되기전 각...',thumb:'🎬',duration:'04:00',createdAt:'1일 전',author:'ME'},
+  {id:Date.now()+97,type:'content',category:'video',title:"ATEEZ(에이티즈) 민기 'Dinero' Production Behind",body:'에이티즈는 정말 자신이 하고...',thumb:'🎥',duration:'YouTube',createdAt:'2일 전',author:'ME'},
+  {id:Date.now()+96,type:'content',category:'atiny',title:'ATEEZ WORLD TOUR [IN YOUR FANTASY]',body:'☺️❤️✨',thumb:'🌎',duration:'YouTube',createdAt:'3일 전',author:'ME'}
+ ];
+ const fallbackNotices=[
+  {id:Date.now()+90,title:'ATEEZ(에이티즈) 편지 전달 주소 안내',meta:'KQ엔터테인먼트 · 3년 전',body:'팬레터 전달 주소 및 유의사항 안내입니다.'},
+  {id:Date.now()+89,title:'ATEEZ(에이티즈) 오피셜 플랫폼 오픈 안내',meta:'KQ엔터테인먼트 · 3년 전',body:'ATEEZ 공식 플랫폼이 오픈되었습니다.'}
+ ];
+ const fallbackProducts=[
+  {id:Date.now()+80,thumb:'💎',name:'ATINY MEMBERSHIP (단건 결제)',price:'20,000원 · 멤버십',detail:'멤버십 결제 상품입니다.',body:'멤버십 결제 상품입니다.',detailText:'멤버십 가입 후 내 멤버십에서 카드를 확인할 수 있습니다.',detailImg:'',membership:true,category:'MEMBERSHIP'},
+  {id:Date.now()+79,thumb:'📹',name:'ATINY 7TH KIT VOD ONLY',price:'7,000원',detail:'VOD ONLY 상품입니다.',body:'VOD ONLY 상품입니다.',detailText:'구매 후 주문내역에서 확인 가능합니다.',detailImg:'',category:'PRODUCTS'},
+  {id:Date.now()+78,thumb:'💿',name:'GOLDEN HOUR Pt.4 Album',price:'18,000원',detail:'앨범 상품 상세페이지입니다.',body:'앨범 상품 상세페이지입니다.',detailText:'앨범 상세 설명을 입력할 수 있습니다.',detailImg:'',category:'ALBUM'}
+ ];
+ const fallbackBoards=[
+  {id:Date.now()+70,category:'event',kind:'content',title:'다정 토끼 성화의 날 🐰🌸',date:'2026.04.02',thumb:'🐰',body:'다정 토끼 성화의 생일을 축하합니다🎉\n\n성화의 생일을 맞아 생일 인증샷을 남길 수 있는 비밀 게시판을 오픈합니다.'},
+  {id:Date.now()+69,category:'broadcast',kind:'content',title:"260215(일) SBS '인기가요' 사전녹화 및 생방송 참여 명단 안내",date:'3달 전',thumb:'💚',body:'사전녹화 및 생방송 참여 명단 안내입니다.'},
+  {id:Date.now()+68,category:'notice',kind:'community',title:'ATEEZ(에이티즈) THE WORLD EP.FIN : WILL 발매 안내',date:'2024.04.21',thumb:'',body:'안녕하세요.\nKQ엔터테인먼트입니다.\n\nATEEZ 발매 안내드립니다.'}
+ ];
+ if(!Array.isArray(posts) || posts.length===0) posts=fallbackPosts;
+ if(!Array.isArray(notices) || notices.length===0) notices=fallbackNotices;
+ if(!Array.isArray(products) || products.length===0) products=fallbackProducts;
+ if(typeof boardPosts==='undefined' || !Array.isArray(boardPosts) || boardPosts.length===0) boardPosts=fallbackBoards;
+
+ posts=posts.map((p,i)=>({
+   id:p.id||Date.now()+i,
+   type:p.type||'talk',
+   memberId:p.memberId||talkMembers[i%talkMembers.length]?.id||'hongjoong',
+   memberName:p.memberName||talkMembers[i%talkMembers.length]?.name||'홍중',
+   title:p.title||'제목 없음',
+   body:p.body||p.text||'내용 없음',
+   thumb:p.thumb||p.icon||'',
+   likes:p.likes||0,
+   comments:p.comments||0,
+   createdAt:p.createdAt||p.date||'방금 작성',
+   author:p.author||'ME',
+   category:p.category||(p.type==='content'?'video':undefined)
+ }));
+ notices=notices.map((n,i)=>({id:n.id||Date.now()+i,title:n.title||'공지',meta:n.meta||'KQ엔터테인먼트 · 방금',body:n.body||'공지 내용입니다.'}));
+ products=products.map((p,i)=>({id:p.id||Date.now()+i,thumb:p.thumb||'🛍️',name:p.name||p.title||'상품',price:p.price||'0원',detail:p.detail||p.body||'상품 상세페이지입니다.',body:p.body||p.detail||'상품 상세페이지입니다.',detailText:p.detailText||'',detailImg:p.detailImg||'',membership:!!p.membership,category:p.category||guessShopCategory(p)}));
+ boardPosts=boardPosts.map((b,i)=>({id:b.id||Date.now()+i,category:b.category||'event',kind:b.kind||'content',title:b.title||'게시글',date:b.date||'방금',thumb:b.thumb||'',body:b.body||'내용입니다.'}));
+ save();
+}
+
 function save(){localStorage.setItem('products',JSON.stringify(products));localStorage.setItem('notices',JSON.stringify(notices));localStorage.setItem('posts',JSON.stringify(posts));localStorage.setItem('profile',JSON.stringify(profile));localStorage.setItem('membership',JSON.stringify(membership));localStorage.setItem('orders',JSON.stringify(orders));localStorage.setItem('cart',JSON.stringify(cart));localStorage.setItem('alarms',JSON.stringify(alarms));localStorage.setItem('talkMembers',JSON.stringify(talkMembers));localStorage.setItem('boardPosts',JSON.stringify(boardPosts));localStorage.setItem('comments',JSON.stringify(comments))}
 function media(v){return v&&String(v).startsWith('http')?`<img src="${v}">`:(v||'＋')}
 function addAlarm(type,title,thumb,sourceType,sourceId){alarms.unshift({id:Date.now()+Math.random(),type,title,thumb:thumb||'🔔',time:new Date().toLocaleString(),read:false,sourceType,sourceId});save();renderAlarms()}
@@ -404,7 +462,80 @@ window.openPost=function(id){const p=posts.find(x=>x.id===id);editingPostId=id;
  const mediaBox=p.type==='content'?`<div class="content-detail-media">${media(p.thumb)}</div>`:`<div class="detail-thumb">${media(p.thumb)}</div>`;
  document.getElementById('post-detail').innerHTML=`<button class="back" onclick="switchPage('${p.type==='content'?'contents':'talk'}')">‹ BACK</button><div class="detail-main">${mediaBox}<div class="detail-title">${p.title}</div><div class="notice-meta" style="margin-bottom:14px">${p.type==='content'?'CONTENTS':'ATEEZ TALK'}</div><div class="detail-body">${p.body}</div><div class="actions-bottom"><button class="btn btn-light" onclick="editPost(${p.id})">수정</button><button class="btn btn-danger" onclick="deletePost(${p.id})">삭제</button></div></div>`;switchPage('post-detail')};
 window.editPost=function(id){const p=posts.find(x=>x.id===id);modalMode='editPost';editingPostId=id;modalThumb=p.thumb;openModal('게시글 수정',p.title,p.body,'')};
-window.deletePost=function(id){if(confirm('게시글을 삭제할까요?')){const p=posts.find(x=>x.id===id);posts=sortNewest(posts).filter(x=>x.id!==id);comments=comments.filter(c=>c.postId!==id);cleanAlarms();render();switchPage(p.type==='content'?'contents':'talk')}};
+window.deletePost=function(id){if(confirm('게시글을 삭제할까요?')){const p=posts.find(x=>x.id===id);posts=sortNewest(posts).filter(x=>x.id!==id);comments=comments.filter(c=>c.postId!==id);cleanAlarms();
+function makeMemberCode(){const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ';let s='';for(let i=0;i<6;i++)s+=chars[Math.floor(Math.random()*chars.length)];return s}
+function oneYearLater(d){const x=new Date(d);x.setFullYear(x.getFullYear()+1);return x}
+function dateFmt(d){return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0')}
+
+window.openMembership=function(){
+ const el=document.getElementById('membership-page');
+ if(!el)return alert('멤버십 페이지 영역이 없습니다.');
+ if(!membership){
+  el.innerHTML=`<div class="member-head"><button class="back" onclick="switchPage('my')">‹</button><h1>내 멤버십</h1></div><div class="detail-wrap"><div class="detail-main"><div class="detail-title">가입된 멤버십이 없습니다</div><div class="detail-body">멤버십 가입하기를 누르면 이름, 생년월일, 전화번호 입력 후 1년 멤버십 카드가 생성됩니다.</div><button class="blue-btn" style="margin-top:20px" onclick="openJoinForm()">멤버십 가입하기</button></div></div>`;
+  switchPage('membership');return;
+ }
+ const start=new Date(membership.start),end=new Date(membership.end);
+ const dday=Math.max(0,Math.ceil((end-new Date())/86400000));
+ el.innerHTML=`<div class="member-head"><button class="back" onclick="switchPage('my')">‹</button><h1>내 멤버십</h1><span class="pill">💎 ${dateFmt(start)}부터</span></div><div class="member-wrap"><div class="flip"><div class="membership-card" onclick="this.classList.toggle('flipped')"><div class="card-face card-front">ATINY MEMBERSHIP<br><br>ATINY</div><div class="card-face card-back"><div class="card-back-inner"><div>ATINY MEMBERSHIP<br>ATINY<br>${dateFmt(start)} - ${dateFmt(end)}</div><div class="small-label">멤버십 번호</div><div class="big-info">${membership.code}</div><div class="small-label">이름</div><div class="big-info">${membership.name}</div><div class="small-label">생년월일</div><div class="big-info">${membership.birth}</div><div class="small-label">전화번호</div><div class="big-info">${membership.phone}</div></div></div></div></div><div class="detail-title">ATINY MEMBERSHIP</div><div class="notice-meta">남은 기간 D-${dday}</div></div>`;
+ switchPage('membership');
+};
+
+window.openJoinForm=function(){
+ modalMode='join';modalThumb='';
+ openModal('멤버십 가입 정보','','','');
+ document.getElementById('modal-title-input').placeholder='이름';
+ document.getElementById('modal-body-input').placeholder='생년월일 예: 2006.12.30';
+ document.getElementById('modal-price-input').placeholder='전화번호';
+ document.getElementById('thumb-area').style.display='none';
+ const detail=document.getElementById('modal-detail-input');if(detail)detail.style.display='none';
+ document.getElementById('modal-save').textContent='최종 결제 진행';
+};
+
+window.openProfileEdit=function(){
+ modalMode='profile';modalThumb='';
+ profileImageTemp=profile.photo||'';
+ openModal('프로필 관리',profile.nickname||'','','');
+ document.getElementById('modal-title-input').placeholder='닉네임';
+ document.getElementById('modal-body-input').style.display='none';
+ document.getElementById('modal-price-input').style.display='none';
+ document.getElementById('thumb-area').style.display='none';
+ const area=document.getElementById('profile-img-area');
+ if(area){area.style.display='block';renderProfilePreview();}
+};
+
+function renderProfilePreview(){const box=document.getElementById('profile-img-preview');if(box)box.innerHTML=profileImageTemp?media(profileImageTemp):'프로필 사진 없음'}
+window.pickProfileImage=async function(){const url=await uploadToCloudinary();if(url){profileImageTemp=url;renderProfilePreview()}};
+
+window.openMyDetail=function(title){
+ const el=document.getElementById('my-detail');if(!el)return;
+ if(title==='주문 내역'){
+  el.innerHTML=`<button class="back" onclick="switchPage('my')">‹ MY</button><div class="detail-main"><div class="detail-title">주문 내역</div><div style="margin:14px 0"><button class="btn btn-danger" onclick="clearOrders()">주문내역 초기화</button></div><div id="order-list"></div></div>`;
+  renderOrders();switchPage('my-detail');return;
+ }
+ if(title==='내가 쓴 글'){
+  const mine=newestFirst(posts.filter(p=>p.author==='ME'||p.author===profile.nickname));
+  el.innerHTML=`<button class="back" onclick="switchPage('my')">‹ MY</button><div class="detail-main"><div class="detail-title">내가 쓴 글</div>${mine.length?mine.map(p=>`<div class="order-row" onclick="openPost(${p.id})"><div class="order-thumb">${p.thumb?media(p.thumb):'📝'}</div><div class="order-main"><div class="order-title">${p.title}</div><div class="order-meta">${p.createdAt||'방금 작성'}</div></div></div>`).join(''):'<div class="meta">작성한 글이 없습니다.</div>'}</div>`;
+  switchPage('my-detail');return;
+ }
+ el.innerHTML=`<button class="back" onclick="switchPage('my')">‹ MY</button><div class="detail-main"><div class="detail-title">${title}</div><div class="detail-body">상세 화면입니다.</div></div>`;
+ switchPage('my-detail');
+};
+
+function renderOrders(){
+ const el=document.getElementById('order-list');if(!el)return;
+ el.innerHTML=orders.length?newestFirst(orders).map(o=>`<div class="order-row"><div class="order-thumb">${media(o.thumb||'🛍️')}</div><div class="order-main"><div class="order-title">${o.name}</div><div class="order-meta">${o.price} · 수량 ${o.qty||1} · ${o.date||''}</div></div></div>`).join(''):'<div class="meta">주문 내역이 없습니다.</div>';
+}
+window.clearOrders=function(){if(confirm('주문내역을 초기화할까요?')){orders=[];save();renderOrders()}};
+
+window.logout=function(){
+ if(confirm('로그아웃할까요?')){
+  profile={nickname:'',name:'',birth:'',phone:'',photo:''};
+  membership=null;orders=[];cart=[];
+  save();render();alert('로그아웃되었습니다.');switchPage('home');
+ }
+};
+
+render();switchPage(p.type==='content'?'contents':'talk')}};
 
 window.openProduct=function(id){
  const p=products.find(x=>x.id===id);
