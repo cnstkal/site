@@ -594,6 +594,12 @@ html.force-dark .member-detail-btn{background:#8fa2cc!important;color:#fff!impor
 .app.artist-landing header,.app.artist-landing .bottom-nav{display:none!important;}
 .artist-hit-button{position:relative!important;z-index:5!important;}
 .artist-actions{position:relative!important;z-index:6!important;}
+
+/* BUTTON TAP HARD FIX */
+button,[data-action],.nav-item,.artist-card,.artist-hit-button{position:relative;z-index:5;pointer-events:auto!important;touch-action:manipulation;}
+.artist-hit-button *{pointer-events:none!important;}
+.content-head{position:relative;z-index:6;}
+
 </style>
 </head>
 <body>
@@ -915,13 +921,13 @@ function bindArtistGridTap(){
 function renderArtistSelect(){
   const box=document.getElementById('artistGrid'); if(!box)return;
   box.innerHTML=artists.map(a=>`<div class="artist-card" data-artist-id="${a.id}">
-    <button type="button" class="artist-hit-button" onclick="selectArtist('${a.id}')" aria-label="${esc(a.name)} 플랫폼 입장">
+    <button type="button" class="artist-hit-button" data-action="select-artist" data-id="${a.id}" aria-label="${esc(a.name)} 플랫폼 입장">
       <div class="artist-avatar">${media(a.photo||'🎤')}</div>
       <div class="artist-name">${esc(a.name)}</div>
     </button>
     <div class="artist-actions">
-      <button type="button" onclick="event.stopPropagation();editArtist('${a.id}')">수정</button>
-      <button type="button" class="danger" onclick="event.stopPropagation();deleteArtist('${a.id}')">삭제</button>
+      <button type="button" data-action="edit-artist" data-id="${a.id}">수정</button>
+      <button type="button" class="danger" data-action="delete-artist" data-id="${a.id}">삭제</button>
     </div>
   </div>`).join('')||'<div class="meta">아티스트가 없습니다.</div>';
 }
@@ -1023,7 +1029,7 @@ window.toggleMember=id=>{currentMember=currentMember===id?null:id;renderMembers(
 function renderTalk(){let list=newest(posts).filter(p=>p.type==='talk'&&(!currentMember||p.member===currentMember));document.getElementById('talkFeed').innerHTML=list.map(p=>{let m=members.find(x=>x.id===p.member)||members[0];let img=p.thumb?`<div class="feed-img">${media(p.thumb)}</div>`:'';return `<article class="feed-card" onclick="openPost(${p.id})"><div class="feed-head"><div class="feed-user"><div class="photo">${media(m.photo)}</div><div><div class="name">${m.name} <span class="check">✓</span></div><div class="feed-time">${timeAgo(createdTime(p))}</div></div></div><button class="more" onclick="event.stopPropagation();openMenu(event,'post',${p.id})">⋮</button></div>${img}<div class="feed-title">${p.title}</div><div class="react" onclick="event.stopPropagation()"><button onclick="likePost(${p.id})">♡ ${p.likes||0}</button><button onclick="addComment(${p.id})">💬 ${p.comments||0}</button></div></article>`}).join('')||'<div class="meta">게시글이 없습니다.</div>'}
 function renderContents(){
   const box=document.getElementById('contentSections'); if(!box)return;
-  box.innerHTML=`<section class="content-section" style="padding-bottom:0"><div class="content-head"><h2>콘텐츠 카테고리</h2><button class="btn light" onclick="addContentCategory()">+ 카테고리</button></div></section>`+contentCats.map(c=>{let k=c.id,t=c.name;let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===k).slice(0,4);return `<section class="content-section"><div class="content-head"><h2>${esc(t)}</h2><div style="display:flex;gap:8px;align-items:center"><button class="btn light" onclick="editContentCategory('${k}')">수정</button><button class="btn light" onclick="openContentAll('${k}','${esc(t)}')">전체보기</button></div></div><div class="row-scroll">${list.map(p=>`<div onclick="openPost(${p.id})">${p.thumb?`<div class="wide-thumb">${media(p.thumb)}</div>`:''}<div class="wide-title">${esc(p.title)}</div><div class="meta">${timeAgo(createdTime(p))}</div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>'}</div></section>`}).join('')
+  box.innerHTML=`<section class="content-section" style="padding-bottom:0"><div class="content-head"><h2>콘텐츠 카테고리</h2><button type="button" class="btn light" data-action="add-content-cat">+ 카테고리</button></div></section>`+contentCats.map(c=>{let k=c.id,t=c.name;let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===k).slice(0,4);return `<section class="content-section"><div class="content-head"><h2>${esc(t)}</h2><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="btn light" data-action="edit-content-cat" data-id="${k}">수정</button><button type="button" class="btn light danger" data-action="delete-content-cat" data-id="${k}">삭제</button><button type="button" class="btn light" data-action="open-content-all" data-id="${k}" data-name="${esc(t)}">전체보기</button></div></div><div class="row-scroll">${list.map(p=>`<div data-action="open-post" data-id="${p.id}">${p.thumb?`<div class="wide-thumb">${media(p.thumb)}</div>`:''}<div class="wide-title">${esc(p.title)}</div><div class="meta">${timeAgo(createdTime(p))}</div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>'}</div></section>`}).join('')
 }
 window.addContentCategory=()=>{
   const name=prompt('추가할 콘텐츠 카테고리 이름을 입력해 주세요.'); if(!name)return;
@@ -1202,7 +1208,38 @@ window.chooseCategory=function(type,value){
  if(type==='post') selectedPostCategory=value;
  if(type==='product') selectedProductCat=value;
  if(type==='visibility') selectedVisibility=value;
- if(type==='theme'){themeMode=value; localStorage.setItem('themeMode',themeMode); localStorage.setItem('theme',themeMode); applyTheme(); renderProfile();}
+ if(type==='theme'){themeMode=value; localStorage.setItem('themeMode',themeMode); localStorage.setItem('theme',themeMode); 
+/* LAST SAFETY CLICK BRIDGE: inline onclick이 모바일 Safari에서 먹지 않는 경우 대비 */
+(function(){
+  let lastTapKey='', lastTapAt=0;
+  function runAction(target, ev){
+    if(!target || !target.closest) return false;
+    const el=target.closest('[data-action], .nav-item[data-page], .artist-card, .logo, .header-actions button, .profile-mini');
+    if(!el) return false;
+    const now=Date.now();
+    const key=(el.dataset.action||el.dataset.page||el.className||el.textContent||'')+':' +(el.dataset.id||'');
+    if(ev.type!=='click' && key===lastTapKey && now-lastTapAt<280) return true;
+    lastTapKey=key; lastTapAt=now;
+    const action=el.dataset.action;
+    try{
+      if(action==='select-artist' || el.classList.contains('artist-card')){ const card=el.closest('.artist-card'); const id=el.dataset.id || (card&&card.dataset.artistId); if(id){ev.preventDefault(); ev.stopPropagation(); window.selectArtist(id); return true;} }
+      if(action==='edit-artist'){ev.preventDefault(); ev.stopPropagation(); window.editArtist(el.dataset.id); return true;}
+      if(action==='delete-artist'){ev.preventDefault(); ev.stopPropagation(); window.deleteArtist(el.dataset.id); return true;}
+      if(action==='add-content-cat'){ev.preventDefault(); ev.stopPropagation(); window.addContentCategory(); return true;}
+      if(action==='edit-content-cat'){ev.preventDefault(); ev.stopPropagation(); window.editContentCategory(el.dataset.id); return true;}
+      if(action==='delete-content-cat'){ev.preventDefault(); ev.stopPropagation(); window.deleteContentCategory(el.dataset.id); return true;}
+      if(action==='open-content-all'){ev.preventDefault(); ev.stopPropagation(); window.openContentAll(el.dataset.id, el.dataset.name||''); return true;}
+      if(action==='open-post'){ev.preventDefault(); ev.stopPropagation(); window.openPost(Number(el.dataset.id)); return true;}
+      if(el.matches('.nav-item[data-page]')){ev.preventDefault(); ev.stopPropagation(); window.go(el.dataset.page); return true;}
+      if(el.classList.contains('logo')){ev.preventDefault(); ev.stopPropagation(); window.go(currentArtist?'home':'artistSelect'); return true;}
+    }catch(err){ alert('버튼 오류: '+(err&&err.message?err.message:err)); }
+    return false;
+  }
+  document.addEventListener('click',function(e){runAction(e.target,e)},true);
+  document.addEventListener('touchstart',function(e){runAction(e.target,e)}, {capture:true, passive:false});
+})();
+
+applyTheme(); renderProfile();}
  document.getElementById('categoryModal').classList.remove('open');
  updateCategoryTexts();
  if(type==='product') renderProductCategoryField();
@@ -1276,7 +1313,38 @@ function applyTheme(){
 window.openThemeSettings=()=>{
   openSelectModal('theme');
 }
-document.addEventListener('touchend',(()=>{let last=0;return e=>{const now=Date.now();if(now-last<320){e.preventDefault()}last=now}})(),{passive:false});
+/* double tap zoom guard disabled to avoid blocking buttons */
+
+/* LAST SAFETY CLICK BRIDGE: inline onclick이 모바일 Safari에서 먹지 않는 경우 대비 */
+(function(){
+  let lastTapKey='', lastTapAt=0;
+  function runAction(target, ev){
+    if(!target || !target.closest) return false;
+    const el=target.closest('[data-action], .nav-item[data-page], .artist-card, .logo, .header-actions button, .profile-mini');
+    if(!el) return false;
+    const now=Date.now();
+    const key=(el.dataset.action||el.dataset.page||el.className||el.textContent||'')+':' +(el.dataset.id||'');
+    if(ev.type!=='click' && key===lastTapKey && now-lastTapAt<280) return true;
+    lastTapKey=key; lastTapAt=now;
+    const action=el.dataset.action;
+    try{
+      if(action==='select-artist' || el.classList.contains('artist-card')){ const card=el.closest('.artist-card'); const id=el.dataset.id || (card&&card.dataset.artistId); if(id){ev.preventDefault(); ev.stopPropagation(); window.selectArtist(id); return true;} }
+      if(action==='edit-artist'){ev.preventDefault(); ev.stopPropagation(); window.editArtist(el.dataset.id); return true;}
+      if(action==='delete-artist'){ev.preventDefault(); ev.stopPropagation(); window.deleteArtist(el.dataset.id); return true;}
+      if(action==='add-content-cat'){ev.preventDefault(); ev.stopPropagation(); window.addContentCategory(); return true;}
+      if(action==='edit-content-cat'){ev.preventDefault(); ev.stopPropagation(); window.editContentCategory(el.dataset.id); return true;}
+      if(action==='delete-content-cat'){ev.preventDefault(); ev.stopPropagation(); window.deleteContentCategory(el.dataset.id); return true;}
+      if(action==='open-content-all'){ev.preventDefault(); ev.stopPropagation(); window.openContentAll(el.dataset.id, el.dataset.name||''); return true;}
+      if(action==='open-post'){ev.preventDefault(); ev.stopPropagation(); window.openPost(Number(el.dataset.id)); return true;}
+      if(el.matches('.nav-item[data-page]')){ev.preventDefault(); ev.stopPropagation(); window.go(el.dataset.page); return true;}
+      if(el.classList.contains('logo')){ev.preventDefault(); ev.stopPropagation(); window.go(currentArtist?'home':'artistSelect'); return true;}
+    }catch(err){ alert('버튼 오류: '+(err&&err.message?err.message:err)); }
+    return false;
+  }
+  document.addEventListener('click',function(e){runAction(e.target,e)},true);
+  document.addEventListener('touchstart',function(e){runAction(e.target,e)}, {capture:true, passive:false});
+})();
+
 applyTheme();
 
 function boot(){
