@@ -497,6 +497,13 @@ html.force-light #modal .light{background:#f0f0f2!important;color:#111!important
 html.force-light .artist-card,html.force-light .artist-add{background:#fff;color:#111;border-color:#e5e5e5}
 html.force-dark .artist-card{background:transparent;color:#f5f5f5;border-color:#2b2b2f}
 @media(max-width:380px){.artist-avatar{width:112px;height:112px}.artist-grid{gap:24px 12px}.artist-name{font-size:1.08rem}}
+/* HARD FIX: artist selection is a standalone entry screen */
+.app:has(#artistSelect.active) header,
+.app:has(#artistSelect.active) .bottom-nav{display:none!important}
+.app:has(#artistSelect.active){padding-bottom:0!important;min-height:100vh}
+.app:has(#artistSelect.active) main{min-height:100vh}
+#artistSelect.active{min-height:100vh}
+
 
 
 
@@ -876,6 +883,15 @@ window.removeBlogBlock=i=>{blogBlocks.splice(i,1);renderBlogEditor()}
 
 
 function currentArtistObj(){return artists.find(a=>a.id===currentArtist)||null}
+function syncArtistLandingChrome(){
+  const app=document.querySelector('.app');
+  const isLanding=!!document.getElementById('artistSelect')?.classList.contains('active');
+  if(app)app.classList.toggle('artist-landing',isLanding);
+  const logo=document.querySelector('.logo');
+  if(logo)logo.textContent=isLanding?'ARTIST':(currentArtistObj()?.name||'ATEEZ');
+  const fab=document.getElementById('fab');
+  if(fab && isLanding)fab.style.display='none';
+}
 
 function bindArtistGridTap(){
   const grid=document.getElementById('artistGrid');
@@ -950,6 +966,7 @@ function showArtistLanding(){
   document.querySelector('.app').classList.add('artist-landing');
   const logo=document.querySelector('.logo'); if(logo)logo.textContent='ARTIST';
   const fab=document.getElementById('fab'); if(fab)fab.style.display='none';
+  syncArtistLandingChrome();
 }
 
 
@@ -964,11 +981,13 @@ function go(id){
   document.getElementById('fab').style.display=id==='talk'?'block':'none';
   localStorage.setItem(artistKey('lastView'),id);
   window.scrollTo(0,0);
+  syncArtistLandingChrome();
   render();
+  syncArtistLandingChrome();
 }
 window.go=go;
 
-function render(){renderArtistSelect();renderProfile();renderHome();renderMembers();renderTalk();renderContents();renderShop();renderCommunity();renderSchedule();renderAlerts();save()}
+function render(){renderArtistSelect();renderProfile();renderHome();renderMembers();renderTalk();renderContents();renderShop();renderCommunity();renderSchedule();renderAlerts();syncArtistLandingChrome();save()}
 function renderProfile(){document.getElementById('welcome').textContent=profile.nickname?`${profile.nickname}님 환영합니다`:'ATEEZ Official Platform';document.getElementById('myNick').textContent=profile.nickname||'닉네임 미설정';document.getElementById('topProfile').innerHTML=profile.photo?media(profile.photo):'👤';const pb=document.getElementById('pointBadge');if(pb)pb.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`;const cp=document.getElementById('cartPointBadge');if(cp)cp.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`;const tl=document.getElementById('themeLabel');if(tl)tl.textContent=themeMode==='dark'?'다크':themeMode==='light'?'화이트':'시스템';applyTheme()}
 function renderHome(){
   const list=newest(posts).filter(p=>p.type==='content').slice(0,4);
