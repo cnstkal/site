@@ -481,7 +481,7 @@ html.force-light #modal .light{background:#f0f0f2!important;color:#111!important
 .artist-select h1{font-size:2.15rem;font-weight:900;letter-spacing:-.06em;margin:20px 0 8px}
 .artist-select .artist-sub{font-size:1rem;color:var(--sub);line-height:1.5;margin-bottom:28px}
 .artist-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 14px;align-items:start}
-.artist-card{width:100%;border:0;background:transparent;color:inherit;border-radius:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;box-shadow:none}
+.artist-card{width:100%;border:0;background:transparent;color:inherit;border-radius:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;box-shadow:none;cursor:pointer;touch-action:manipulation;pointer-events:auto}
 .artist-avatar{width:82px;height:82px;border-radius:50%;background:#eee;display:grid;place-items:center;font-size:2rem;overflow:hidden;flex-shrink:0;border:1px solid var(--line)}
 .artist-avatar img{width:100%;height:100%;object-fit:cover}
 .artist-name{font-size:1rem;font-weight:900;letter-spacing:-.04em;line-height:1.2;word-break:keep-all}
@@ -491,6 +491,80 @@ html.force-light #modal .light{background:#f0f0f2!important;color:#111!important
 .app.artist-landing{padding-bottom:0}
 html.force-light .artist-card,html.force-light .artist-add{background:#fff;color:#111;border-color:#e5e5e5}
 html.force-dark .artist-card{background:#151519;color:#f5f5f5;border-color:#2b2b2f}
+
+
+
+/* USER PATCH 7: comfortable dark mode + readable membership card */
+html.force-dark{
+  --line:#303038!important;
+  --card:#18181d!important;
+  --sub:#b7b7bf!important;
+  color-scheme:dark!important;
+}
+html.force-dark body{background:#101014!important;color:#f2f2f4!important;}
+html.force-dark .app{background:#111115!important;color:#f2f2f4!important;}
+html.force-dark header,
+html.force-dark .bottom-nav,
+html.force-dark .fixed-bar,
+html.force-dark .shop-bottom{background:rgba(17,17,21,.96)!important;color:#f2f2f4!important;border-color:#2d2d34!important;}
+html.force-dark .hero-card,
+html.force-dark .card,
+html.force-dark .detail-card,
+html.force-dark .my-row,
+html.force-dark .cart-row,
+html.force-dark .home-wide-card,
+html.force-dark .schedule-card,
+html.force-dark .support-faq details{background:#1b1b21!important;color:#f2f2f4!important;border-color:#303038!important;}
+html.force-dark .hero-card{background:linear-gradient(135deg,#1d1d24,#15151a)!important;}
+html.force-dark .meta,
+html.force-dark .cart-meta,
+html.force-dark .community-meta,
+html.force-dark .community-preview,
+html.force-dark .hero-card p,
+html.force-dark .home-wide-meta,
+html.force-dark .member-sub{color:#b7b7bf!important;}
+html.force-dark .membership-detail-page,
+html.force-dark #membership,
+html.force-dark #membershipBox,
+html.force-dark .member-card-wrap{background:#111115!important;color:#f2f2f4!important;}
+html.force-dark .membership-card .backface{background:#e8e8f1!important;color:#18181d!important;box-shadow:0 24px 44px rgba(0,0,0,.32)!important;}
+html.force-dark .membership-card .backface:before{background:#d6d6e1!important;border-right:1px solid #c7c7d2!important;}
+html.force-dark .membership-card .back-inner{color:#18181d!important;}
+html.force-dark .membership-card .label{color:#4b4b55!important;}
+html.force-dark .membership-card .big{color:#111!important;}
+html.force-dark .membership-card .front{color:#5d5d68!important;}
+html.force-dark .member-card-dot{background:#2f2f38!important;}
+html.force-dark .member-title{color:#f2f2f4!important;}
+html.force-dark .member-detail-btn{background:#8fa2cc!important;color:#fff!important;}
+
+@media (prefers-color-scheme: dark){
+  html:not(.force-light) body{background:#101014!important;color:#f2f2f4!important;}
+  html:not(.force-light) .app{background:#111115!important;color:#f2f2f4!important;}
+  html:not(.force-light) header,
+  html:not(.force-light) .bottom-nav,
+  html:not(.force-light) .fixed-bar,
+  html:not(.force-light) .shop-bottom{background:rgba(17,17,21,.96)!important;color:#f2f2f4!important;border-color:#2d2d34!important;}
+  html:not(.force-light) .hero-card,
+  html:not(.force-light) .card,
+  html:not(.force-light) .detail-card,
+  html:not(.force-light) .my-row,
+  html:not(.force-light) .cart-row,
+  html:not(.force-light) .home-wide-card,
+  html:not(.force-light) .schedule-card,
+  html:not(.force-light) .support-faq details{background:#1b1b21!important;color:#f2f2f4!important;border-color:#303038!important;}
+  html:not(.force-light) .hero-card{background:linear-gradient(135deg,#1d1d24,#15151a)!important;}
+  html:not(.force-light) .membership-detail-page,
+  html:not(.force-light) #membership,
+  html:not(.force-light) #membershipBox,
+  html:not(.force-light) .member-card-wrap{background:#111115!important;color:#f2f2f4!important;}
+  html:not(.force-light) .membership-card .backface{background:#e8e8f1!important;color:#18181d!important;box-shadow:0 24px 44px rgba(0,0,0,.32)!important;}
+  html:not(.force-light) .membership-card .backface:before{background:#d6d6e1!important;border-right:1px solid #c7c7d2!important;}
+  html:not(.force-light) .membership-card .back-inner{color:#18181d!important;}
+  html:not(.force-light) .membership-card .label{color:#4b4b55!important;}
+  html:not(.force-light) .membership-card .big{color:#111!important;}
+  html:not(.force-light) .member-title{color:#f2f2f4!important;}
+  html:not(.force-light) .member-sub{color:#b7b7bf!important;}
+}
 
 </style>
 </head>
@@ -795,9 +869,37 @@ window.removeBlogBlock=i=>{blogBlocks.splice(i,1);renderBlogEditor()}
 
 
 function currentArtistObj(){return artists.find(a=>a.id===currentArtist)||null}
+
+function bindArtistGridTap(){
+  const grid=document.getElementById('artistGrid');
+  if(!grid || grid.dataset.bound==='1')return;
+  grid.dataset.bound='1';
+  grid.addEventListener('click',e=>{
+    const card=e.target.closest('.artist-card');
+    if(!card)return;
+    e.preventDefault();
+    const id=card.dataset.artistId;
+    if(id) window.selectArtist(id);
+  });
+  grid.addEventListener('touchend',e=>{
+    const card=e.target.closest('.artist-card');
+    if(!card)return;
+    e.preventDefault();
+    const id=card.dataset.artistId;
+    if(id) window.selectArtist(id);
+  },{passive:false});
+}
+
 function renderArtistSelect(){
-  const box=document.getElementById('artistGrid'); if(!box)return;
-  box.innerHTML=artists.map(a=>`<button class="artist-card" onclick="selectArtist('${a.id}')"><div class="artist-avatar">${media(a.photo||'🎤')}</div><div class="artist-name">${esc(a.name)}</div></button>`).join('')||'<div class="meta">아티스트가 없습니다.</div>';
+  const box=document.getElementById('artistGrid'); if(!box)return; bindArtistGridTap();
+  box.innerHTML=artists.map(a=>`<button type="button" class="artist-card" data-artist-id="${a.id}" onclick="window.selectArtist('${a.id}')"><div class="artist-avatar">${media(a.photo||'🎤')}</div><div class="artist-name">${esc(a.name)}</div></button>`).join('')||'<div class="meta">아티스트가 없습니다.</div>';
+  box.querySelectorAll('.artist-card').forEach(btn=>{
+    btn.addEventListener('pointerup',e=>{
+      e.preventDefault();
+      const id=btn.dataset.artistId;
+      if(id) window.selectArtist(id);
+    },{once:false});
+  });
 }
 window.selectArtist=(id)=>{
   if(currentArtist && currentArtist!==id) save();
