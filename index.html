@@ -95,6 +95,15 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdr
 .shop-cart-btn{flex:1;background:#fff;border:2px solid #111}
 .shop-buy-btn{flex:1;background:#7d8fb7;color:#fff;border:0}
 
+
+.my-posts-list{padding:10px 20px 120px;display:flex;flex-direction:column;gap:14px}
+.my-post-item{display:flex;gap:14px;padding:14px;border:1px solid var(--line);border-radius:20px;background:#fff}
+.my-post-thumb{width:82px;height:82px;border-radius:16px;background:#f1f1f4;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0}
+.my-post-thumb img{width:100%;height:100%;object-fit:cover}
+.my-post-meta{flex:1;min-width:0}
+.my-post-title{font-size:1rem;font-weight:800;line-height:1.4}
+.my-post-date{font-size:.92rem;color:#888;margin-top:10px}
+
 /* REQUEST FIXES */
 .post-menu{position:absolute;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 28px rgba(0,0,0,.12);padding:8px;z-index:500;display:none;min-width:120px}
 .post-menu.open{display:block}
@@ -288,12 +297,20 @@ let posts=JSON.parse(localStorage.getItem('posts')||'null')||[
 function save(){localStorage.setItem('products',JSON.stringify(products));localStorage.setItem('notices',JSON.stringify(notices));localStorage.setItem('posts',JSON.stringify(posts));localStorage.setItem('profile',JSON.stringify(profile));localStorage.setItem('membership',JSON.stringify(membership));localStorage.setItem('orders',JSON.stringify(orders));localStorage.setItem('cart',JSON.stringify(cart));localStorage.setItem('alarms',JSON.stringify(alarms));localStorage.setItem('talkMembers',JSON.stringify(talkMembers));localStorage.setItem('boardPosts',JSON.stringify(boardPosts));localStorage.setItem('comments',JSON.stringify(comments))}
 function media(v){return v&&String(v).startsWith('http')?`<img src="${v}">`:(v||'＋')}
 function addAlarm(type,title,thumb,sourceType,sourceId){alarms.unshift({id:Date.now()+Math.random(),type,title,thumb:thumb||'🔔',time:new Date().toLocaleString(),read:false,sourceType,sourceId});save();renderAlarms()}
-function normalizeTalkPosts(){posts=posts.map((p,i)=>{if(p.type!=='talk')return p;const m=talkMembers[i%talkMembers.length];return {...p,memberId:p.memberId||m.id,memberName:p.memberName||m.name,likes:p.likes||0,comments:p.comments||0}})}
-function render(){normalizeTalkPosts();cleanAlarms();renderHome();renderShop();renderNotice();renderPosts();renderContentsSections();renderProfile();renderCart();renderAlarms();renderMemberStrip();renderTalkFeed();renderShopTabs();updateFloatingButton();save()}
+function normalizeTalkPosts(){posts=newestFirst(posts).map((p,i)=>{if(p.type!=='talk')return p;const m=talkMembers[i%talkMembers.length];return {...p,memberId:p.memberId||m.id,memberName:p.memberName||m.name,likes:p.likes||0,comments:p.comments||0}})}
+function render(){normalizeTalkPosts();cleanAlarms();renderHome();renderShop();renderNotice();renderPosts();renderContentsSections();renderProfile();renderMyPosts();renderCart();renderAlarms();renderMemberStrip();renderTalkFeed();renderShopTabs();updateFloatingButton();save()}
+
+function renderMyPosts(){
+ const mine=sortNewest(posts.filter(p=>p.author===profile.nickname||p.author==='ME'));
+ const el=document.getElementById('my-posts');
+ if(!el)return;
+ el.innerHTML=mine.length?`<div class="my-posts-list">${mine.map(p=>`<div class="my-post-item" onclick="openPost(${p.id})"><div class="my-post-thumb">${p.thumb?media(p.thumb):'📝'}</div><div class="my-post-meta"><div class="my-post-title">${p.title}</div><div class="my-post-date">${p.createdAt||'방금 전 작성'}</div></div></div>`).join('')}</div>`:'<div class="empty">작성한 글이 없습니다.</div>';
+}
+
 function renderProfile(){document.getElementById('my-nickname').textContent=profile.nickname||'닉네임 미설정';document.getElementById('home-profile').textContent=profile.nickname?`${profile.nickname}님 환영합니다`:'ATEEZ Official Platform · White Edition';document.getElementById('top-profile').innerHTML=profile.photo?`<img src="${profile.photo}">`:'👤'}
-function renderHome(){document.getElementById('home-grid').innerHTML=posts.filter(p=>p.type==='content').slice(0,4).map(p=>`<div class="card" onclick="openPost(${p.id})"><div class="thumb">${media(p.thumb)}</div><div class="info"><div class="title">${p.title}</div><div class="meta">${p.body}</div></div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>'}
+function renderHome(){document.getElementById('home-grid').innerHTML=sortNewest(posts).filter(p=>p.type==='content').slice(0,4).map(p=>`<div class="card" onclick="openPost(${p.id})"><div class="thumb">${media(p.thumb)}</div><div class="info"><div class="title">${p.title}</div><div class="meta">${p.body}</div></div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>'}
 function renderShop(){
- const list=products.filter(p=>selectedShopCategory==='ALL'||(p.category||guessShopCategory(p))===selectedShopCategory);
+ const list=sortNewest(products).filter(p=>selectedShopCategory==='ALL'||(p.category||guessShopCategory(p))===selectedShopCategory);
  document.getElementById('shop-grid').innerHTML=list.map(p=>`<div class="card" onclick="openProduct(${p.id})"><div class="thumb">${media(p.thumb)}</div><div class="info"><div class="title">${p.name}</div><div class="meta">${p.price}</div></div></div>`).join('')||'<div class="meta">상품이 없습니다.</div>';
 }
 function guessShopCategory(p){if(p.membership)return 'MEMBERSHIP';if((p.name||'').toUpperCase().includes('ALBUM')||(p.name||'').includes('GOLDEN'))return 'ALBUM';if((p.name||'').toUpperCase().includes('TICKET'))return 'TICKET';return 'PRODUCTS'}
@@ -308,9 +325,9 @@ window.openShopMore=function(){
  document.getElementById('shop-more-sheet').classList.add('open');
 }
 window.closeShopMore=function(){const s=document.getElementById('shop-more-sheet');if(s)s.classList.remove('open')}
-function renderNotice(){document.getElementById('notice-list').innerHTML=notices.map(n=>`<div class="notice-card" onclick="openNotice(${n.id})"><div class="notice-body"><div class="notice-title">${n.title}</div><div class="notice-meta">${n.meta}</div></div></div>`).join('')}
+function renderNotice(){document.getElementById('notice-list').innerHTML=sortNewest(notices).map(n=>`<div class="notice-card" onclick="openNotice(${n.id})"><div class="notice-body"><div class="notice-title">${n.title}</div><div class="notice-meta">${n.meta}</div></div></div>`).join('')}
 function renderPosts(){}
-function contentPostsFor(cat){return posts.filter(p=>p.type==='content'&&(p.category===cat.key||(!p.category&&cat.key==='video')))}
+function contentPostsFor(cat){return sortNewest(posts).filter(p=>p.type==='content'&&(p.category===cat.key||(!p.category&&cat.key==='video')))}
 function renderContentsSections(){
  const wrap=document.getElementById('contents-sections');if(!wrap)return;
  wrap.innerHTML=contentCategories.map(cat=>{
@@ -328,7 +345,7 @@ window.openContentAll=function(key){
 function renderMemberStrip(){document.getElementById('member-strip').innerHTML=talkMembers.map(m=>`<button class="member-chip ${selectedTalkMember===m.id?'active':''}" onclick="toggleTalkMember('${m.id}')"><div class="m-photo">${media(m.photo)}</div><div class="m-name">${m.name}</div></button>`).join('')}
 window.toggleTalkMember=function(id){selectedTalkMember=selectedTalkMember===id?null:id;renderMemberStrip();renderTalkFeed()}
 function renderTalkFeed(){
- const list=posts.filter(p=>p.type==='talk'&&(!selectedTalkMember||p.memberId===selectedTalkMember));
+ const list=sortNewest(posts).filter(p=>p.type==='talk'&&(!selectedTalkMember||p.memberId===selectedTalkMember));
  document.getElementById('talk-feed').innerHTML=list.length?list.map(p=>`<article class="feed-card" onclick="openPost(${p.id})"><div class="feed-head"><div class="feed-user"><div class="feed-avatar">${media(talkMembers.find(m=>m.id===p.memberId)?.photo||p.thumb||'👤')}</div><div class="feed-name">${p.memberName||'멤버'} <span class="verified">✓</span></div></div><button class="feed-more" onclick="event.stopPropagation();openPostMenu(event,\'post\',${p.id})">⋮</button></div><div class="feed-media">${String(p.thumb||'').startsWith('http')?`<img src="${p.thumb}">`:`<div class="emoji-media">${p.thumb||'💬'}</div>`}</div><div class="feed-title">${p.title}</div><div class="feed-meta">방금 전 · 좋아요 ${Number(p.likes||0).toLocaleString()} · 댓글 ${Number(p.comments||0).toLocaleString()}</div><div class="feed-comment"><b>${p.memberName||'멤버'}</b> ${p.body}</div><div class="reaction-row" onclick="event.stopPropagation()"><button class="react-btn" onclick="likeTalk(${p.id})">♡ ${Number(p.likes||0).toLocaleString()}</button><button class="react-btn" onclick="commentTalk(${p.id})">💬 ${Number(p.comments||0).toLocaleString()}</button></div></article>`).join(''):'<div class="meta">선택한 멤버의 게시글이 없습니다.</div>'
 }
 window.likeTalk=function(id){const p=posts.find(x=>x.id===id);if(!p)return;p.likes=(p.likes||0)+1;save();renderTalkFeed()}
@@ -387,7 +404,7 @@ window.openPost=function(id){const p=posts.find(x=>x.id===id);editingPostId=id;
  const mediaBox=p.type==='content'?`<div class="content-detail-media">${media(p.thumb)}</div>`:`<div class="detail-thumb">${media(p.thumb)}</div>`;
  document.getElementById('post-detail').innerHTML=`<button class="back" onclick="switchPage('${p.type==='content'?'contents':'talk'}')">‹ BACK</button><div class="detail-main">${mediaBox}<div class="detail-title">${p.title}</div><div class="notice-meta" style="margin-bottom:14px">${p.type==='content'?'CONTENTS':'ATEEZ TALK'}</div><div class="detail-body">${p.body}</div><div class="actions-bottom"><button class="btn btn-light" onclick="editPost(${p.id})">수정</button><button class="btn btn-danger" onclick="deletePost(${p.id})">삭제</button></div></div>`;switchPage('post-detail')}
 window.editPost=function(id){const p=posts.find(x=>x.id===id);modalMode='editPost';editingPostId=id;modalThumb=p.thumb;openModal('게시글 수정',p.title,p.body,'')}
-window.deletePost=function(id){if(confirm('게시글을 삭제할까요?')){const p=posts.find(x=>x.id===id);posts=posts.filter(x=>x.id!==id);comments=comments.filter(c=>c.postId!==id);cleanAlarms();render();switchPage(p.type==='content'?'contents':'talk')}}
+window.deletePost=function(id){if(confirm('게시글을 삭제할까요?')){const p=posts.find(x=>x.id===id);posts=sortNewest(posts).filter(x=>x.id!==id);comments=comments.filter(c=>c.postId!==id);cleanAlarms();render();switchPage(p.type==='content'?'contents':'talk')}}
 
 window.openProduct=function(id){
  const p=products.find(x=>x.id===id);
@@ -421,3 +438,35 @@ window.openProduct=function(id){
  switchPage('shop-detail');
 }
 >
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+ document.querySelectorAll('button,[onclick],.card,.feed-card,.member-chip').forEach(el=>{el.style.pointerEvents='auto'});
+ const modal=document.getElementById('modal');
+ if(modal) modal.style.pointerEvents='none';
+});
+</script>
+
+<script>
+function openMyPosts(){
+ const mine = newestFirst(posts.filter(p=>(p.author||'')===(profile.nickname||'')));
+ const wrap = document.createElement('div');
+ wrap.className='page-overlay';
+ wrap.innerHTML = `
+ <div style="padding:24px;background:#fff;min-height:100vh">
+   <h1 style="font-size:2rem;font-weight:900;margin-bottom:20px">내가 쓴 글</h1>
+   ${mine.map(p=>`
+    <div onclick="openPost(${p.id})" style="display:flex;gap:14px;padding:14px;border:1px solid #e5e5e5;border-radius:20px;margin-bottom:14px">
+      <div style="width:84px;height:84px;border-radius:16px;background:#f4f4f4;overflow:hidden;display:flex;align-items:center;justify-content:center">
+        ${p.thumb ? (String(p.thumb).startsWith('http') ? `<img src="${p.thumb}" style="width:100%;height:100%;object-fit:cover">` : p.thumb) : '📝'}
+      </div>
+      <div style="flex:1">
+        <div style="font-size:1rem;font-weight:800;line-height:1.4">${p.title||'제목 없음'}</div>
+        <div style="font-size:.92rem;color:#888;margin-top:10px">${p.createdAt||'방금 작성'}</div>
+      </div>
+    </div>
+   `).join('')}
+   <button onclick="this.parentElement.parentElement.remove()" style="width:100%;height:52px;border-radius:16px;border:0;background:#111;color:#fff;font-weight:900">닫기</button>
+ </div>`;
+ document.body.appendChild(wrap);
+}
+</script>
