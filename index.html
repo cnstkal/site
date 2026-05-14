@@ -52,18 +52,18 @@ header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdr
 .member-pill{background:#eee;border-radius:999px;padding:6px 10px;font-size:.8rem;font-weight:800;color:#555}
 .member-card-wrap{padding:42px 20px 130px;text-align:center}
 .member-flip{perspective:1200px}
-.membership-card{width:78%;max-width:330px;aspect-ratio:.72/1;margin:0 auto 30px;position:relative;transform-style:preserve-3d;transition:transform .5s}
-.membership-card.flip{transform:rotateY(180deg)}
-.face{position:absolute;inset:0;border-radius:28px;backface-visibility:hidden;box-shadow:0 24px 44px rgba(0,0,0,.08);overflow:hidden}
-.front{background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.95),rgba(255,255,255,.62) 38%,rgba(238,241,250,.70) 62%,rgba(255,255,255,.92)),radial-gradient(circle at 20% 80%,rgba(191,255,242,.55),transparent 28%),radial-gradient(circle at 80% 30%,rgba(214,219,255,.55),transparent 32%),linear-gradient(135deg,#fff,#eef2f8,#fff);display:flex;align-items:center;justify-content:center;text-align:center;color:#9c9c9c;font-size:1.25rem;font-weight:900;line-height:1.35}
+.membership-card{width:78%;max-width:330px;aspect-ratio:.72/1;margin:0 auto 30px;position:relative;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .5s;-webkit-transition:-webkit-transform .5s}
+.membership-card.flip{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:28px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 24px 44px rgba(0,0,0,.08);overflow:hidden}
+.front{transform:rotateY(0deg);-webkit-transform:rotateY(0deg);background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.95),rgba(255,255,255,.62) 38%,rgba(238,241,250,.70) 62%,rgba(255,255,255,.92)),radial-gradient(circle at 20% 80%,rgba(191,255,242,.55),transparent 28%),radial-gradient(circle at 80% 30%,rgba(214,219,255,.55),transparent 32%),linear-gradient(135deg,#fff,#eef2f8,#fff);display:flex;align-items:center;justify-content:center;text-align:center;color:#9c9c9c;font-size:1.25rem;font-weight:900;line-height:1.35}
 .front:before{content:"✦ ✧ ✶ ✧ ✦ ✧ ✶ ✦ ✧";position:absolute;inset:0;color:rgba(255,255,255,.8);font-size:1.4rem;letter-spacing:14px;line-height:2.5;filter:blur(.1px);opacity:.95}
 .front:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.35),rgba(255,255,255,0) 45%,rgba(255,255,255,.55));mix-blend-mode:screen}
 .front span{position:relative;z-index:1}
-.backface{transform:rotateY(180deg);background:#f2f1fa;text-align:left;display:flex}
+.backface{transform:rotateY(180deg);-webkit-transform:rotateY(180deg);background:#f2f1fa;text-align:left;display:flex}
 .backface:before{content:"";width:28%;background:rgba(0,0,0,.045);border-right:1px solid rgba(0,0,0,.06)}
-.back-inner{padding:26px 22px;flex:1;font-size:.95rem;line-height:1.45}
-.label{font-size:.82rem;margin-top:18px;color:#333}
-.big{font-size:1.35rem;font-weight:900;margin-top:4px;word-break:break-all}
+.back-inner{padding:22px 18px;flex:1;font-size:.82rem;line-height:1.32;overflow:hidden}
+.label{font-size:.72rem;margin-top:10px;color:#333}
+.big{font-size:1.05rem;font-weight:900;margin-top:2px;word-break:break-all;line-height:1.15}
 .member-card-dot{width:10px;height:10px;background:#111;border-radius:50%;margin:0 auto 34px}
 .member-title{font-size:1.35rem;font-weight:900;letter-spacing:-.04em}
 .member-sub{font-size:1.05rem;color:#555;margin-top:10px}
