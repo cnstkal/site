@@ -1,1361 +1,663 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="light">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>ATEEZ Official Platform</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-:root{--line:#e5e5e5;--card:#f5f5f7;--sub:#777;--danger:#e63946;--blue:#7f91b5}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:Pretendard,sans-serif;background:#fff;color:#111}
-.app{padding-bottom:92px}
-button{font-family:inherit;cursor:pointer}
-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);height:60px;padding:0 18px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:1.2rem;font-weight:900}
-.header-actions{display:flex;gap:16px;align-items:center}
-.header-actions button{border:0;background:none;font-size:1.28rem;position:relative}
-.dot{display:none;position:absolute;right:-2px;top:-2px;width:8px;height:8px;background:#e63946;border-radius:50%}.dot.on{display:block}
-.profile-mini{width:30px;height:30px;border-radius:50%;background:#eee;overflow:hidden;display:grid;place-items:center}.profile-mini img{width:100%;height:100%;object-fit:cover}
-.view{display:none}.view.active{display:block}
-.hero{padding:20px}.hero-card{min-height:220px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg,#fff,#f2f2f2);padding:28px 22px;display:flex;flex-direction:column;justify-content:flex-end}.hero-card h1{font-size:2.2rem;line-height:1;letter-spacing:-.05em;margin-bottom:10px}.hero-card p{font-size:.92rem;color:#777;margin-bottom:18px}
-.primary{height:48px;border:0;border-radius:999px;background:#111;color:#fff;font-weight:900;padding:0 18px}
-.section{padding:20px}.section-title{font-size:1.1rem;font-weight:900;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.card{border:1px solid #ececec;border-radius:22px;background:var(--card);overflow:hidden}.thumb{aspect-ratio:1/1;background:#e8e8ec;display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden}.thumb img,.mini img,.photo img,.big-media img,.cart-thumb img,.member-photo img{width:100%;height:100%;object-fit:cover}.info{padding:12px}.title{font-size:.93rem;font-weight:800;line-height:1.35}.meta{font-size:.78rem;color:#777;margin-top:5px}
-.bottom-nav{position:fixed;bottom:0;left:0;width:100%;height:74px;background:rgba(255,255,255,.96);border-top:1px solid var(--line);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-around;z-index:200}
-.nav-item{border:0;background:none;color:#777;font-size:.62rem;font-weight:700;display:flex;flex-direction:column;gap:4px;align-items:center}.nav-item.active{color:#111}
-.fab{display:none;position:fixed;right:20px;bottom:96px;width:58px;height:58px;border-radius:50%;border:0;background:#111;color:#fff;font-size:1.8rem;z-index:210}
-.back{border:0;background:none;font-weight:900;color:#555;margin-bottom:16px}
-.detail{padding:20px}.detail-card{border:1px solid #ececec;background:var(--card);border-radius:24px;padding:18px}.detail-title{font-size:1.55rem;font-weight:900;line-height:1.25;margin:14px 0}.detail-body{font-size:1rem;line-height:1.65;white-space:pre-line;color:#444}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{height:44px;border-radius:999px;border:0;font-weight:900;padding:0 16px}.light{background:#fff;border:1px solid var(--line)}.danger{background:var(--danger);color:#fff}
-.modal{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.35);align-items:flex-end}.modal.open{display:flex}.sheet{width:100%;background:#fff;border-radius:24px 24px 0 0;padding:20px;max-height:88vh;overflow:auto}.sheet h3{font-size:1.1rem;margin-bottom:14px}.input,.textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:14px;font-family:inherit;font-size:.95rem;margin-bottom:10px}.textarea{min-height:120px;resize:vertical}.preview{height:92px;border:1px solid var(--line);background:#f5f5f5;border-radius:18px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:10px;color:#888}.preview img{width:100%;height:100%;object-fit:cover}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Idol Archive</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Noto Sans KR', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#f5f3ff', 100: '#ede9fe', 500: '#8b5cf6', 600: '#7c3aed', 900: '#4c1d95' }
+          }
+        }
+      }
+    }
+  </script>
 
-/* TALK */
-.member-strip{display:flex;gap:18px;overflow-x:auto;padding:18px 20px;border-bottom:1px solid var(--line)}.member-strip::-webkit-scrollbar{display:none}.member-chip{border:0;background:none;min-width:72px;color:#777}.member-chip.active{color:#111}.member-photo{width:66px;height:66px;border-radius:50%;background:#e8e8ec;display:grid;place-items:center;font-size:1.7rem;margin:0 auto 8px;overflow:hidden;border:2px solid transparent}.member-chip.active .member-photo{border-color:#111}.member-name{font-size:.82rem;font-weight:900}.member-setting-chip{border:0;background:rgba(0,0,0,.04);color:#999;min-width:46px;height:46px;border-radius:999px;margin:auto 0;font-size:1rem;align-self:center;opacity:.55}.member-setting-chip:hover{opacity:1;background:rgba(0,0,0,.08);color:#111}
-.feed{padding:20px 20px 120px}.feed-card{padding:20px 0;border-bottom:1px solid var(--line);position:relative}.feed-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.feed-user{display:flex;gap:10px;align-items:center}.photo{width:44px;height:44px;border-radius:50%;background:#e8e8ec;display:grid;place-items:center;overflow:hidden}.name{font-weight:900;font-size:1.05rem}.check{background:#0b3b77;color:white;border-radius:50%;font-size:.72rem;padding:2px 5px}.more{border:0;background:none;font-size:1.5rem;color:#777}.feed-img{width:100%;aspect-ratio:1/1;border-radius:18px;background:#111;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:4rem;color:white}.feed-img img{width:100%;height:100%;object-fit:cover}.feed-title{font-size:1.28rem;font-weight:600;line-height:1.35;margin:14px 0}.react{display:flex;gap:10px;flex-wrap:wrap}.react button{height:38px;border-radius:999px;border:1px solid var(--line);background:#f8f8f8;font-weight:900;padding:0 14px}
-.menu{display:none;position:absolute;background:#fff;border:1px solid var(--line);box-shadow:0 12px 28px rgba(0,0,0,.15);border-radius:14px;padding:8px;z-index:900}.menu.open{display:block}.menu button{display:block;width:120px;height:38px;border:0;background:#fff;text-align:left;padding:0 12px;font-weight:900;border-radius:10px}.menu button.danger{color:var(--danger)}
-.talk-detail{padding:20px 20px 130px}.big-media{width:100%;border-radius:18px;background:#111;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:4rem;color:white;margin-bottom:20px}.big-media img{width:100%;height:auto;display:block}.comment-box{background:#f7f7f7;margin:30px -20px -130px;padding:26px 20px 150px}.comment-row{display:flex;gap:12px;margin-bottom:24px;position:relative}.comment-avatar{width:34px;height:34px;border-radius:50%;background:#d9ddff;display:grid;place-items:center;overflow:hidden;flex-shrink:0}.comment-meta{font-size:.92rem;color:#888;margin-bottom:6px}.comment-text{font-size:1rem;line-height:1.5}.fixed-bar{position:fixed;left:0;right:0;bottom:74px;background:#fff;border-top:1px solid var(--line);padding:14px 20px;display:flex;gap:28px;font-weight:900;z-index:180}
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-/* CONTENTS */
-.tabs{display:flex;gap:14px;overflow-x:auto;padding:16px 20px;border-bottom:1px solid var(--line)}.tabs button{height:44px;border-radius:999px;border:1px solid var(--line);background:#fff;padding:0 20px;font-weight:800;white-space:nowrap}
-.content-section{padding:24px 20px}.content-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.content-head h2{font-size:1.45rem}.row-scroll{display:grid;grid-auto-flow:column;grid-auto-columns:78%;gap:16px;overflow-x:auto}.wide-thumb{aspect-ratio:16/9;border-radius:12px;background:#e8e8ec;display:grid;place-items:center;overflow:hidden;font-size:2rem}.wide-thumb img{width:100%;height:100%;object-fit:cover}.wide-title{font-weight:700;line-height:1.35;margin-top:10px}.all-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px 16px;padding:20px}.content-detail-img{aspect-ratio:16/9;border-radius:18px;background:#e8e8ec;display:grid;place-items:center;overflow:hidden}.content-detail-img img{width:100%;height:100%;object-fit:cover}
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+        "firebase/app": "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js",
+        "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"
+      }
+    }
+  </script>
 
-/* SHOP */
-.shop-tabs{display:flex;gap:20px;overflow-x:auto;padding:0 20px 18px;border-bottom:1px solid var(--line)}.shop-tabs button{border:0;background:none;font-size:1.1rem;font-weight:900;color:#888;padding:12px 0;border-bottom:3px solid transparent}.shop-tabs button.active{color:#111;border-bottom-color:#111}.shop-hero{width:100%;aspect-ratio:1/1;background:#f5f5f7;display:grid;place-items:center;overflow:hidden;font-size:4rem}.shop-hero img{width:100%;height:100%;object-fit:cover}.shop-info{padding:24px 20px}.shop-title{font-size:1.18rem;font-weight:900;line-height:1.28}.shop-price{font-size:1.55rem;font-weight:900;margin-top:12px}.shop-desc{margin-top:32px;border-top:12px solid #f5f5f7;padding-top:28px}.shop-bottom{position:fixed;left:0;right:0;bottom:0;background:white;border-top:1px solid var(--line);padding:14px 16px;display:flex;gap:12px;z-index:300}.shop-bottom button{height:60px;border-radius:18px;font-size:1.15rem;font-weight:900;flex:1}.cart-btn{background:white;border:2px solid #111}.buy-btn{background:var(--blue);color:white;border:0}
+  <style>
+    body { overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+    /* Hide Scrollbar */
+    ::-webkit-scrollbar { width: 0px; background: transparent; }
+    
+    /* Smooth Transitions */
+    .fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease; }
+    .fade-enter-from, .fade-leave-to { opacity: 0; }
+    
+    .slide-up-enter-active, .slide-up-leave-active { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s; }
+    .slide-up-enter-from, .slide-up-leave-to { transform: translateY(100%); opacity: 0; }
 
+    .slide-right-enter-active, .slide-right-leave-active { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .slide-right-enter-from, .slide-right-leave-to { transform: translateX(100%); }
 
-/* COMMUNITY */
-.content-tabs-clean{
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-  padding:14px 20px 6px;
-  border-bottom:0;
-  background:#fff;
-}
-.content-tabs-clean::-webkit-scrollbar{display:none}
-.content-tabs-clean button{
-  height:40px;
-  border:1px solid #e5e5e5;
-  background:#f7f7f8;
-  color:#222;
-  border-radius:999px;
-  padding:0 16px;
-  font-size:.9rem;
-  font-weight:900;
-  white-space:nowrap;
-}
-.home-list{display:flex;flex-direction:column;gap:20px}
-.home-wide-card{
-  border:1px solid #ececec;
-  border-radius:24px;
-  overflow:hidden;
-  background:#fff;
-  box-shadow:0 8px 22px rgba(0,0,0,.04);
-}
-.home-wide-thumb{
-  width:100%;
-  aspect-ratio:16/9;
-  background:#e8e8ec;
-  display:grid;
-  place-items:center;
-  overflow:hidden;
-  font-size:2rem;
-}
-.home-wide-thumb img{width:100%;height:100%;object-fit:cover}
-.home-wide-main{padding:16px 16px 18px}
-.home-wide-title{
-  font-size:1.25rem;
-  font-weight:900;
-  line-height:1.3;
-  letter-spacing:-.04em;
-}
-.home-wide-meta{
-  margin-top:8px;
-  color:#888;
-  font-size:.9rem;
-}
-.community-tabs{
-  display:flex;
-  gap:30px;
-  height:64px;
-  padding:0 20px;
-  align-items:flex-end;
-  border-bottom:1px solid #ececec;
-  background:#fff;
-  overflow-x:auto;
-  position:sticky;
-  top:60px;
-  z-index:60;
-}
-.community-tabs::-webkit-scrollbar{display:none}
-.community-tabs button{
-  flex:0 0 auto;
-  height:64px;
-  border:0;
-  background:none;
-  color:#969696;
-  font-size:1.05rem;
-  font-weight:900;
-  letter-spacing:-.03em;
-  position:relative;
-  padding:0 0 15px;
-  white-space:nowrap;
-}
-.community-tabs button.active{color:#111}
-.community-tabs button.active::after{
-  content:'';
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
-  height:3px;
-  background:#111;
-  border-radius:999px;
-}
-.community-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  min-height:68px;
-  padding:0 20px;
-  border-bottom:1px solid #f1f1f1;
-  color:#aaa;
-  font-size:1.05rem;
-  font-weight:800;
-}
-.community-top .community-write{
-  height:38px;
-  border:1px solid var(--line);
-  background:#fff;
-  border-radius:999px;
-  padding:0 14px;
-  color:#111;
-  font-weight:900;
-}
-.community-list{padding:0 20px 120px;background:#fff}
-.community-item{
-  display:flex;
-  gap:14px;
-  padding:18px 0;
-  border-bottom:1px solid #f0f0f0;
-  align-items:center;
-}
-.community-main{flex:1;min-width:0}
-.community-title{
-  font-size:1.08rem;
-  font-weight:900;
-  line-height:1.35;
-  letter-spacing:-.04em;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.community-count{color:#f24b4b;font-weight:900;margin-left:5px}
-.community-meta{
-  font-size:.88rem;
-  color:#999;
-  margin-top:7px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.community-preview{
-  font-size:.95rem;
-  color:#666;
-  margin-top:10px;
-  line-height:1.35;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.community-thumb{
-  width:76px;
-  height:76px;
-  border-radius:14px;
-  overflow:hidden;
-  background:#f2f2f2;
-  flex-shrink:0;
-  display:grid;
-  place-items:center;
-  font-size:1.8rem;
-}
-.community-thumb img{width:100%;height:100%;object-fit:cover}
-
-/* MY */
-.my-menu{padding:0 20px 28px}.my-row{background:var(--card);border:1px solid #ececec;border-radius:18px;padding:17px 16px;margin-bottom:10px;font-weight:900;display:flex;justify-content:space-between}.cart-row{display:flex;gap:14px;padding:14px;border:1px solid var(--line);border-radius:20px;background:#fff;margin-bottom:14px}.cart-thumb{width:82px;height:82px;border-radius:16px;background:#f4f4f4;display:grid;place-items:center;overflow:hidden;flex-shrink:0}.cart-main{flex:1}.cart-title{font-weight:900}.cart-meta{color:#888;font-size:.9rem;margin-top:8px}
-
-.member-page-head{display:flex;align-items:center;gap:12px;padding:24px 20px 8px}
-.member-page-head .back{font-size:1.35rem;min-width:28px}.member-page-head h1{font-size:1.55rem;font-weight:900;letter-spacing:-.05em}
-.member-pill{background:#eee;border-radius:999px;padding:6px 10px;font-size:.8rem;font-weight:800;color:#555}
-.member-card-wrap{padding:42px 20px 130px;text-align:center}
-.member-flip{perspective:1200px}
-.membership-card{width:78%;max-width:330px;aspect-ratio:.72/1;margin:0 auto 30px;position:relative;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .5s;-webkit-transition:-webkit-transform .5s}
-.membership-card.flip{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
-.face{position:absolute;inset:0;border-radius:28px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 24px 44px rgba(0,0,0,.08);overflow:hidden}
-.front{transform:rotateY(0deg);-webkit-transform:rotateY(0deg);background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.95),rgba(255,255,255,.62) 38%,rgba(238,241,250,.70) 62%,rgba(255,255,255,.92)),radial-gradient(circle at 20% 80%,rgba(191,255,242,.55),transparent 28%),radial-gradient(circle at 80% 30%,rgba(214,219,255,.55),transparent 32%),linear-gradient(135deg,#fff,#eef2f8,#fff);display:flex;align-items:center;justify-content:center;text-align:center;color:#9c9c9c;font-size:1.25rem;font-weight:900;line-height:1.35}
-.front:before{content:"✦ ✧ ✶ ✧ ✦ ✧ ✶ ✦ ✧";position:absolute;inset:0;color:rgba(255,255,255,.8);font-size:1.4rem;letter-spacing:14px;line-height:2.5;filter:blur(.1px);opacity:.95}
-.front:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.35),rgba(255,255,255,0) 45%,rgba(255,255,255,.55));mix-blend-mode:screen}
-.front span{position:relative;z-index:1}
-.backface{transform:rotateY(180deg);-webkit-transform:rotateY(180deg);background:#f2f1fa;text-align:left;display:flex}
-.backface:before{content:"";width:28%;background:rgba(0,0,0,.045);border-right:1px solid rgba(0,0,0,.06)}
-.back-inner{padding:24px 18px 18px;flex:1;font-size:.82rem;line-height:1.32;overflow:hidden;display:flex;flex-direction:column}
-.label{font-size:.72rem;margin-top:10px;color:#333}
-.big{font-size:1.05rem;font-weight:900;margin-top:2px;word-break:break-all;line-height:1.15}
-.member-card-dot{width:10px;height:10px;background:#111;border-radius:50%;margin:0 auto 34px}
-.member-title{font-size:1.35rem;font-weight:900;letter-spacing:-.04em}
-.member-sub{font-size:1.05rem;color:#555;margin-top:10px}
-.member-detail-btn{width:100%;height:64px;border:0;border-radius:14px;background:#7d8fb7;color:#fff;font-size:1.2rem;font-weight:900;margin-top:48px}
-
-/* FIXED SELECT / BLOG EDITOR */
-.category-modal{display:none;position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.28);align-items:flex-end}.category-modal.open{display:flex}.category-panel{width:100%;background:#fff;border-radius:22px 22px 0 0;padding:14px;max-height:62vh;overflow:auto}.category-option{width:100%;height:48px;border:0;border-radius:14px;background:#fff;text-align:left;padding:0 14px;font-size:1rem;font-weight:900;color:#111}.category-option.active{background:#111;color:#fff}.modal-field-label{font-size:.78rem;font-weight:900;color:#777;margin:12px 2px 7px}.select-like{width:100%;min-height:48px;border:1px solid var(--line);border-radius:16px;background:#fff;padding:0 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;font-size:.95rem;font-weight:900;color:#111}.feed-time{font-size:.78rem;color:#999;margin-top:3px}.feed-img:empty,.big-media:empty{display:none}.blog-editor{display:none;border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:10px;background:#fafafa}.blog-toolbar{display:flex;gap:8px;margin-bottom:10px}.blog-toolbar button{height:38px;border-radius:999px;border:1px solid var(--line);background:#fff;font-weight:900;padding:0 12px}.blog-block{border:1px solid #ececec;border-radius:14px;background:#fff;padding:10px;margin-bottom:10px}.blog-block textarea{width:100%;min-height:86px;border:0;outline:0;resize:vertical;font-family:inherit;font-size:.95rem;line-height:1.55}.blog-img-preview{min-height:90px;border-radius:12px;background:#f1f1f1;display:grid;place-items:center;overflow:hidden;color:#888}.blog-img-preview img{width:100%;height:auto;display:block}.blog-remove{margin-top:8px;height:32px;border:0;border-radius:999px;background:#f5f5f5;padding:0 10px;font-weight:900;color:#999}.content-article{display:flex;flex-direction:column;gap:18px;margin-top:24px}.content-article-text{font-size:1rem;line-height:1.8;white-space:pre-line;color:#444}.content-article-img{border-radius:18px;overflow:hidden;background:#e8e8ec}.content-article-img img{width:100%;height:auto;display:block}.support-faq{display:flex;flex-direction:column;gap:10px;margin-top:16px}.support-faq details{background:var(--card);border:1px solid #ececec;border-radius:16px;padding:14px}.support-faq summary{font-weight:900;cursor:pointer}.support-faq p{margin-top:10px;color:#666;line-height:1.55}.support-form{margin-top:24px}
-
-
-/* SCHEDULE */
-.schedule-wrap{padding:20px 20px 116px;background:#fff;min-height:100vh;overflow:hidden}
-.schedule-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;gap:12px}
-.schedule-month{border:0;background:none;font-size:1.9rem;font-weight:900;letter-spacing:-.06em;line-height:1.05;color:inherit;padding:0;white-space:nowrap}
-.schedule-actions{display:flex;gap:12px;align-items:center;flex-shrink:0}.schedule-actions button{border:0;background:none;font-size:1.25rem;padding:2px}
-.schedule-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--line);padding-bottom:12px;color:#888;font-weight:800;font-size:.86rem}.schedule-week div{text-align:center}
-.schedule-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px 2px;margin-top:12px;width:100%;max-width:100%;overflow:hidden}
-.schedule-day{height:96px;border-radius:16px;padding:7px 2px;position:relative;min-width:0;overflow:hidden;border:1px solid transparent;background:transparent}.schedule-day.blank{opacity:0;pointer-events:none}.schedule-day.today{background:#f1f1f1}.schedule-day.selected{border-color:#111}.schedule-num{font-size:.86rem;font-weight:900;text-align:center;line-height:1.1;white-space:nowrap;letter-spacing:-.04em}.schedule-num.has-event::before{content:'• ';font-weight:900;color:#555}.schedule-event{display:block;max-width:100%;margin:8px auto 0;font-size:.56rem;background:#dcd8f5;padding:3px 4px;border-radius:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;color:#111}
-.schedule-selected{margin-top:18px;border-top:1px solid var(--line);padding-top:18px}.schedule-selected-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px}.schedule-selected-title{font-size:1.28rem;font-weight:900;letter-spacing:-.05em}.schedule-selected-date{font-size:.95rem;color:#999}.schedule-list-view{padding-top:18px}.schedule-list-head{display:flex;justify-content:space-between;align-items:flex-end;margin:18px 0 14px}.schedule-list-date{font-size:1.42rem;font-weight:900;letter-spacing:-.05em}.schedule-list-full{font-size:.98rem;color:#999}.schedule-card{border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px;background:#fff}.schedule-card-title{font-size:1.12rem;font-weight:900;line-height:1.35;letter-spacing:-.04em}.schedule-card-meta{margin-top:12px;color:#555;font-size:.94rem;line-height:1.7}.schedule-dot{display:inline-block;width:13px;height:13px;border-radius:50%;background:#c9cada;margin-right:10px;vertical-align:middle}.schedule-nav{border-top:1px solid var(--line);display:flex;justify-content:space-between;margin-top:36px;padding-top:26px}.schedule-nav button{height:52px;padding:0 24px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:1.05rem;font-weight:900;color:inherit}
-.schedule-filters{position:fixed;left:0;right:0;bottom:74px;height:68px;background:#fff;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center;overflow-x:auto;padding:10px 20px;z-index:160}.schedule-filters::-webkit-scrollbar{display:none}.schedule-filters button{height:42px;border-radius:999px;border:1px solid var(--line);background:#fff;padding:0 18px;font-weight:900;white-space:nowrap;font-size:.95rem}.schedule-filters .active{border-color:#111}.schedule-filter-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#f5b6c1;margin-right:8px}.dot-tv{background:#f3aab2}.dot-yt{background:#f1b7a4}.dot-radio{background:#ffd885}.dot-fan{background:#a9c4ed}
-.month-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:850;align-items:flex-end}.month-modal.open{display:flex}.month-panel{width:100%;background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 28px}.month-panel-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}.month-panel-top button{border:0;background:none;font-size:1.8rem;color:#777}.month-year{font-size:1.9rem;font-weight:900}.month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.month-option{height:66px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:1.45rem;font-weight:900;color:#111}.month-option.active{border:2px solid #111}.month-option.disabled{opacity:.35}
-@media (prefers-color-scheme: dark){.schedule-wrap,.schedule-filters,.month-panel{background:#0b0b0d}.schedule-day.today{background:#242428}.schedule-day.selected{border-color:#fff}.schedule-card{background:#151519}.schedule-card-meta{color:#ddd}.month-option{background:#151519;color:#f5f5f5;border-color:#29292e}.month-option.active{border-color:#fff}}
-.point-badge{display:inline-flex;align-items:center;height:30px;border-radius:999px;background:#f4f4f7;padding:0 12px;font-size:.85rem;font-weight:900;color:#555;margin-top:12px}
-@media(min-width:900px){.schedule-filters{left:50%;transform:translateX(-50%);max-width:500px}.month-modal{left:50%;transform:translateX(-50%);max-width:500px}}
-
-@media (prefers-color-scheme: dark){
-  :root{--line:#2b2b2f;--card:#1c1c20;--sub:#aaa;--danger:#ff5b65;--blue:#8fa2cc}
-  body{background:#050505;color:#f5f5f5}
-  .app,header,.bottom-nav,.fixed-bar,.shop-bottom,.sheet,.community-tabs,.community-top,.community-list,.content-tabs-clean{background:#0b0b0d;color:#f5f5f5}
-  header,.bottom-nav,.fixed-bar,.shop-bottom,.community-tabs,.community-top,.content-tabs-clean{border-color:#26262a}
-  .hero-card,.card,.detail-card,.my-row,.cart-row,.home-wide-card{background:#151519;border-color:#29292e}
-  .hero-card{background:linear-gradient(135deg,#19191d,#0d0d10)}
-  .thumb,.wide-thumb,.home-wide-thumb,.preview,.photo,.member-photo,.cart-thumb,.community-thumb{background:#222228;color:#ddd}
-  .meta,.cart-meta,.community-meta,.community-preview,.hero-card p,.home-wide-meta{color:#aaa}
-  .detail-body{color:#ddd}
-  .primary,.fab{background:#f5f5f5;color:#0b0b0d}
-  .light,.community-top .community-write,.content-tabs-clean button,.react button,.cart-btn{background:#17171b;color:#f5f5f5;border-color:#303036}
-  .nav-item{color:#aaa}.nav-item.active,.community-tabs button.active{color:#fff}
-  .community-tabs button{color:#777}.community-tabs button.active::after{background:#fff}
-  .feed-card,.community-item{border-color:#26262a}
-  .comment-box{background:#111114}
-  .menu{background:#17171b;border-color:#303036}.menu button{background:#17171b;color:#f5f5f5}
-  .shop-desc{border-top-color:#1c1c20}.shop-hero{background:#17171b}
-  .member-setting-chip{background:rgba(255,255,255,.08);color:#aaa}.member-setting-chip:hover{background:rgba(255,255,255,.14);color:#fff}
-  .category-panel,.select-like,.blog-editor,.blog-block,.blog-toolbar button{background:#17171b;color:#f5f5f5;border-color:#303036}
-  .category-option{background:#17171b;color:#f5f5f5}.category-option.active{background:#f5f5f5;color:#111}
-  .blog-img-preview{background:#222228}.content-article-text,.support-faq p{color:#ddd}
-}
-
-@media(min-width:900px){body{background:#efefef}.app{max-width:500px;margin:0 auto;background:#fff;min-height:100vh}.bottom-nav,.fixed-bar{left:50%;transform:translateX(-50%);max-width:500px}.shop-bottom{left:50%;transform:translateX(-50%);max-width:500px}.modal{left:50%;transform:translateX(-50%);max-width:500px}.fab{right:calc(50% - 230px)}}
-@media(min-width:900px) and (prefers-color-scheme: dark){body{background:#151515}.app{background:#0b0b0d}}
-
-
-/* SCHEDULE COMPACT + DARK FIX */
-.schedule-wrap{padding:16px 14px 118px !important;}
-.schedule-head{margin-bottom:14px !important;align-items:center !important;}
-.schedule-month{font-size:1.42rem !important;letter-spacing:-.05em !important;}
-.schedule-actions{gap:8px !important;}
-.schedule-actions button{height:36px !important;border:1px solid var(--line) !important;border-radius:999px !important;background:#fff !important;padding:0 12px !important;font-size:.9rem !important;font-weight:900 !important;color:inherit !important;}
-.schedule-week{padding-bottom:8px !important;font-size:.78rem !important;}
-.schedule-grid{gap:4px 2px !important;margin-top:8px !important;}
-.schedule-day{height:58px !important;border-radius:10px !important;padding:5px 1px !important;}
-.schedule-num{font-size:.76rem !important;}
-.schedule-event{margin-top:5px !important;font-size:.5rem !important;padding:2px 3px !important;border-radius:6px !important;}
-.schedule-selected{margin-top:12px !important;padding-top:12px !important;}
-.schedule-selected-title{font-size:1.06rem !important;}
-.schedule-card{padding:13px !important;border-radius:14px !important;margin-bottom:10px !important;}
-.schedule-card-title{font-size:.98rem !important;}
-.schedule-card-meta{font-size:.84rem !important;margin-top:8px !important;}
-.month-panel{padding:16px 14px 18px !important;border-radius:20px 20px 0 0 !important;max-height:70vh !important;overflow:auto !important;}
-.month-panel-top{margin-bottom:14px !important;}
-.month-panel-top button{font-size:1.35rem !important;}
-.month-year{font-size:1.35rem !important;}
-.month-grid{gap:8px !important;}
-.month-option{height:48px !important;border-radius:12px !important;font-size:1rem !important;}
-.schedule-filters{height:58px !important;padding:8px 14px !important;}
-.schedule-filters button{height:36px !important;font-size:.82rem !important;padding:0 13px !important;}
-@media (prefers-color-scheme: dark){
-  #schedule,#schedule .schedule-wrap,#schedule .schedule-filters,#schedule .schedule-week,#schedule .schedule-grid,#schedule .schedule-selected,#schedule .schedule-list-view{background:#0b0b0d !important;color:#f5f5f5 !important;}
-  #schedule .schedule-month,#schedule .schedule-actions button,#schedule .schedule-nav button,#schedule .schedule-filters button{color:#f5f5f5 !important;background:#111114 !important;border-color:#2b2b2f !important;}
-  #schedule .schedule-week,#schedule .schedule-selected,#schedule .schedule-filters,#schedule .schedule-nav{border-color:#2b2b2f !important;}
-  #schedule .schedule-week div,#schedule .schedule-selected-date,#schedule .schedule-list-full,#schedule .meta{color:#a7a7ad !important;}
-  #schedule .schedule-day{background:transparent !important;color:#f5f5f5 !important;}
-  #schedule .schedule-day.today{background:#242428 !important;color:#fff !important;}
-  #schedule .schedule-day.selected{border-color:#fff !important;}
-  #schedule .schedule-card{background:#151519 !important;border-color:#2b2b2f !important;color:#f5f5f5 !important;}
-  #schedule .schedule-card-meta{color:#d0d0d5 !important;}
-  #schedule .month-panel{background:#0b0b0d !important;color:#f5f5f5 !important;border:1px solid #2b2b2f !important;border-bottom:0 !important;}
-  #schedule .month-option{background:#151519 !important;color:#f5f5f5 !important;border-color:#2b2b2f !important;}
-  #schedule .month-option.active{border-color:#8d5cff !important;box-shadow:0 0 0 1px #4f7cff inset !important;}
-}
-
-/* NOTICE DETAIL FIX */
-.notice-detail-title{font-size:1.55rem !important;line-height:1.32 !important;letter-spacing:-.05em !important;margin:18px 0 10px !important;}
-.notice-detail-body{font-size:.98rem !important;line-height:1.75 !important;margin-top:28px !important;color:inherit !important;}
-@media(max-width:420px){.notice-detail-title{font-size:1.42rem !important}.notice-detail-body{font-size:.94rem !important}}
-
-/* SCHEDULE STRONG MOBILE FIX */
-#schedule .schedule-wrap{padding:14px 12px 106px !important;}
-#schedule .schedule-month{font-size:1.25rem !important;}
-#schedule .schedule-actions button{height:34px !important;padding:0 10px !important;font-size:.78rem !important;border-radius:999px !important;}
-#schedule .schedule-week{font-size:.7rem !important;padding-bottom:7px !important;}
-#schedule .schedule-grid{gap:3px 2px !important;margin-top:7px !important;}
-#schedule .schedule-day{height:52px !important;border-radius:9px !important;padding:4px 1px !important;}
-#schedule .schedule-num{font-size:.7rem !important;}
-#schedule .schedule-event{font-size:.45rem !important;margin-top:3px !important;padding:1px 2px !important;}
-.month-panel{padding:14px 12px 16px !important;}
-.month-option{height:44px !important;font-size:.94rem !important;}
-@media (prefers-color-scheme: dark){
-  .month-modal,.month-panel{background:#0b0b0d !important;color:#f5f5f5 !important;}
-  .month-option{background:#151519 !important;color:#f5f5f5 !important;border-color:#2b2b2f !important;}
-  .month-option.active{border-color:#8d5cff !important;box-shadow:0 0 0 1px #4f7cff inset !important;}
-}
-
-
-/* REQUEST PATCH: schedule controls, content detail, rich shop body, membership detail */
-.schedule-card-actions{display:flex;gap:8px;margin-top:12px}
-.schedule-mini-btn{height:34px;border-radius:999px;border:1px solid var(--line);background:#fff;color:inherit;font-size:.78rem;font-weight:900;padding:0 12px}
-.schedule-mini-btn.danger{background:#fff;color:var(--danger)}
-.content-post-page{background:#fff;min-height:100vh;padding-bottom:120px}
-.content-post-media{width:100%;aspect-ratio:16/9;background:#111;display:grid;place-items:center;overflow:hidden;font-size:3rem;color:#fff}
-.content-post-media img{width:100%;height:100%;object-fit:cover}
-.content-post-inner{padding:26px 20px 34px}
-.content-post-title{font-size:1.72rem;font-weight:900;line-height:1.18;letter-spacing:-.06em;margin-bottom:12px}
-.content-post-date{font-size:1rem;color:#aaa;margin-bottom:28px}
-.content-post-tag{font-size:1.15rem;font-weight:900;color:#2997ff;margin-bottom:22px}
-.content-post-body{font-size:1.05rem;line-height:1.65;color:#111;white-space:pre-line}
-.content-post-body a,.content-post-body .linkish{color:#1d9bf0;font-weight:800;word-break:break-all}
-.shop-rich-body{display:flex;flex-direction:column;gap:14px;margin-top:18px}
-.shop-rich-text{font-size:1.02rem;line-height:1.78;white-space:pre-line;border-radius:12px;padding:2px 0}
-.shop-rich-text.has-bg{padding:12px}
-.shop-rich-image{border-radius:16px;overflow:hidden;background:#f1f1f1}
-.shop-rich-image img{width:100%;height:auto;display:block}
-.blog-style-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.blog-style-row input{height:36px;border:1px solid var(--line);border-radius:10px;padding:0 10px;font-family:inherit;font-size:.82rem;background:#fff;color:inherit}
-.membership-detail-page{padding:24px 20px 120px;background:#fff;min-height:100vh}
-.membership-detail-page h1{font-size:2rem;font-weight:900;letter-spacing:-.06em;margin:16px 0 62px}
-.mem-section-title{font-size:1.22rem;font-weight:900;margin:0 0 28px}
-.mem-info-grid{display:grid;grid-template-columns:34% 1fr;gap:18px 18px;font-size:1.12rem;line-height:1.45;margin-bottom:36px}
-.mem-info-grid .label2{color:#777;font-size:1rem}
-.mem-info-grid .value2{font-weight:500;word-break:break-word}
-.mem-divider{height:1px;background:var(--line);margin:34px 0}
-.mem-benefits{display:flex;flex-direction:column;gap:18px;color:#666;font-size:1.05rem;line-height:1.5}
-.mem-benefits div{display:flex;gap:12px;align-items:flex-start}
-.mem-hex{width:20px;height:18px;background:#777;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);flex:0 0 auto;margin-top:4px}
-@media (prefers-color-scheme: dark){.content-post-page,.membership-detail-page{background:#0b0b0d;color:#f5f5f5}.content-post-body{color:#f5f5f5}.schedule-mini-btn,.blog-style-row input{background:#151519;border-color:#2b2b2f;color:#f5f5f5}.shop-rich-image{background:#1c1c20}.mem-benefits{color:#ddd}}
-
-
-
-/* USER PATCH: spacing, theme, dark fixes, pinned notices, schedule form, no zoom */
-html,body{touch-action:manipulation;}
-.point-badge{margin-bottom:18px;}
-#my .hero-card .point-badge{margin-top:22px;margin-bottom:22px;}
-#my .hero-card .primary{margin-top:4px;}
-.shop-tabs button.active{color:#111;opacity:1;}
-.shop-tabs button{opacity:.72;}
-.pinned-notice{background:linear-gradient(135deg,#fff7d0,#fff);border:1px solid #f2d36d;border-radius:18px;padding:16px;margin:14px 0;}
-.pinned-notice .community-title:before{content:'📌 ';}
-.notice-pin-btn{background:#fff4bd!important;border-color:#e6c449!important;color:#111!important;}
-.schedule-card-actions{display:flex;gap:8px;margin-top:12px}.schedule-card-actions button{height:34px;border-radius:999px;border:1px solid var(--line);background:#fff;color:#111;font-weight:900;padding:0 12px}.schedule-card-actions .danger{background:var(--danger);color:#fff;border:0}
-#scheduleFormModal .sheet{border:1px solid var(--line);}
-#scheduleFormModal select.input{appearance:auto;}
-html.force-dark body{background:#050505;color:#f5f5f5}html.force-dark .app,html.force-dark header,html.force-dark .bottom-nav,html.force-dark .fixed-bar,html.force-dark .shop-bottom,html.force-dark .sheet,html.force-dark .community-tabs,html.force-dark .community-top,html.force-dark .community-list,html.force-dark .content-tabs-clean{background:#0b0b0d;color:#f5f5f5}html.force-dark header,html.force-dark .bottom-nav,html.force-dark .fixed-bar,html.force-dark .shop-bottom,html.force-dark .community-tabs,html.force-dark .community-top,html.force-dark .content-tabs-clean{border-color:#26262a}html.force-dark .hero-card,html.force-dark .card,html.force-dark .detail-card,html.force-dark .my-row,html.force-dark .cart-row,html.force-dark .home-wide-card{background:#151519;border-color:#29292e}html.force-dark .hero-card{background:linear-gradient(135deg,#19191d,#0d0d10)}html.force-dark .thumb,html.force-dark .wide-thumb,html.force-dark .home-wide-thumb,html.force-dark .preview,html.force-dark .photo,html.force-dark .member-photo,html.force-dark .cart-thumb,html.force-dark .community-thumb{background:#222228;color:#ddd}html.force-dark .meta,html.force-dark .cart-meta,html.force-dark .community-meta,html.force-dark .community-preview,html.force-dark .hero-card p,html.force-dark .home-wide-meta{color:#aaa}html.force-dark .detail-body{color:#ddd}html.force-dark .light,html.force-dark .community-top .community-write,html.force-dark .content-tabs-clean button,html.force-dark .react button,html.force-dark .cart-btn,html.force-dark .schedule-card-actions button{background:#17171b;color:#f5f5f5;border-color:#303036}html.force-dark .nav-item{color:#aaa}html.force-dark .nav-item.active,html.force-dark .community-tabs button.active{color:#fff}html.force-dark .shop-tabs button.active{color:#fff!important}html.force-dark .shop-tabs button{color:#aaa!important}html.force-dark .shop-tabs button.active{border-bottom-color:#fff!important}html.force-dark .pinned-notice{background:linear-gradient(135deg,#2b2410,#151519);border-color:#5e4b16}html.force-dark .notice-pin-btn{background:#3b3210!important;color:#fff!important;border-color:#6f5a19!important}html.force-dark input,html.force-dark textarea,html.force-dark select{background:#2c2c30!important;color:#fff!important;border-color:#3a3a40!important}html.force-dark #scheduleFormModal .sheet{background:#1c1c20;color:#fff}
-html.force-light body{background:#fff!important;color:#111!important}html.force-light .app,html.force-light header,html.force-light .bottom-nav,html.force-light .fixed-bar,html.force-light .shop-bottom,html.force-light .sheet,html.force-light .community-tabs,html.force-light .community-top,html.force-light .community-list,html.force-light .content-tabs-clean{background:#fff!important;color:#111!important}html.force-light header,html.force-light .bottom-nav,html.force-light .fixed-bar,html.force-light .shop-bottom,html.force-light .community-tabs,html.force-light .community-top,html.force-light .content-tabs-clean{border-color:#e5e5e5!important}html.force-light .hero-card,html.force-light .card,html.force-light .detail-card,html.force-light .my-row,html.force-light .cart-row,html.force-light .home-wide-card{background:#f5f5f7!important;border-color:#ececec!important;color:#111!important}html.force-light .hero-card{background:linear-gradient(135deg,#fff,#f2f2f2)!important}html.force-light .meta,html.force-light .cart-meta,html.force-light .community-meta,html.force-light .community-preview,html.force-light .hero-card p,html.force-light .home-wide-meta{color:#777!important}html.force-light .shop-tabs button.active{color:#111!important;border-bottom-color:#111!important}html.force-light .shop-tabs button{color:#888!important}html.force-light input,html.force-light textarea,html.force-light select{background:#fff!important;color:#111!important;border-color:#e5e5e5!important}
-@media (prefers-color-scheme: dark){.shop-tabs button.active{color:#fff!important;border-bottom-color:#fff!important}.shop-tabs button{color:#aaa!important}.schedule-card-actions button{background:#17171b;color:#f5f5f5;border-color:#303036}.pinned-notice{background:linear-gradient(135deg,#2b2410,#151519);border-color:#5e4b16}.notice-pin-btn{background:#3b3210!important;color:#fff!important;border-color:#6f5a19!important}#scheduleFormModal .sheet{background:#1c1c20;color:#fff}#scheduleFormModal input,#scheduleFormModal select{background:#2c2c30;color:#fff;border-color:#3a3a40}}
-
-
-/* USER PATCH 2: theme selector + light-mode readability fixes */
-.theme-choice-title{font-size:1rem;font-weight:900;padding:8px 6px 12px;color:inherit}
-html.force-light .support-faq details{background:#f7f7f8!important;border-color:#e6e6e8!important;color:#111!important}
-html.force-light .support-faq summary{color:#111!important}
-html.force-light .support-faq p{color:#555!important}
-html.force-light .detail-title,html.force-light .detail-body{color:#111!important}
-html.force-light #home .hero-card .primary,html.force-light .primary{background:#f0f0f2!important;color:#111!important;border:1px solid #e5e5e5!important;box-shadow:none!important}
-html.force-light .bottom-nav{background:rgba(255,255,255,.96)!important}
-html.force-light .nav-item,html.force-light .nav-item span{color:#8a8a8f!important;opacity:1!important}
-html.force-light .nav-item.active,html.force-light .nav-item.active span{color:#111!important}
-html.force-light .react button{background:#f3f3f5!important;color:#555!important;border-color:#e2e2e6!important}
-html.force-light .category-panel{background:#fff!important;color:#111!important;border-top:1px solid #ececec!important}
-html.force-light .category-option{background:#fff!important;color:#111!important}
-html.force-light .category-option.active{background:#111!important;color:#fff!important}
-@media (prefers-color-scheme: light){.support-faq details{color:#111}.support-faq summary{color:#111}.support-faq p{color:#555}.nav-item,.nav-item span{color:#8a8a8f}.nav-item.active,.nav-item.active span{color:#111}.react button{background:#f3f3f5;color:#555;border-color:#e2e2e6}}
-
-/* USER PATCH 3: 실제 적용용 강제 라이트/테마 선택 UI 보정 */
-html.force-light{--line:#e5e5e5!important;--card:#f7f7f8!important;--sub:#777!important;--danger:#e63946!important;--blue:#7f91b5!important;color-scheme:light!important;}
-html.force-dark{color-scheme:dark!important;}
-html.force-light body,html.force-light .app{background:#fff!important;color:#111!important;}
-html.force-light header,html.force-light .bottom-nav,html.force-light .fixed-bar,html.force-light .shop-bottom{background:rgba(255,255,255,.97)!important;color:#111!important;border-color:#e6e6e8!important;}
-html.force-light .hero-card,html.force-light .detail-card,html.force-light .card,html.force-light .my-row,html.force-light .cart-row,html.force-light .home-wide-card{background:#f7f7f8!important;color:#111!important;border-color:#e7e7ea!important;}
-html.force-light .hero-card{background:linear-gradient(135deg,#fff,#f3f3f4)!important;}
-html.force-light .primary,html.force-light #home .hero-card .primary{background:#e9e9ec!important;color:#111!important;border:1px solid #dcdce0!important;opacity:1!important;box-shadow:none!important;}
-html.force-light .bottom-nav .nav-item,html.force-light .bottom-nav .nav-item span{color:#777!important;opacity:1!important;}
-html.force-light .bottom-nav .nav-item.active,html.force-light .bottom-nav .nav-item.active span{color:#111!important;opacity:1!important;}
-html.force-light .react button,html.force-light .feed-card .react button{background:#f0f0f2!important;color:#666!important;border-color:#dedee3!important;}
-html.force-light .react button *,html.force-light .feed-card .react button *{color:#666!important;}
-html.force-light .support-faq details{background:#f7f7f8!important;border-color:#e2e2e6!important;color:#111!important;}
-html.force-light .support-faq summary{color:#111!important;opacity:1!important;}
-html.force-light .support-faq p{color:#4d4d52!important;}
-html.force-light .detail-title,html.force-light .detail-body,html.force-light #myDetail,html.force-light #myDetailBox{color:#111!important;}
-html.force-light .meta,html.force-light .cart-meta,html.force-light .community-meta,html.force-light .community-preview,html.force-light .hero-card p,html.force-light .home-wide-meta{color:#777!important;}
-html.force-light .category-modal{background:rgba(0,0,0,.25)!important;}
-html.force-light .category-panel{background:#fff!important;color:#111!important;border-top:1px solid #e6e6e8!important;}
-html.force-light .category-option{background:#fff!important;color:#111!important;}
-html.force-light .category-option.active{background:#111!important;color:#fff!important;}
-html.force-light .select-like{background:#fff!important;color:#111!important;border-color:#e1e1e5!important;}
-html.force-light .input,html.force-light .textarea,html.force-light input,html.force-light textarea,html.force-light select{background:#fff!important;color:#111!important;border-color:#e1e1e5!important;}
-html.force-light .feed-title,html.force-light .name{color:#111!important;}
-@media (prefers-color-scheme: dark){
-  html.force-light .support-faq details{background:#f7f7f8!important;color:#111!important;border-color:#e2e2e6!important;}
-  html.force-light .support-faq summary{color:#111!important;}
-  html.force-light .support-faq p{color:#4d4d52!important;}
-  html.force-light .primary,html.force-light #home .hero-card .primary{background:#e9e9ec!important;color:#111!important;border-color:#dcdce0!important;}
-  html.force-light .bottom-nav .nav-item,html.force-light .bottom-nav .nav-item span{color:#777!important;}
-  html.force-light .bottom-nav .nav-item.active,html.force-light .bottom-nav .nav-item.active span{color:#111!important;}
-  html.force-light .react button,html.force-light .feed-card .react button{background:#f0f0f2!important;color:#666!important;border-color:#dedee3!important;}
-}
-/* 시스템 라이트일 때도 고객센터/버튼/하단/리액션 가독성 고정 */
-@media (prefers-color-scheme: light){
-  .support-faq details{background:#f7f7f8!important;color:#111!important;border-color:#e2e2e6!important;}
-  .support-faq summary{color:#111!important;}
-  .support-faq p{color:#4d4d52!important;}
-  #home .hero-card .primary{background:#e9e9ec!important;color:#111!important;border:1px solid #dcdce0!important;}
-  .bottom-nav .nav-item,.bottom-nav .nav-item span{color:#777!important;opacity:1!important;}
-  .bottom-nav .nav-item.active,.bottom-nav .nav-item.active span{color:#111!important;}
-  .react button,.feed-card .react button{background:#f0f0f2!important;color:#666!important;border-color:#dedee3!important;}
-}
-
-
-/* USER PATCH 4: blog editor light mode + horizontal lock */
-html,body{width:100%;max-width:100%;overflow-x:hidden!important;}
-*{max-width:100%;}
-.app{width:100%;max-width:500px;overflow-x:hidden!important;}
-.view,.sheet,.modal,.category-panel,.month-panel{max-width:100%;overflow-x:hidden!important;}
-.blog-editor,.blog-block,.blog-style-row,.blog-toolbar{max-width:100%;box-sizing:border-box;}
-.blog-editor{overflow:hidden;}
-.blog-toolbar{display:flex;flex-wrap:wrap;}
-.blog-style-row{display:grid!important;grid-template-columns:1fr 1fr;gap:8px;width:100%;overflow:hidden;}
-.blog-style-row input{width:100%!important;min-width:0!important;}
-.blog-block textarea{width:100%!important;max-width:100%!important;display:block;box-sizing:border-box;}
-
-html.force-light .blog-editor{background:#f7f7f8!important;color:#111!important;border-color:#e2e2e6!important;}
-html.force-light .blog-toolbar button{background:#fff!important;color:#111!important;border-color:#dedee3!important;}
-html.force-light .blog-block{background:#fff!important;color:#111!important;border-color:#e2e2e6!important;}
-html.force-light .blog-block textarea{background:#fff!important;color:#111!important;border:1px solid #e2e2e6!important;border-radius:12px!important;padding:10px!important;}
-html.force-light .blog-style-row input{background:#fff!important;color:#111!important;border:1px solid #e2e2e6!important;border-radius:12px!important;}
-html.force-light .blog-remove{background:#eeeeef!important;color:#555!important;}
-html.force-light .blog-img-preview{background:#f1f1f3!important;color:#777!important;}
-html.force-light .modal-field-label{color:#666!important;}
-html.force-light .sheet{background:#fff!important;color:#111!important;}
-html.force-light #modal .primary,html.force-light #saveBtn{background:#111!important;color:#fff!important;border:0!important;}
-html.force-light #modal .light{background:#f0f0f2!important;color:#111!important;border-color:#dedee3!important;}
-@media(max-width:420px){.blog-style-row{grid-template-columns:1fr!important;}}
-
-
-/* ARTIST SELECT + VIEW PERSIST */
-.artist-select{padding:38px 20px 48px;min-height:100vh;background:inherit;color:inherit}
-.artist-select h1{font-size:2.15rem;font-weight:900;letter-spacing:-.06em;margin:20px 0 8px}
-.artist-select .artist-sub{font-size:1rem;color:var(--sub);line-height:1.5;margin-bottom:28px}
-.artist-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 18px;align-items:start}
-.artist-card{width:100%;border:0;background:transparent;color:inherit;border-radius:24px;padding:8px 6px 12px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;box-shadow:none;cursor:pointer;touch-action:manipulation;pointer-events:auto;user-select:none}
-.artist-avatar{width:128px;height:128px;border-radius:50%;background:#eee;display:grid;place-items:center;font-size:2.65rem;overflow:hidden;flex-shrink:0;border:1px solid var(--line)}
-.artist-avatar img{width:100%;height:100%;object-fit:cover}
-.artist-name{font-size:1.18rem;font-weight:900;letter-spacing:-.04em;line-height:1.2;word-break:keep-all}
-.artist-meta{display:none}
-.artist-add{height:58px;border-radius:18px;border:1px dashed var(--line);background:transparent;color:inherit;font-weight:900;font-size:1rem;margin-top:30px;width:100%}
-.artist-actions{display:flex;gap:8px;justify-content:center;width:100%;margin-top:-2px}
-.artist-actions button{height:32px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:inherit;font-size:.78rem;font-weight:900;padding:0 12px}
-.artist-actions button.danger{color:var(--danger)}
-.app.artist-landing header,.app.artist-landing .bottom-nav{display:none!important}
-.app.artist-landing{padding-bottom:0;min-height:100vh}
-.app.artist-landing main{min-height:100vh}
-.app.artist-landing .view#artistSelect{min-height:100vh}
-html.force-light .artist-card,html.force-light .artist-add{background:#fff;color:#111;border-color:#e5e5e5}
-html.force-dark .artist-card{background:transparent;color:#f5f5f5;border-color:#2b2b2f}
-@media(max-width:380px){.artist-avatar{width:112px;height:112px}.artist-grid{gap:24px 12px}.artist-name{font-size:1.08rem}}
-
-/* TAP FIX: artist cards must enter immediately */
-.artist-hit-button{width:100%;border:0;background:transparent;color:inherit;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:0;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none}
-.artist-card{pointer-events:auto!important}
-.artist-hit-button *{pointer-events:none}
-.artist-actions,.artist-actions *{pointer-events:auto!important}
-
-/* HARD FIX: artist selection is a standalone entry screen */
-.app:has(#artistSelect.active) header,
-.app:has(#artistSelect.active) .bottom-nav{display:none!important}
-.app:has(#artistSelect.active){padding-bottom:0!important;min-height:100vh}
-.app:has(#artistSelect.active) main{min-height:100vh}
-#artistSelect.active{min-height:100vh}
-
-
-
-
-
-/* USER PATCH 7: comfortable dark mode + readable membership card */
-html.force-dark{
-  --line:#303038!important;
-  --card:#18181d!important;
-  --sub:#b7b7bf!important;
-  color-scheme:dark!important;
-}
-html.force-dark body{background:#101014!important;color:#f2f2f4!important;}
-html.force-dark .app{background:#111115!important;color:#f2f2f4!important;}
-html.force-dark header,
-html.force-dark .bottom-nav,
-html.force-dark .fixed-bar,
-html.force-dark .shop-bottom{background:rgba(17,17,21,.96)!important;color:#f2f2f4!important;border-color:#2d2d34!important;}
-html.force-dark .hero-card,
-html.force-dark .card,
-html.force-dark .detail-card,
-html.force-dark .my-row,
-html.force-dark .cart-row,
-html.force-dark .home-wide-card,
-html.force-dark .schedule-card,
-html.force-dark .support-faq details{background:#1b1b21!important;color:#f2f2f4!important;border-color:#303038!important;}
-html.force-dark .hero-card{background:linear-gradient(135deg,#1d1d24,#15151a)!important;}
-html.force-dark .meta,
-html.force-dark .cart-meta,
-html.force-dark .community-meta,
-html.force-dark .community-preview,
-html.force-dark .hero-card p,
-html.force-dark .home-wide-meta,
-html.force-dark .member-sub{color:#b7b7bf!important;}
-html.force-dark .membership-detail-page,
-html.force-dark #membership,
-html.force-dark #membershipBox,
-html.force-dark .member-card-wrap{background:#111115!important;color:#f2f2f4!important;}
-html.force-dark .membership-card .backface{background:#e8e8f1!important;color:#18181d!important;box-shadow:0 24px 44px rgba(0,0,0,.32)!important;}
-html.force-dark .membership-card .backface:before{background:#d6d6e1!important;border-right:1px solid #c7c7d2!important;}
-html.force-dark .membership-card .back-inner{color:#18181d!important;}
-html.force-dark .membership-card .label{color:#4b4b55!important;}
-html.force-dark .membership-card .big{color:#111!important;}
-html.force-dark .membership-card .front{color:#5d5d68!important;}
-html.force-dark .member-card-dot{background:#2f2f38!important;}
-html.force-dark .member-title{color:#f2f2f4!important;}
-html.force-dark .member-detail-btn{background:#8fa2cc!important;color:#fff!important;}
-
-@media (prefers-color-scheme: dark){
-  html:not(.force-light) body{background:#101014!important;color:#f2f2f4!important;}
-  html:not(.force-light) .app{background:#111115!important;color:#f2f2f4!important;}
-  html:not(.force-light) header,
-  html:not(.force-light) .bottom-nav,
-  html:not(.force-light) .fixed-bar,
-  html:not(.force-light) .shop-bottom{background:rgba(17,17,21,.96)!important;color:#f2f2f4!important;border-color:#2d2d34!important;}
-  html:not(.force-light) .hero-card,
-  html:not(.force-light) .card,
-  html:not(.force-light) .detail-card,
-  html:not(.force-light) .my-row,
-  html:not(.force-light) .cart-row,
-  html:not(.force-light) .home-wide-card,
-  html:not(.force-light) .schedule-card,
-  html:not(.force-light) .support-faq details{background:#1b1b21!important;color:#f2f2f4!important;border-color:#303038!important;}
-  html:not(.force-light) .hero-card{background:linear-gradient(135deg,#1d1d24,#15151a)!important;}
-  html:not(.force-light) .membership-detail-page,
-  html:not(.force-light) #membership,
-  html:not(.force-light) #membershipBox,
-  html:not(.force-light) .member-card-wrap{background:#111115!important;color:#f2f2f4!important;}
-  html:not(.force-light) .membership-card .backface{background:#e8e8f1!important;color:#18181d!important;box-shadow:0 24px 44px rgba(0,0,0,.32)!important;}
-  html:not(.force-light) .membership-card .backface:before{background:#d6d6e1!important;border-right:1px solid #c7c7d2!important;}
-  html:not(.force-light) .membership-card .back-inner{color:#18181d!important;}
-  html:not(.force-light) .membership-card .label{color:#4b4b55!important;}
-  html:not(.force-light) .membership-card .big{color:#111!important;}
-  html:not(.force-light) .member-title{color:#f2f2f4!important;}
-  html:not(.force-light) .member-sub{color:#b7b7bf!important;}
-}
-
-
-/* FINAL CLICK FIX + COMMUNITY GAP FIX */
-#community{padding-top:0!important;}
-#community .community-tabs{top:60px!important;margin-top:0!important;}
-.app.artist-landing header,.app.artist-landing .bottom-nav{display:none!important;}
-.artist-hit-button{position:relative!important;z-index:5!important;}
-.artist-actions{position:relative!important;z-index:6!important;}
-
-/* BUTTON TAP HARD FIX */
-button,[data-action],.nav-item,.artist-card,.artist-hit-button{position:relative;z-index:5;pointer-events:auto!important;touch-action:manipulation;}
-.artist-hit-button *{pointer-events:none!important;}
-.content-head{position:relative;z-index:6;}
-
-</style>
+    /* Glassmorphism */
+    .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    .dark .glass { background: rgba(15, 23, 42, 0.8); }
+  </style>
 </head>
-<body>
-<div class="app">
-<header>
-  <div class="logo" onclick="go('home')">ATEEZ</div>
-  <div class="header-actions">
-    <button onclick="openAlerts()">🔔<span class="dot" id="alertDot"></span></button>
-    <button onclick="go('schedule')">📅</button>
-    <button onclick="openCart()">🛒</button>
-    <button class="profile-mini" onclick="go('my')" id="topProfile">👤</button>
-  </div>
-</header>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
 
-<main>
-<section class="view active" id="artistSelect">
-  <div class="artist-select">
-    <h1>ARTIST</h1>
-    <div class="artist-sub">입장할 아티스트 플랫폼을 선택해 주세요.</div>
-    <div class="artist-grid" id="artistGrid"></div>
-    <button class="artist-add" onclick="addArtist()">＋ 아티스트 추가</button>
-  </div>
-</section>
-<section class="view" id="home">
-  <div class="hero"><div class="hero-card"><h1>GOLDEN<br>HOUR</h1><p id="welcome">ATEEZ Official Platform</p><button class="primary" onclick="openMembership()">멤버십 가입하기</button></div></div>
-  <div class="section"><div class="section-title">LATEST CONTENTS</div><div class="grid" id="homeGrid"></div></div>
-</section>
+  <div id="app" class="max-w-md mx-auto min-h-screen relative shadow-2xl bg-white dark:bg-slate-800 pb-20 overflow-hidden flex flex-col">
+    
+    <header class="glass sticky top-0 z-30 px-5 py-4 flex items-center justify-between border-b border-gray-100 dark:border-slate-700">
+      <div class="flex items-center gap-2">
+        <i class="ph-fill ph-star-four text-brand-500 text-xl"></i>
+        <h1 class="font-bold text-lg tracking-tight">Archive</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        <button @click="toggleDarkMode" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition">
+          <i :class="isDark ? 'ph ph-sun' : 'ph ph-moon'" class="text-xl"></i>
+        </button>
+        <button @click="exportData" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition" title="JSON Export">
+          <i class="ph ph-download-simple text-xl"></i>
+        </button>
+        <label class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition cursor-pointer" title="JSON Import">
+          <i class="ph ph-upload-simple text-xl"></i>
+          <input type="file" accept=".json" @change="importData" class="hidden">
+        </label>
+      </div>
+    </header>
 
-<section class="view" id="talk"><div class="member-strip" id="memberStrip"></div><div class="feed" id="talkFeed"></div></section>
-<section class="view" id="postDetail"><div id="postDetailBox"></div></section>
-
-<section class="view" id="contents">
-  <div class="content-tabs-clean"><button onclick="openBoard('notice')">NOTICE</button><button onclick="openBoard('event')">EVENT</button><button onclick="openBoard('broadcast')">공방공지</button></div>
-  <div id="contentSections"></div>
-</section>
-<section class="view" id="contentAll"><div id="contentAllBox"></div></section>
-<section class="view" id="board"><div id="boardBox"></div></section>
-<section class="view" id="boardDetail"><div id="boardDetailBox"></div></section>
-
-<section class="view" id="community">
-  <div class="community-tabs">
-    <button class="active" data-community="notice" onclick="setCommunityTab('notice',this)">공지</button>
-    <button data-community="magazine" onclick="setCommunityTab('magazine',this)">매거진</button>
-  </div>
-  <div class="community-top" id="communityTop"></div>
-  <div class="community-list" id="communityList"></div>
-</section>
-<section class="view" id="noticeDetail"><div id="noticeDetailBox"></div></section>
-
-
-<section class="view" id="schedule">
-  <div class="schedule-wrap">
-    <div class="schedule-head">
-      <button class="schedule-month" id="scheduleMonthBtn" onclick="openMonthPicker()">5월, 2026⌄</button>
-      <div class="schedule-actions">
-        <button onclick="openAddSchedule()">＋ 스케줄</button>
-        <button id="scheduleToggleBtn" onclick="toggleScheduleMode()">📅</button>
+    <div class="px-5 py-3 bg-white dark:bg-slate-800 z-20 sticky top-[65px]">
+      <div class="relative">
+        <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+        <input v-model="searchQuery" type="text" placeholder="스케줄, 멤버, 태그 검색..." 
+               class="w-full bg-gray-100 dark:bg-slate-700 text-sm rounded-2xl py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+        <i v-if="searchQuery" @click="searchQuery = ''" class="ph-fill ph-x-circle absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"></i>
       </div>
     </div>
-    <div id="scheduleBox"></div>
-  </div>
-  <div class="schedule-filters">
-    <button class="active">전체</button><button><span class="schedule-filter-dot dot-tv"></span>TV</button><button><span class="schedule-filter-dot dot-yt"></span>YouTube</button><button><span class="schedule-filter-dot dot-radio"></span>RADIO</button><button><span class="schedule-filter-dot dot-fan"></span>FAN</button>
-  </div>
-</section>
 
-<section class="view" id="shop"><div class="section-title" style="padding:18px 20px 0"><span>SHOP</span><button class="primary" onclick="openAddProduct()">+ 상품 추가</button></div><div class="hero"><div class="hero-card"><h1>OUR ETERNAL<br>STAR ATINY</h1><p>Official Membership & Goods</p></div></div><div class="shop-tabs" id="shopTabs"></div><div class="section"><div class="grid" id="shopGrid"></div></div></section>
-<section class="view" id="shopDetail"><div id="shopDetailBox"></div></section>
-<section class="view" id="cart"><div class="section"><div class="section-title">장바구니</div><div class="point-badge" id="cartPointBadge" style="margin:0 0 18px">보유 포인트 0P</div><div id="cartList"></div></div></section>
-<section class="view" id="alerts"><div class="section"><div class="section-title">알림 <button class="btn danger" onclick="clearAlerts()">초기화</button></div><div id="alertList"></div></div></section>
-
-<section class="view" id="my">
-  <div class="hero"><div class="hero-card"><h1>MY<br>PAGE</h1><p id="myNick">닉네임 미설정</p><div class="point-badge" id="pointBadge">0P</div><button class="primary" onclick="openProfile()">프로필 관리</button></div></div>
-  <div class="my-menu">
-    <div class="my-row" onclick="openMembership()">내 멤버십 <span>›</span></div>
-    <div class="my-row" onclick="openOrders()">주문 내역 <span>›</span></div>
-    <div class="my-row" onclick="openMyPosts()">내가 쓴 글 <span>›</span></div>
-    <div class="my-row" onclick="openProfile()">내 정보 관리 <span>›</span></div>
-    <div class="my-row" onclick="openThemeSettings()">테마 <span id="themeLabel">시스템</span></div>
-    <div class="my-row" onclick="openSupport()">고객센터 <span>›</span></div>
-    <div class="my-row" style="color:var(--danger)" onclick="logout()">로그아웃 <span>›</span></div>
-  </div>
-</section>
-<section class="view" id="myDetail"><div id="myDetailBox"></div></section>
-<section class="view" id="membership"><div id="membershipBox"></div></section>
-</main>
-
-<button class="fab" id="fab" onclick="openAddTalk()">＋</button>
-<nav class="bottom-nav">
-<button class="nav-item active" data-page="home" onclick="go('home')">🏠<span>HOME</span></button>
-<button class="nav-item" data-page="talk" onclick="go('talk')">💬<span>TALK</span></button>
-<button class="nav-item" data-page="contents" onclick="go('contents')">▶️<span>CONTENTS</span></button>
-<button class="nav-item" data-page="shop" onclick="go('shop')">🛍️<span>SHOP</span></button>
-<button class="nav-item" data-page="community" onclick="go('community')">👥<span>COMMUNITY</span></button>
-</nav>
-</div>
-
-<div class="menu" id="menu"></div>
-<div class="modal" id="scheduleFormModal"><div class="sheet">
-<h3 id="scheduleFormTitle">스케줄 추가</h3>
-<div class="modal-field-label">날짜</div><input class="input" id="sfDate" type="date">
-<div class="modal-field-label">스케줄 멤버</div><select class="input" id="sfMember"><option value="">전체/공통</option></select>
-<div class="modal-field-label">스케줄 이름</div><input class="input" id="sfTitle" placeholder="스케줄 이름">
-<div class="modal-field-label">스케줄 카테고리</div><select class="input" id="sfCat"><option>TV</option><option>YouTube</option><option>RADIO</option><option>FAN</option><option>EVENT</option><option>ETC</option></select>
-<div class="modal-field-label">시간</div><input class="input" id="sfTime" placeholder="종일 / 18:00" value="종일">
-<div style="display:flex;gap:10px"><button class="btn primary" onclick="saveScheduleForm()">저장</button><button class="btn light" onclick="closeScheduleForm()">취소</button></div>
-</div></div>
-
-<div class="category-modal" id="categoryModal"><div class="category-panel" id="categoryPanel"></div></div>
-<div class="month-modal" id="monthModal"><div class="month-panel" id="monthPanel"></div></div>
-<div class="modal" id="modal"><div class="sheet">
-<h3 id="modalTitle">작성</h3>
-<div id="thumbBlock"><div class="preview" id="thumbPreview">이미지 없음</div><button class="btn light" style="width:100%;margin-bottom:10px" onclick="pickThumb()">이미지 첨부</button></div>
-<div id="profileBlock" style="display:none"><div class="preview" id="profilePreview">프로필 사진 없음</div><button class="btn light" style="width:100%;margin-bottom:10px" onclick="pickProfilePhoto()">프로필 사진 첨부</button></div>
-<div id="pickerArea" style="display:none"></div><div id="categoryFields" style="display:none"><div class="modal-field-label" id="memberLabel">멤버 카테고리</div><button type="button" class="select-like" id="memberCategorySelect" onclick="openSelectModal('member')"><span id="memberCategoryText">선택</span><span>⌄</span></button><div class="modal-field-label" id="postLabel">글 카테고리</div><button type="button" class="select-like" id="postCategorySelect" onclick="openSelectModal('post')"><span id="postCategoryText">예능</span><span>⌄</span></button><div id="visibilityRow"><div class="modal-field-label">공개 설정</div><button type="button" class="select-like" id="visibilitySelect" onclick="openSelectModal('visibility')"><span id="visibilityText">전체공개</span><span>⌄</span></button></div></div><input class="input" id="mTitle" placeholder="제목">
-<textarea class="textarea" id="mBody" placeholder="내용"></textarea>
-<div class="blog-editor" id="blogEditor"><div class="modal-field-label">본문 블록</div><div class="blog-toolbar"><button type="button" onclick="addBlogText()">+ 텍스트</button><button type="button" onclick="addBlogImage()">+ 사진</button></div><div id="blogBlocks"></div></div>
-<input class="input" id="mMeta" placeholder="메타/가격/전화번호">
-<div style="display:flex;gap:10px"><button class="btn primary" id="saveBtn" onclick="saveModal()">저장</button><button class="btn light" onclick="closeModal()">취소</button></div>
-</div></div>
-
-<script>
-const firebaseConfig={apiKey:"AIzaSyAA6mbdYfLrrgCJjN47PX91_mU7I53RiBs",authDomain:"site-c67b4.firebaseapp.com",projectId:"site-c67b4",storageBucket:"site-c67b4.firebasestorage.app",messagingSenderId:"744761377245",appId:"1:744761377245:web:3ddaee14f184716eeef634"};
-const CLOUDINARY_CLOUD='dbljkloal',CLOUDINARY_PRESET='clowofficial';
-const app=null, db=null;
-
-const LS=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');return Array.isArray(f)?(Array.isArray(v)&&v.length?v:f):(v||f)}catch(e){return f}};
-const defaultMembers=[{id:'hong',name:'홍중',photo:'🎤'},{id:'seong',name:'성화',photo:'🌟'},{id:'yunho',name:'윤호',photo:'🐶'},{id:'yeo',name:'여상',photo:'✨'},{id:'san',name:'산',photo:'⛰️'},{id:'mingi',name:'민기',photo:'🐥'},{id:'woo',name:'우영',photo:'🦊'},{id:'jong',name:'종호',photo:'🍎'}];
-const defaultProducts=[{id:80,name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',body:'1년 멤버십 상품입니다.',membership:true,cat:'MEMBERSHIP'},{id:79,name:'GOLDEN HOUR Pt.4 Album',price:'18,000원',thumb:'💿',body:'앨범 상품 상세페이지입니다.',cat:'ALBUM'},{id:78,name:'ANITEEZ Figure Set',price:'35,000원',thumb:'🧸',body:'굿즈 상품입니다.',cat:'PRODUCTS'}];
-const defaultPosts=[{id:300,type:'talk',member:'hong',title:'우리 티니들 간바떼!💪',body:'오늘도 힘내요.',thumb:'🎤',likes:2421,comments:3,author:'ME',created:'방금 작성'},{id:299,type:'talk',member:'seong',title:'오늘의 기록',body:'작은 순간도 나누고 싶어서 올려요.',thumb:'🌟',likes:10712,comments:1,author:'ME',created:'1일 전'},{id:298,type:'content',cat:'golden',title:'Adrenaline MAX ⚡ 보이스 비하인드',body:'비하인드 영상',thumb:'🎬',author:'ME',created:'1일 전'},{id:297,type:'content',cat:'video',title:"민기 'Dinero' Production Behind",body:'YouTube',thumb:'🎥',author:'ME',created:'2일 전'}];
-const defaultNotices=[{id:200,title:'편지 전달 주소 안내',body:'팬레터 전달 주소 및 유의사항 안내입니다.',meta:'KQ엔터테인먼트 · 3년 전'},{id:199,title:'오피셜 플랫폼 오픈 안내',body:'ATEEZ 공식 플랫폼이 오픈되었습니다.',meta:'KQ엔터테인먼트 · 3년 전'}];
-const defaultBoards=[{id:150,cat:'event',title:'다정 토끼 성화의 날 🐰🌸',body:'다정 토끼 성화의 생일을 축하합니다🎉\n\n성화의 생일을 맞아 이벤트를 진행합니다.',thumb:'🐰',date:'2026.04.02'},{id:149,cat:'broadcast',title:"260215(일) SBS '인기가요' 사전녹화 안내",body:'사전녹화 및 생방송 참여 명단 안내입니다.',thumb:'💚',date:'3달 전'},{id:148,cat:'notice',title:'THE WORLD EP.FIN : WILL 발매 안내',body:'안녕하세요.\nKQ엔터테인먼트입니다.\n\n발매 안내드립니다.',date:'2024.04.21'}];
-const defaultSchedules=[{date:'2026-05-07',title:'전주국제영화제 <할루시네이션> GV',member:'홍중',time:'종일',cat:'FAN'},{date:'2026-05-17',title:'ASEA 2026',member:'',time:'종일',cat:'TV'}];
-let artists=LS('artists',[{id:'clow',name:'CLOW',photo:'C'},{id:'kinon',name:'KINON',photo:'K'},{id:'aven',name:'AVEN',photo:'A'}]);
-let currentArtist=localStorage.getItem('currentArtist')||'';
-const artistKey=(k)=>currentArtist?`artist_${currentArtist}_${k}`:k;
-
-let members=LS('members',defaultMembers);
-let profile=LS('profile',{nickname:'',photo:'',name:'',birth:'',phone:''});
-let membership=LS('membership',null),orders=LS('orders',[]),cart=LS('cart',[]),alerts=LS('alerts',[]),comments=LS('comments',[]),points=Number(localStorage.getItem('points')||0);
-let themeMode=localStorage.getItem('themeMode')||localStorage.getItem('theme')||'system';
-let editingScheduleIndex=null;
-let products=LS('products',defaultProducts);
-let posts=LS('posts',defaultPosts);
-let notices=LS('notices',defaultNotices);
-let boards=LS('boards',defaultBoards);
-let contentCats=LS('contentCats',[{id:'golden',name:'GOLDEN HOUR'},{id:'video',name:'VIDEO'},{id:'atiny',name:'ATINY ZONE'},{id:'log',name:'LOG'}]);
-
-let currentMember=null,shopCat='ALL',modalMode='',editId=null,tempImg='',tempProfile='',selectedProductCat='PRODUCTS',selectedPostMember='',blogBlocks=[];
-
-function save(){
-  localStorage.setItem('themeMode',themeMode);
-  localStorage.setItem('artists',JSON.stringify(artists));
-  localStorage.setItem('currentArtist',currentArtist||'');
-  if(!currentArtist)return;
-  localStorage.setItem(artistKey('members'),JSON.stringify(members));
-  localStorage.setItem(artistKey('profile'),JSON.stringify(profile));
-  localStorage.setItem(artistKey('membership'),JSON.stringify(membership));
-  localStorage.setItem(artistKey('orders'),JSON.stringify(orders));
-  localStorage.setItem(artistKey('cart'),JSON.stringify(cart));
-  localStorage.setItem(artistKey('alerts'),JSON.stringify(alerts));
-  localStorage.setItem(artistKey('comments'),JSON.stringify(comments));
-  localStorage.setItem(artistKey('products'),JSON.stringify(products));
-  localStorage.setItem(artistKey('posts'),JSON.stringify(posts));
-  localStorage.setItem(artistKey('notices'),JSON.stringify(notices));
-  localStorage.setItem(artistKey('boards'),JSON.stringify(boards));
-  localStorage.setItem(artistKey('contentCats'),JSON.stringify(contentCats));
-  localStorage.setItem(artistKey('points'),String(points));
-  localStorage.setItem(artistKey('schedules'),JSON.stringify(scheduleData));
-}
-function loadArtistData(){
-  members=LS(artistKey('members'), currentArtist==='ateez'?LS('members',defaultMembers):defaultMembers);
-  profile=LS(artistKey('profile'),{nickname:'',photo:'',name:'',birth:'',phone:''});
-  membership=LS(artistKey('membership'),null); orders=LS(artistKey('orders'),[]); cart=LS(artistKey('cart'),[]); alerts=LS(artistKey('alerts'),[]); comments=LS(artistKey('comments'),[]);
-  points=Number(localStorage.getItem(artistKey('points'))||0);
-  products=LS(artistKey('products'), currentArtist==='ateez'?LS('products',defaultProducts):defaultProducts.map(x=>({...x,id:x.id+Math.floor(Math.random()*9)})));
-  posts=LS(artistKey('posts'), currentArtist==='ateez'?LS('posts',defaultPosts):[]);
-  notices=LS(artistKey('notices'), currentArtist==='ateez'?LS('notices',defaultNotices):[{id:uid(),title:'플랫폼 오픈 안내',body:'새 아티스트 플랫폼이 오픈되었습니다.',meta:'관리자 · 방금',pinned:true}]);
-  boards=LS(artistKey('boards'), currentArtist==='ateez'?LS('boards',defaultBoards):[]);
-  contentCats=LS(artistKey('contentCats'),[{id:'golden',name:'GOLDEN HOUR'},{id:'video',name:'VIDEO'},{id:'atiny',name:'ATINY ZONE'},{id:'log',name:(currentArtistObj()?.name||'ARTIST')+'_log'}]);
-  scheduleData=LS(artistKey('schedules'), currentArtist==='ateez'?LS('schedules',defaultSchedules):[]);
-  scheduleData=scheduleData.map(x=>x.id?x:{...x,id:uid()+Math.floor(Math.random()*999)});
-  currentMember=null; shopCat='ALL'; selectedScheduleDate='';
-}
-
-const newest=a=>[...a].sort((x,y)=>(y.id||0)-(x.id||0));
-const media=v=>v&&String(v).startsWith('http')?`<img src="${v}">`:(v||'');
-const uid=()=>Date.now()+Math.floor(Math.random()*999);
-const code=()=>{const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ';let s='';for(let i=0;i<6;i++){s+=chars[Math.floor(Math.random()*chars.length)]}return s};
-const fmt=d=>d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
-
-const priceNum=v=>Number(String(v||'0').replace(/[^0-9]/g,''))||0;
-const money=n=>Number(n||0).toLocaleString('ko-KR')+'원';
-function payPhysicalProduct(item,qty=1){
-  const total=priceNum(item.price)*qty;
-  let use=0;
-  if(points>0 && total>0){
-    const ok=confirm(`보유 포인트 ${points.toLocaleString('ko-KR')}P를 사용할까?\n멤버십에는 사용 불가하고 실물 상품에만 사용돼.`);
-    if(ok) use=Math.min(points,total);
-  }
-  const final=Math.max(0,total-use);
-  points-=use;
-  const earn=Math.floor(final*0.01);
-  points+=earn;
-  orders.unshift({id:uid(),name:item.name,price:item.price,thumb:item.thumb,qty,date:new Date().toLocaleString(),usedPoint:use,earnedPoint:earn,paid:final});
-  save();
-  alert(`결제가 완료되었습니다.\n사용 포인트: ${use.toLocaleString('ko-KR')}P\n적립 포인트: ${earn.toLocaleString('ko-KR')}P`);
-}
-const scheduleNow=new Date();
-let scheduleYear=new Date().getFullYear(),scheduleMonth=new Date().getMonth()+1,scheduleMode='calendar',selectedScheduleDate='';
-let scheduleData=LS('schedules',defaultSchedules);
-scheduleData=scheduleData.map(x=>x.id?x:{...x,id:uid()+Math.floor(Math.random()*999)});
-const weekNames=['일','월','화','수','목','금','토'];
-const pad2=n=>String(n).padStart(2,'0');
-const dateKey=(y,m,d)=>`${y}-${pad2(m)}-${pad2(d)}`;
-const todayKey=()=>dateKey(scheduleNow.getFullYear(),scheduleNow.getMonth()+1,scheduleNow.getDate());
-function scheduleItems(){return scheduleData.filter(x=>{let d=new Date(x.date+'T00:00:00');return d.getFullYear()===scheduleYear && d.getMonth()+1===scheduleMonth})}
-function scheduleItemsByDate(date){return scheduleData.filter(x=>x.date===date)}
-function scheduleDateInfo(date){let d=new Date(date+'T00:00:00');return {day:d.getDate(),week:weekNames[d.getDay()],full:date.replaceAll('-','.')+'.'}}
-function renderScheduleCard(it){return `<div class="schedule-card"><div class="schedule-card-title"><span class="schedule-dot"></span>${it.title}</div><div class="schedule-card-meta">${it.member?it.member+'<br>':''}${it.time||'종일'}</div><div class="schedule-card-actions"><button class="schedule-mini-btn" onclick="editSchedule(${it.id})">수정</button><button class="schedule-mini-btn danger" onclick="deleteSchedule(${it.id})">삭제</button></div></div>`}
-function renderSchedule(){
-  const btn=document.getElementById('scheduleMonthBtn'), box=document.getElementById('scheduleBox'), tbtn=document.getElementById('scheduleToggleBtn'); if(!btn||!box)return;
-  btn.textContent=`${scheduleMonth}월, ${scheduleYear}⌄`; if(tbtn)tbtn.textContent=scheduleMode==='calendar'?'📅':'🗓️';
-  const items=scheduleItems();
-  if(selectedScheduleDate){const sd=new Date(selectedScheduleDate+'T00:00:00');if(sd.getFullYear()!==scheduleYear||sd.getMonth()+1!==scheduleMonth)selectedScheduleDate=''}
-  if(scheduleMode==='list'){
-    box.innerHTML=`<div class="schedule-list-view">${items.map(it=>{let inf=scheduleDateInfo(it.date);return `<div class="schedule-list-head"><div class="schedule-list-date">${inf.day}일 ${inf.week}요일</div><div class="schedule-list-full">${inf.full}</div></div>${renderScheduleCard(it)}`}).join('')||'<div class="meta">등록된 스케줄이 없습니다.</div>'}<div class="schedule-nav"><button onclick="moveScheduleMonth(-1)">이전달</button><button onclick="moveScheduleMonth(1)">다음달</button></div></div>`;return;
-  }
-  const first=new Date(scheduleYear,scheduleMonth-1,1), last=new Date(scheduleYear,scheduleMonth,0), blanks=first.getDay(), tKey=todayKey();
-  let cells=[];for(let i=0;i<blanks;i++)cells.push('<div class="schedule-day blank"></div>');
-  for(let d=1;d<=last.getDate();d++){let date=dateKey(scheduleYear,scheduleMonth,d);let ev=items.find(x=>x.date===date);let cls=[date===tKey?'today':'',date===selectedScheduleDate?'selected':''].filter(Boolean).join(' ');cells.push(`<button type="button" class="schedule-day ${cls}" onclick="selectScheduleDate('${date}')"><div class="schedule-num ${ev?'has-event':''}">${d}일</div>${ev?`<div class="schedule-event">${ev.title}</div>`:''}</button>`)}
-  let selectedHtml='';
-  if(selectedScheduleDate){let inf=scheduleDateInfo(selectedScheduleDate), dayItems=scheduleItemsByDate(selectedScheduleDate);selectedHtml=`<div class="schedule-selected"><div class="schedule-selected-head"><div class="schedule-selected-title">${inf.day}일 ${inf.week}요일</div><div class="schedule-selected-date">${inf.full}</div></div>${dayItems.map(renderScheduleCard).join('')||'<div class="meta">이 날 등록된 스케줄이 없습니다.</div>'}</div>`}
-  box.innerHTML=`<div class="schedule-week"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div><div class="schedule-grid">${cells.join('')}</div>${selectedHtml}`;
-}
-window.selectScheduleDate=(date)=>{selectedScheduleDate=selectedScheduleDate===date?'':date;renderSchedule()}
-window.toggleScheduleMode=()=>{scheduleMode=scheduleMode==='calendar'?'list':'calendar';renderSchedule()}
-window.moveScheduleMonth=(n)=>{scheduleMonth+=n;if(scheduleMonth<1){scheduleMonth=12;scheduleYear--}if(scheduleMonth>12){scheduleMonth=1;scheduleYear++}selectedScheduleDate='';renderSchedule()}
-window.changeScheduleYear=(n)=>{scheduleYear+=n;openMonthPicker()}
-window.selectScheduleMonth=(m)=>{scheduleMonth=m;selectedScheduleDate='';document.getElementById('monthModal').classList.remove('open');renderSchedule()}
-window.openMonthPicker=()=>{const modal=document.getElementById('monthModal'),panel=document.getElementById('monthPanel');panel.innerHTML=`<div class="month-panel-top"><button onclick="changeScheduleYear(-1)">‹</button><div class="month-year">${scheduleYear}</div><button onclick="changeScheduleYear(1)">›</button><button onclick="document.getElementById('monthModal').classList.remove('open')">×</button></div><div class="month-grid">${Array.from({length:12},(_,i)=>`<button class="month-option ${scheduleMonth===i+1?'active':''}" onclick="selectScheduleMonth(${i+1})">${i+1}월</button>`).join('')}</div>`;modal.classList.add('open')}
-window.openAddSchedule=()=>openScheduleForm(null)
-window.openScheduleForm=(idx=null)=>{
-  editingScheduleIndex=idx;
-  const item=idx===null?null:scheduleData[idx];
-  const modal=document.getElementById('scheduleFormModal');
-  document.getElementById('scheduleFormTitle').textContent=idx===null?'스케줄 추가':'스케줄 수정';
-  const memberSel=document.getElementById('sfMember');
-  memberSel.innerHTML='<option value="">전체/공통</option>'+members.map(m=>`<option value="${m.name}">${m.name}</option>`).join('');
-  document.getElementById('sfDate').value=(item&&item.date)||selectedScheduleDate||dateKey(scheduleYear,scheduleMonth,1);
-  document.getElementById('sfMember').value=(item&&item.member)||'';
-  document.getElementById('sfTitle').value=(item&&item.title)||'';
-  document.getElementById('sfCat').value=(item&&item.cat)||'TV';
-  document.getElementById('sfTime').value=(item&&item.time)||'종일';
-  modal.classList.add('open');
-}
-window.closeScheduleForm=()=>document.getElementById('scheduleFormModal').classList.remove('open')
-window.saveScheduleForm=()=>{
-  const date=document.getElementById('sfDate').value;
-  const member=document.getElementById('sfMember').value;
-  const title=document.getElementById('sfTitle').value.trim();
-  const cat=document.getElementById('sfCat').value;
-  const time=document.getElementById('sfTime').value.trim()||'종일';
-  if(!date||!title){alert('날짜와 스케줄 이름을 입력해줘.');return}
-  const item={date,title,member,time,cat};
-  if(editingScheduleIndex===null) scheduleData.push({...item,id:uid()}); else scheduleData[editingScheduleIndex]={...item,id:scheduleData[editingScheduleIndex]?.id||uid()};
-  const d=new Date(date+'T00:00:00');scheduleYear=d.getFullYear();scheduleMonth=d.getMonth()+1;selectedScheduleDate=date;
-  closeScheduleForm();save();renderSchedule();
-}
-window.editSchedule=(id)=>{const idx=scheduleData.findIndex(x=>x.id===id); if(idx>=0)openScheduleForm(idx)}
-window.deleteSchedule=(id)=>{const idx=scheduleData.findIndex(x=>x.id===id);if(idx<0)return;if(confirm('스케줄을 삭제할까요?')){const it=scheduleData[idx];scheduleData.splice(idx,1);if(it&&selectedScheduleDate===it.date&&scheduleItemsByDate(it.date).length===0)selectedScheduleDate='';save();renderSchedule();}}
-document.addEventListener('click',e=>{if(e.target.id==='monthModal')e.target.classList.remove('open')});
-
-
-const createdTime=p=>p.createdAt||p.created||'';
-function timeAgo(v){
-  if(!v) return '방금';
-  const d=new Date(v);
-  if(isNaN(d.getTime())) return String(v).replace(' 작성','');
-  const diff=Math.max(0,Date.now()-d.getTime());
-  const m=Math.floor(diff/60000),h=Math.floor(m/60),day=Math.floor(h/24),mon=Math.floor(day/30),yr=Math.floor(day/365);
-  if(m<1)return '방금'; if(m<60)return `${m}분 전`; if(h<24)return `${h}시간 전`; if(day<30)return `${day}일 전`; if(mon<12)return `${mon}개월 전`; return `${yr}년 전`;
-}
-function esc(v){return String(v||'').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));}
-function linkify(v){return String(v||'').replace(/(https?:\/\/[^\s]+)/g,'<span class="linkish">$1</span>')}
-function blockStyle(b){let st='';if(b.color)st+=`color:${esc(b.color)};`;if(b.bg)st+=`background:${esc(b.bg)};`;return st}
-function renderBlocks(p,mode='content'){
-  const blocks=Array.isArray(p.blocks)?p.blocks:[];
-  if(!blocks.length)return `<div class="${mode==='shop'?'shop-rich-text':'detail-body'}">${linkify(esc(p.body||''))}</div>`;
-  if(mode==='shop')return `<div class="shop-rich-body">${blocks.map(b=>b.type==='image'?`<div class="shop-rich-image">${media(b.value)}</div>`:`<div class="shop-rich-text ${b.bg?'has-bg':''}" style="${blockStyle(b)}">${linkify(esc(b.value))}</div>`).join('')}</div>`;
-  return `<div class="content-article">${blocks.map(b=>b.type==='image'?`<div class="content-article-img">${media(b.value)}</div>`:`<div class="content-article-text" style="${blockStyle(b)}">${linkify(esc(b.value))}</div>`).join('')}</div>`;
-}
-function renderBlogEditor(){
-  const box=document.getElementById('blogBlocks'); if(!box)return;
-  box.innerHTML=blogBlocks.map((b,i)=>`<div class="blog-block">${b.type==='image'?`<div class="blog-img-preview">${b.value?media(b.value):'이미지 없음'}</div><button type="button" class="blog-remove" onclick="replaceBlogImage(${i})">이미지 변경</button>`:`<textarea oninput="blogBlocks[${i}].value=this.value" placeholder="텍스트 입력">${esc(b.value)}</textarea><div class="blog-style-row"><input placeholder="글씨색 예: #b33420" value="${esc(b.color||'')}" oninput="blogBlocks[${i}].color=this.value"><input placeholder="배경색 예: #ffd35a" value="${esc(b.bg||'')}" oninput="blogBlocks[${i}].bg=this.value"></div>`}<button type="button" class="blog-remove" onclick="removeBlogBlock(${i})">삭제</button></div>`).join('')||'<div class="meta">텍스트/사진 블록을 원하는 순서대로 추가해 주세요. 텍스트 블록마다 글씨색/배경색 지정 가능.</div>';
-}
-function collectBlogBlocks(){return blogBlocks.map(b=>({...b,value:String(b.value||'').trim(),color:String(b.color||'').trim(),bg:String(b.bg||'').trim()})).filter(b=>b.value)}
-window.addBlogText=()=>{blogBlocks.push({type:'text',value:''});renderBlogEditor()}
-window.addBlogImage=async()=>{let u=await upload();if(u){blogBlocks.push({type:'image',value:u});renderBlogEditor()}}
-window.replaceBlogImage=async i=>{let u=await upload();if(u){blogBlocks[i].value=u;renderBlogEditor()}}
-window.removeBlogBlock=i=>{blogBlocks.splice(i,1);renderBlogEditor()}
-
-
-function currentArtistObj(){return artists.find(a=>a.id===currentArtist)||null}
-function syncArtistLandingChrome(){
-  const app=document.querySelector('.app');
-  const isLanding=!!document.getElementById('artistSelect')?.classList.contains('active');
-  if(app)app.classList.toggle('artist-landing',isLanding);
-  const logo=document.querySelector('.logo');
-  if(logo)logo.textContent=isLanding?'ARTIST':(currentArtistObj()?.name||'ATEEZ');
-  const fab=document.getElementById('fab');
-  if(fab && isLanding)fab.style.display='none';
-}
-
-function bindArtistGridTap(){
-  // 개별 버튼 onclick 방식으로 처리해서 모바일 Safari/GitHub Pages에서도 바로 반응하게 함
-}
-
-function renderArtistSelect(){
-  const box=document.getElementById('artistGrid'); if(!box)return;
-  box.innerHTML=artists.map(a=>`<div class="artist-card" data-artist-id="${a.id}">
-    <button type="button" class="artist-hit-button" data-action="select-artist" data-id="${a.id}" aria-label="${esc(a.name)} 플랫폼 입장">
-      <div class="artist-avatar">${media(a.photo||'🎤')}</div>
-      <div class="artist-name">${esc(a.name)}</div>
-    </button>
-    <div class="artist-actions">
-      <button type="button" data-action="edit-artist" data-id="${a.id}">수정</button>
-      <button type="button" class="danger" data-action="delete-artist" data-id="${a.id}">삭제</button>
-    </div>
-  </div>`).join('')||'<div class="meta">아티스트가 없습니다.</div>';
-}
-window.selectArtist=(id)=>{
-  if(currentArtist && currentArtist!==id) save();
-  currentArtist=id;
-  localStorage.setItem('currentArtist',id);
-  loadArtistData();
-  render();
-  let last=localStorage.getItem(artistKey('lastView'))||'home';
-  if(!last || last==='artistSelect' || !document.getElementById(last)) last='home';
-  go(last);
-}
-window.addArtist=()=>{
-  const name=prompt('추가할 아티스트 이름을 입력해 주세요.'); if(!name)return;
-  const photo=prompt('대표 이미지 URL 또는 이모지','🎤')||'🎤';
-  const id='artist_'+Date.now();
-  artists.push({id,name,photo});
-  localStorage.setItem('artists',JSON.stringify(artists));
-  renderArtistSelect();
-}
-window.editArtist=(id)=>{
-  const a=artists.find(x=>x.id===id); if(!a)return;
-  const name=prompt('아티스트 이름을 수정해 주세요.',a.name); if(name===null)return;
-  const photo=prompt('대표 이미지 URL 또는 이모지를 수정해 주세요.',a.photo||''); if(photo===null)return;
-  a.name=(name.trim()||a.name); a.photo=(photo.trim()||a.photo||'🎤');
-  localStorage.setItem('artists',JSON.stringify(artists));
-  renderArtistSelect();
-}
-window.deleteArtist=(id)=>{
-  const a=artists.find(x=>x.id===id); if(!a)return;
-  if(!confirm(`${a.name} 아티스트를 삭제할까요?`))return;
-  artists=artists.filter(x=>x.id!==id);
-  if(currentArtist===id){currentArtist='';localStorage.removeItem('currentArtist');}
-  localStorage.setItem('artists',JSON.stringify(artists));
-  renderArtistSelect();
-  showArtistLanding();
-}
-
-
-function artistSelectByElement(el, ev){
-  const card=el&&el.closest&&el.closest('.artist-card');
-  const id=card&&card.dataset.artistId;
-  if(id){
-    if(ev){ev.preventDefault(); ev.stopPropagation();}
-    window.selectArtist(id);
-    return true;
-  }
-  return false;
-}
-document.addEventListener('touchend',e=>{
-  const hit=e.target.closest&&e.target.closest('.artist-hit-button,.artist-avatar,.artist-name');
-  if(hit)artistSelectByElement(hit,e);
-},{capture:true,passive:false});
-document.addEventListener('click',e=>{
-  const hit=e.target.closest&&e.target.closest('.artist-hit-button,.artist-avatar,.artist-name');
-  if(hit)artistSelectByElement(hit,e);
-},true);
-
-
-function showArtistLanding(){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById('artistSelect').classList.add('active');
-  document.querySelector('.app').classList.add('artist-landing');
-  const logo=document.querySelector('.logo'); if(logo)logo.textContent='ARTIST';
-  const fab=document.getElementById('fab'); if(fab)fab.style.display='none';
-  syncArtistLandingChrome();
-}
-
-
-function go(id){
-  if(id==='artistSelect'){save(); currentArtist=''; localStorage.removeItem('currentArtist'); renderArtistSelect(); showArtistLanding(); return;}
-  if(!currentArtist){renderArtistSelect();showArtistLanding();return;}
-  document.querySelector('.app').classList.remove('artist-landing');
-  const artist=currentArtistObj(); const logo=document.querySelector('.logo'); if(logo)logo.textContent=artist?artist.name:'ATEEZ';
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  const target=document.getElementById(id)||document.getElementById('home'); target.classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
-  document.getElementById('fab').style.display=id==='talk'?'block':'none';
-  localStorage.setItem(artistKey('lastView'),id);
-  window.scrollTo(0,0);
-  syncArtistLandingChrome();
-  render();
-  syncArtistLandingChrome();
-}
-window.go=go;
-
-function render(){renderArtistSelect();renderProfile();renderHome();renderMembers();renderTalk();renderContents();renderShop();renderCommunity();renderSchedule();renderAlerts();syncArtistLandingChrome();save()}
-function renderProfile(){document.getElementById('welcome').textContent=profile.nickname?`${profile.nickname}님 환영합니다`:'ATEEZ Official Platform';document.getElementById('myNick').textContent=profile.nickname||'닉네임 미설정';document.getElementById('topProfile').innerHTML=profile.photo?media(profile.photo):'👤';const pb=document.getElementById('pointBadge');if(pb)pb.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`;const cp=document.getElementById('cartPointBadge');if(cp)cp.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`;const tl=document.getElementById('themeLabel');if(tl)tl.textContent=themeMode==='dark'?'다크':themeMode==='light'?'화이트':'시스템';applyTheme()}
-function renderHome(){
-  const list=newest(posts).filter(p=>p.type==='content').slice(0,4);
-  const old=document.getElementById('homeGrid');
-  if(old && !old.classList.contains('home-list')) old.outerHTML='<div class="home-list" id="homeGrid"></div>';
-  const box=document.getElementById('homeGrid');
-  box.innerHTML=list.map(p=>`<div class="home-wide-card" onclick="openPost(${p.id})"><div class="home-wide-thumb">${media(p.thumb)}</div><div class="home-wide-main"><div class="home-wide-title">${p.title}</div><div class="home-wide-meta">${p.created||p.body||''}</div></div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>';
-}
-function renderMembers(){document.getElementById('memberStrip').innerHTML=members.map(m=>`<button class="member-chip ${currentMember===m.id?'active':''}" onclick="toggleMember('${m.id}')"><div class="member-photo">${media(m.photo)}</div><div class="member-name">${m.name}</div></button>`).join('')+`<button class="member-setting-chip" onclick="openMemberSettings()" title="멤버 설정">⚙︎</button>`}
-window.toggleMember=id=>{currentMember=currentMember===id?null:id;renderMembers();renderTalk()}
-function renderTalk(){let list=newest(posts).filter(p=>p.type==='talk'&&(!currentMember||p.member===currentMember));document.getElementById('talkFeed').innerHTML=list.map(p=>{let m=members.find(x=>x.id===p.member)||members[0];let img=p.thumb?`<div class="feed-img">${media(p.thumb)}</div>`:'';return `<article class="feed-card" onclick="openPost(${p.id})"><div class="feed-head"><div class="feed-user"><div class="photo">${media(m.photo)}</div><div><div class="name">${m.name} <span class="check">✓</span></div><div class="feed-time">${timeAgo(createdTime(p))}</div></div></div><button class="more" onclick="event.stopPropagation();openMenu(event,'post',${p.id})">⋮</button></div>${img}<div class="feed-title">${p.title}</div><div class="react" onclick="event.stopPropagation()"><button onclick="likePost(${p.id})">♡ ${p.likes||0}</button><button onclick="addComment(${p.id})">💬 ${p.comments||0}</button></div></article>`}).join('')||'<div class="meta">게시글이 없습니다.</div>'}
-function renderContents(){
-  const box=document.getElementById('contentSections'); if(!box)return;
-  box.innerHTML=`<section class="content-section" style="padding-bottom:0"><div class="content-head"><h2>콘텐츠 카테고리</h2><button type="button" class="btn light" data-action="add-content-cat">+ 카테고리</button></div></section>`+contentCats.map(c=>{let k=c.id,t=c.name;let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===k).slice(0,4);return `<section class="content-section"><div class="content-head"><h2>${esc(t)}</h2><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="btn light" data-action="edit-content-cat" data-id="${k}">수정</button><button type="button" class="btn light danger" data-action="delete-content-cat" data-id="${k}">삭제</button><button type="button" class="btn light" data-action="open-content-all" data-id="${k}" data-name="${esc(t)}">전체보기</button></div></div><div class="row-scroll">${list.map(p=>`<div data-action="open-post" data-id="${p.id}">${p.thumb?`<div class="wide-thumb">${media(p.thumb)}</div>`:''}<div class="wide-title">${esc(p.title)}</div><div class="meta">${timeAgo(createdTime(p))}</div></div>`).join('')||'<div class="meta">콘텐츠가 없습니다.</div>'}</div></section>`}).join('')
-}
-window.addContentCategory=()=>{
-  const name=prompt('추가할 콘텐츠 카테고리 이름을 입력해 주세요.'); if(!name)return;
-  const id='cat_'+Date.now(); contentCats.push({id,name:name.trim()}); save(); renderContents();
-}
-window.editContentCategory=(id)=>{
-  const c=contentCats.find(x=>x.id===id); if(!c)return;
-  const name=prompt('카테고리 이름을 수정해 주세요.',c.name); if(name===null)return;
-  c.name=(name.trim()||c.name); save(); renderContents();
-}
-window.deleteContentCategory=(id)=>{
-  const c=contentCats.find(x=>x.id===id); if(!c)return;
-  if(!confirm(`${c.name} 카테고리를 삭제할까요?`))return;
-  contentCats=contentCats.filter(x=>x.id!==id); save(); renderContents();
-}
-function renderShop(){
-  let cats=['ALL','MEMBERSHIP','ALBUM','PRODUCTS'];
-  document.getElementById('shopTabs').innerHTML=cats.map(c=>`<button class="${shopCat===c?'active':''}" onclick="setShopCat('${c}')">${c}</button>`).join('');
-  let list=newest(products).filter(p=>shopCat==='ALL'||(p.cat||'PRODUCTS')===shopCat);
-  document.getElementById('shopGrid').innerHTML=list.map(p=>`<div class="card" onclick="openProduct(${p.id})"><div class="thumb">${media(p.thumb)}</div><div class="info"><div class="title">${p.name}</div><div class="meta">${p.price}</div></div></div>`).join('')||'<div class="meta">상품이 없습니다.</div>';
-}
-window.setShopCat=(c)=>{shopCat=c;renderShop()}
-
-let communityTab='notice';
-window.setCommunityTab=(tab,el)=>{
-  communityTab=tab;
-  document.querySelectorAll('.community-tabs button').forEach(b=>b.classList.toggle('active',b.dataset.community===tab));
-  renderCommunity();
-}
-function renderCommunity(){
-  const listBox=document.getElementById('communityList');
-  const top=document.getElementById('communityTop');
-  if(!listBox||!top)return;
-  let html='';
-  if(communityTab==='notice'){
-    top.innerHTML=`<span>공지 보기</span><button class="community-write" onclick="openAddNotice()">+ 공지</button>`;
-    const pinned=newest(notices).filter(n=>n.pinned).slice(0,3);
-    const normal=newest(notices).filter(n=>!n.pinned);
-    const renderNoticeItem=(n,pin=false)=>`
-      <div class="community-item ${pin?'pinned-notice':''}" onclick="openNotice(${n.id})">
-        <div class="community-main">
-          <div class="community-title">${n.title}</div>
-          <div class="community-meta">${pin?'상단 고정 · ':''}${n.meta||'KQ엔터테인먼트 · 방금'}</div>
-          <div class="community-preview">${n.body||''}</div>
+    <main class="flex-1 overflow-y-auto px-5 py-4 hide-scrollbar relative">
+      
+      <div v-if="searchQuery" class="absolute inset-0 bg-white dark:bg-slate-800 z-10 p-5 overflow-y-auto">
+        <h3 class="text-xs font-bold text-gray-400 mb-4 uppercase tracking-wider">검색 결과</h3>
+        <div v-if="searchResults.length === 0" class="text-center text-gray-400 py-10">결과가 없습니다.</div>
+        <div class="space-y-3">
+          <div v-for="item in searchResults" :key="item.id" @click="openDetail(item.type, item)"
+               class="p-4 rounded-2xl bg-gray-50 dark:bg-slate-700 active:scale-95 transition cursor-pointer">
+            <div class="text-xs text-brand-500 font-bold mb-1">{{ item.type.toUpperCase() }}</div>
+            <div class="font-bold">{{ item.title || item.name }}</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400 line-clamp-1 mt-1">{{ item.desc || item.memo }}</div>
+          </div>
         </div>
-      </div>`;
-    html=pinned.map(n=>renderNoticeItem(n,true)).join('')+normal.map(n=>renderNoticeItem(n,false)).join('');
-  }
-  if(communityTab==='magazine'){
-    top.innerHTML=`<span>매거진 보기</span><button class="community-write" onclick="openAddMagazine()">+ 매거진</button>`;
-    html=newest(boards).filter(b=>['magazine','event','broadcast'].includes(b.cat)).map(b=>`
-      <div class="community-item" onclick="openBoardDetail(${b.id})">
-        <div class="community-main">
-          <div class="community-title">${b.title}</div>
-          <div class="community-meta">KQ엔터테인먼트 · ${b.date||'방금'}</div>
-          <div class="community-preview">${b.body||''}</div>
-        </div>
-        <div class="community-thumb">${media(b.thumb||'📝')}</div>
       </div>
-    `).join('');
-  }
-  listBox.innerHTML=html||'<div class="meta" style="padding:40px 0">게시글이 없습니다.</div>';
-}
 
-window.openPost=id=>{let p=posts.find(x=>x.id===id);if(!p)return;if(p.type==='talk'){let m=members.find(x=>x.id===p.member)||members[0];let cs=comments.filter(c=>c.post===p.id);let img=p.thumb?`<div class="big-media">${media(p.thumb)}</div>`:'';document.getElementById('postDetailBox').innerHTML=`<div class="talk-detail"><button class="back" onclick="go('talk')">‹ TALK</button><div class="feed-head"><div class="feed-user"><div class="photo">${media(m.photo)}</div><div><div class="name">${m.name} <span class="check">✓</span></div><div class="meta">${timeAgo(createdTime(p))}</div></div></div><button class="more" onclick="openMenu(event,'post',${p.id})">⋮</button></div>${img}<div class="detail-title">${p.title}</div><div class="detail-body">${esc(p.body)}</div><div class="react"><button>👍 ${Math.floor((p.likes||0)*.2+100)}</button><button>💗 ${p.likes||0}</button><button>🍿 ${Math.floor((p.likes||0)*.04+200)}</button></div><div class="comment-box"><h2>댓글 ${cs.length}</h2><div class="cart-row" onclick="addComment(${p.id})">✎ 댓글 추가하기...</div>${cs.map(c=>`<div class="comment-row"><div class="comment-avatar">${media(c.photo||'👤')}</div><div style="flex:1"><div class="comment-meta">${c.nick} · ${c.time}</div><div class="comment-text">${esc(c.body)}</div></div><button class="more" onclick="openMenu(event,'comment',${c.id})">⋮</button></div>`).join('')}</div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 ${cs.length}</span><span style="margin-left:auto">⋮</span></div>`;go('postDetail');return}document.getElementById('postDetailBox').innerHTML=`<div class="content-post-page"><button class="back" style="margin:16px 20px" onclick="go('contents')">‹ BACK</button>${p.thumb?`<div class="content-post-media">${media(p.thumb)}</div>`:''}<div class="content-post-inner"><div class="content-post-title">${p.title}</div><div class="content-post-date">${timeAgo(createdTime(p))}</div><div class="content-post-tag">#${String(p.cat||'VIDEO').toUpperCase()}</div><div class="content-post-body">${renderBlocks(p)}</div><div class="actions"><button class="btn light" onclick="editPost(${p.id})">수정</button><button class="btn danger" onclick="deletePost(${p.id})">삭제</button></div></div></div>`;go('postDetail')}
+      <div v-show="activeTab === 'schedule' && !searchQuery" class="space-y-6">
+        <div class="flex justify-between items-center bg-brand-50 dark:bg-slate-700 p-4 rounded-3xl">
+          <button @click="changeMonth(-1)"><i class="ph-bold ph-caret-left"></i></button>
+          <h2 class="font-bold">{{ currentYear }}년 {{ currentMonth + 1 }}월</h2>
+          <button @click="changeMonth(1)"><i class="ph-bold ph-caret-right"></i></button>
+        </div>
+        <div class="grid grid-cols-7 gap-1 text-center text-xs mb-2">
+          <div v-for="day in ['일','월','화','수','목','금','토']" :key="day" class="text-gray-400 py-2">{{ day }}</div>
+          <div v-for="blank in blankDays" :key="'blank'+blank"></div>
+          <div v-for="day in daysInMonth" :key="day" 
+               @click="selectDate(day)"
+               class="aspect-square flex flex-col items-center justify-center rounded-2xl cursor-pointer transition-all relative"
+               :class="selectedDate.getDate() === day && selectedDate.getMonth() === currentMonth ? 'bg-brand-600 text-white font-bold shadow-lg shadow-brand-500/30' : 'hover:bg-gray-100 dark:hover:bg-slate-700'">
+            <span>{{ day }}</span>
+            <div v-if="hasSchedule(day)" class="w-1.5 h-1.5 bg-brand-400 rounded-full mt-0.5"></div>
+          </div>
+        </div>
 
-
-window.openProduct=id=>{let p=products.find(x=>x.id===id);document.getElementById('shopDetailBox').innerHTML=`<div><button class="back" style="margin:16px" onclick="go('shop')">‹ SHOP</button><div class="shop-hero">${media(p.thumb)}</div><div class="shop-info"><div class="shop-title">${p.name}</div><div class="shop-price">${p.price}</div>${p.membership?'':`<div class="meta" style="margin-top:8px">결제 시 1% 포인트 적립 · 보유 ${points.toLocaleString('ko-KR')}P</div>`}<div class="shop-desc"><h2>상품 설명</h2>${renderBlocks(p,'shop')}</div><div class="actions"><button class="btn light" onclick="editProduct(${p.id})">수정</button><button class="btn danger" onclick="deleteProduct(${p.id})">삭제</button></div></div><div class="shop-bottom">${p.membership?'':`<button class="cart-btn" onclick="addCart(${p.id})">장바구니</button>`}<button class="buy-btn" onclick="buyProduct(${p.id})">구매하기</button></div></div>`;go('shopDetail')}
-window.openNotice=id=>{let n=notices.find(x=>x.id===id);document.getElementById('noticeDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('community')">‹ COMMUNITY</button><div class="detail-title notice-detail-title">${n.title}</div><div class="meta">${n.meta||'KQ엔터테인먼트 · 방금'}</div><div class="detail-body notice-detail-body">${esc(n.body||'')}</div><div class="actions"><button class="btn light notice-pin-btn" onclick="toggleNoticePin(${n.id})">${n.pinned?'고정 해제':'상단 고정'}</button><button class="btn light" onclick="editNotice(${n.id})">수정</button><button class="btn danger" onclick="deleteNotice(${n.id})">삭제</button></div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 14</span></div>`;go('noticeDetail')}
-window.openContentAll=(cat,title)=>{let list=newest(posts).filter(p=>p.type==='content'&&(p.cat||'video')===cat);document.getElementById('contentAllBox').innerHTML=`<div class="section"><button class="back" onclick="go('contents')">‹ CONTENTS</button><h1>${title}</h1><button class="primary" style="margin-top:14px" onclick="openAddContentFor('${cat}')">+ 콘텐츠 추가</button></div><div class="all-grid">${list.map(p=>`<div onclick="openPost(${p.id})">${p.thumb?`<div class="wide-thumb">${media(p.thumb)}</div>`:''}<div class="wide-title">${p.title}</div><div class="meta">${timeAgo(createdTime(p))}</div></div>`).join('')}</div>`;go('contentAll')}
-window.openBoard=cat=>{let list=newest(boards).filter(b=>b.cat===cat);let title={notice:'# NOTICE',event:'# EVENT',broadcast:'# 공방공지'}[cat];document.getElementById('boardBox').innerHTML=`<div class="section"><button class="back" onclick="go('contents')">‹ CONTENTS</button><h1>${title}</h1><button class="primary" style="margin-top:14px" onclick="openAddContentFor('${cat}')">+ 콘텐츠 추가</button></div><div class="all-grid">${list.map(b=>`<div onclick="openBoardDetail(${b.id})"><div class="wide-thumb">${cat==='notice'?'':media(b.thumb)}</div><div class="wide-title">${b.title}</div><div class="meta">${b.date}</div></div>`).join('')}</div>`;go('board')}
-window.openBoardDetail=id=>{let b=boards.find(x=>x.id===id);document.getElementById('boardDetailBox').innerHTML=`<div class="talk-detail"><button class="back" onclick="go('community')">‹ COMMUNITY</button><div class="detail-title">${b.title}</div><div class="meta">${b.date}</div>${b.cat==='notice'?'':`<div class="big-media">${media(b.thumb)}</div>`}<div class="detail-body" style="font-size:1.35rem;margin-top:28px">${b.body}</div><div class="react"><button>👍 1691</button><button>💗 8712</button><button>🍿 392</button></div></div><div class="fixed-bar"><span>☺︎ 공감</span><span>💬 984</span></div>`;go('boardDetail')}
-
-window.openAlerts=()=>{alerts=alerts.map(a=>({...a,read:true}));renderAlerts();save();go('alerts')}
-window.clearAlerts=()=>{alerts=[];renderAlerts();save()}
-window.openCart=()=>{const cp=document.getElementById('cartPointBadge');if(cp)cp.textContent=`보유 포인트 ${points.toLocaleString('ko-KR')}P`;document.getElementById('cartList').innerHTML=cart.length?newest(cart).map(c=>`<div class="cart-row"><div class="cart-thumb">${media(c.thumb)}</div><div class="cart-main"><div class="cart-title">${c.name}</div><div class="cart-meta">${c.price} · 수량 ${c.qty}</div></div><button class="btn danger" onclick="cart=cart.filter(x=>x.id!==${c.id});openCart();save()">삭제</button></div>`).join('')+`<button class="primary" style="width:100%" onclick="checkout()">장바구니 결제하기</button>`:'<div class="meta">장바구니가 비어있습니다.</div>';go('cart')}
-window.addCart=id=>{let p=products.find(x=>x.id===id);let c=cart.find(x=>x.id===id);if(c)c.qty++;else cart.push({id:p.id,name:p.name,price:p.price,thumb:p.thumb,qty:1});save();alert('장바구니에 담았습니다.')}
-window.buyProduct=id=>{let p=products.find(x=>x.id===id);if(p.membership){openJoin();return}payPhysicalProduct(p,1);render();}
-window.checkout=()=>{if(!cart.length)return; const total=cart.reduce((s,c)=>s+priceNum(c.price)*(c.qty||1),0); let use=0;if(points>0&&total>0&&confirm(`보유 포인트 ${points.toLocaleString('ko-KR')}P를 사용할까?`)){use=Math.min(points,total)} points-=use; let restUse=use; cart.forEach(c=>{let sub=priceNum(c.price)*(c.qty||1); let used=Math.min(restUse,sub); restUse-=used; let final=sub-used; let earned=Math.floor(final*0.01); points+=earned; orders.unshift({...c,id:uid(),date:new Date().toLocaleString(),usedPoint:used,earnedPoint:earned,paid:final})}); cart=[];save();alert('결제가 완료되었습니다.');openCart()}
-
-
-
-window.openMembershipDetail=()=>{
-  if(!membership){openJoin();return}
-  const start=membership.start?fmt(new Date(membership.start)):'2026.05.03';
-  const end=membership.end?fmt(new Date(membership.end)):'2027.05.03';
-  document.getElementById('myDetailBox').innerHTML=`<div class="membership-detail-page"><button class="back" onclick="go('membership')">‹ BACK</button><h1>멤버십 상세</h1><div class="mem-section-title">상품 정보</div><div class="mem-info-grid"><div class="label2">멤버십 이름</div><div class="value2">ATINY MEMBERSHIP (단건 결제)</div><div class="label2">옵션</div><div class="value2">ATINY</div><div class="label2">이용 기간</div><div class="value2">${start} - ${end}</div></div><div class="mem-divider"></div><div class="mem-section-title">멤버십 정보</div><div class="mem-info-grid"><div class="label2">멤버십 번호</div><div class="value2"><u>${membership.code||code()}</u></div><div class="label2">이름</div><div class="value2">${esc(membership.name||profile.name||'')}</div><div class="label2">생년월일</div><div class="value2">${esc(membership.birth||profile.birth||'')}</div><div class="label2">전화번호</div><div class="value2">${esc(membership.phone||profile.phone||'')}</div></div><div class="mem-divider"></div><div class="mem-benefits"><div><span class="mem-hex"></span><span>디지털 멤버십 카드</span></div><div><span class="mem-hex"></span><span>멤버십 KIT 구매 기회 제공</span></div><div><span class="mem-hex"></span><span>멤버십 전용 상품 구매 기회 제공</span></div><div><span class="mem-hex"></span><span>KQ 주최 공연시 선예매 및 팬클럽 부스 이용 혜택</span></div><div><span class="mem-hex"></span><span>공식 플랫폼 내 멤버십 독점 콘텐츠 제공</span></div><div><span class="mem-hex"></span><span>공개방송 및 온/오프라인 이벤트 응모 및 참여 기회</span></div></div></div>`;
-  go('myDetail');
-}
-
-window.openMembership=()=>{
-  if(membership && (!/^[A-Z]{6}$/.test(membership.code||''))){
-    membership.code=code();
-    save();
-  }
-  if(!membership){
-    document.getElementById('membershipBox').innerHTML=`<div class="member-page-head"><button class="back" onclick="go('my')">‹</button><h1>내 멤버십</h1></div><div class="detail"><div class="detail-card"><div class="detail-title">가입된 멤버십이 없습니다</div><div class="detail-body">멤버십 가입 후 카드가 생성됩니다.</div><button class="primary" style="width:100%;margin-top:20px" onclick="openJoin()">멤버십 가입하기</button></div></div>`;
-    go('membership');return;
-  }
-  const start=new Date(membership.start||Date.now());
-  const end=new Date(membership.end||Date.now());
-  const startTxt=fmt(start);
-  const endTxt=fmt(end);
-  document.getElementById('membershipBox').innerHTML=`
-  <div class="member-page-head">
-    <button class="back" onclick="go('my')">‹</button>
-    <h1>내 멤버십</h1>
-    <span class="member-pill">💎 ${startTxt}부터</span>
-  </div>
-  <div class="member-card-wrap">
-    <div class="member-flip">
-      <div class="membership-card" onclick="this.classList.toggle('flip')">
-        <div class="face front"><span>ATINY MEMBERSHIP (단건<br>결제)<br><small>ATINY</small></span></div>
-        <div class="face backface">
-          <div class="back-inner">
-            <div>ATINY MEMBERSHIP (단건 결제)<br>ATINY<br>${startTxt} - ${endTxt}</div>
-            <div style="margin-top:auto">
-              <div class="label">멤버십 번호</div>
-              <div class="big">${membership.code}</div>
-              <div class="label">이름</div>
-              <div class="big">${membership.name||''}</div>
-              <div class="label">생년월일</div>
-              <div class="big">${membership.birth||''}</div>
-              <div class="label">전화번호</div>
-              <div class="big">${membership.phone||''}</div>
+        <div class="mt-8">
+          <div class="flex items-end justify-between mb-4">
+            <h3 class="font-bold text-lg">{{ selectedDateStr }} 일정</h3>
+          </div>
+          <div v-if="selectedDaySchedules.length === 0" class="text-center text-gray-400 py-8 bg-gray-50 dark:bg-slate-700/50 rounded-3xl">
+            일정이 없습니다.
+          </div>
+          <div class="space-y-3">
+            <div v-for="sch in selectedDaySchedules" :key="sch.id" @click="openDetail('schedule', sch)"
+                 class="p-4 rounded-3xl bg-white dark:bg-slate-700 shadow-sm border border-gray-100 dark:border-slate-600 active:scale-95 transition cursor-pointer flex gap-4 items-center">
+              <div class="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-slate-600 flex flex-col items-center justify-center text-brand-600 dark:text-brand-400 flex-shrink-0">
+                <span class="text-xs font-bold">{{ sch.time.split(':')[0] }}</span>
+                <span class="text-[10px]">{{ sch.time.split(':')[1] }}</span>
+              </div>
+              <div class="flex-1">
+                <h4 class="font-bold">{{ sch.title }}</h4>
+                <div class="flex gap-2 mt-1 flex-wrap">
+                  <span v-for="tag in sch.tags" :key="tag" @click.stop="searchQuery = '#'+tag" class="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-500">#{{ tag }}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="member-card-dot"></div>
-    <div class="member-title">ATINY MEMBERSHIP (단건 결제)</div>
-    <div class="member-sub">ATINY</div>
-    <button class="member-detail-btn" onclick="openMembershipDetail()">멤버십 상세 보기</button>
-  </div>`;
-  go('membership');
-}
 
-window.openOrders=()=>{document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="detail-title">주문 내역</div><button class="btn danger" onclick="orders=[];save();openOrders()">주문내역 초기화</button><div style="margin-top:16px">${orders.length?newest(orders).map(o=>`<div class="cart-row"><div class="cart-thumb">${media(o.thumb)}</div><div class="cart-main"><div class="cart-title">${o.name}</div><div class="cart-meta">${o.price} · 수량 ${o.qty||1} · ${o.date}${o.usedPoint?` · ${o.usedPoint.toLocaleString('ko-KR')}P 사용`:''}${o.earnedPoint?` · ${o.earnedPoint.toLocaleString('ko-KR')}P 적립`:''}</div></div></div>`).join(''):'<div class="meta">주문 내역이 없습니다.</div>'}</div></div>`;go('myDetail')}
-window.openMyPosts=()=>{let mine=newest(posts).filter(p=>p.author==='ME'||p.author===profile.nickname);document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="detail-title">내가 쓴 글</div>${mine.length?mine.map(p=>`<div class="cart-row" onclick="openPost(${p.id})"><div class="cart-thumb">${p.thumb?media(p.thumb):'📝'}</div><div class="cart-main"><div class="cart-title">${p.title}</div><div class="cart-meta">${p.created}</div></div></div>`).join(''):'<div class="meta">작성한 글이 없습니다.</div>'}</div>`;go('myDetail')}
-window.openMemberSettings=()=>{document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('talk')">‹ TALK</button><div class="detail-title">멤버 설정</div><div class="meta" style="margin-bottom:14px">토크 상단에 보이는 이름과 프로필 사진을 수정합니다.</div>${members.map(m=>`<div class="cart-row"><div class="cart-thumb">${media(m.photo)}</div><div class="cart-main"><div class="cart-title">${m.name}</div><div class="cart-meta">${m.id}</div></div><button class="btn light" onclick="editMember('${m.id}')">수정</button></div>`).join('')}</div>`;go('myDetail')}
-window.editMember=id=>{let m=members.find(x=>x.id===id);if(!m)return;modalMode='editMember';editId=id;tempProfile=m.photo||'';openModal('멤버 수정',m.name,'','');document.getElementById('profileBlock').style.display='block';document.getElementById('thumbBlock').style.display='none';document.getElementById('mBody').style.display='none';document.getElementById('mMeta').style.display='none';document.getElementById('profilePreview').innerHTML=tempProfile?media(tempProfile):'프로필 사진 없음'}
-window.openAddMagazine=()=>{editId=null;modalMode='magazine';tempImg='';openModal('매거진 작성','','','');document.getElementById('mMeta').placeholder='날짜/메타';}
+      <div v-show="activeTab === 'members' && !searchQuery" class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div v-for="member in members" :key="member.id" @click="openDetail('member', member)"
+               class="relative rounded-3xl overflow-hidden aspect-[4/5] cursor-pointer group active:scale-95 transition-transform shadow-sm">
+            <img :src="member.image || 'https://via.placeholder.com/400x500?text=No+Image'" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4">
+              <span class="text-brand-300 text-xs font-bold mb-1">{{ member.position }}</span>
+              <h3 class="text-white font-bold text-lg">{{ member.stageName }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <div v-show="activeTab === 'people' && !searchQuery" class="space-y-3">
+        <div v-for="person in people" :key="person.id" @click="openDetail('person', person)"
+             class="flex items-center gap-4 p-4 rounded-3xl bg-white dark:bg-slate-700 shadow-sm border border-gray-100 dark:border-slate-600 active:scale-95 transition cursor-pointer">
+          <div class="w-12 h-12 rounded-full bg-gray-100 dark:bg-slate-600 flex items-center justify-center text-xl">
+            {{ person.name.charAt(0) }}
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h4 class="font-bold">{{ person.name }}</h4>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-300">{{ person.role }}</span>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ person.relationship }}</p>
+          </div>
+        </div>
+      </div>
 
-window.openSupport=()=>{document.getElementById('myDetailBox').innerHTML=`<div class="detail"><button class="back" onclick="go('my')">‹ MY</button><div class="detail-title">고객센터</div><div class="detail-body">자주 묻는 질문을 확인하거나 1대1 문의를 남길 수 있습니다.</div><div class="support-faq"><details open><summary>멤버십 가입 정보는 어디서 확인하나요?</summary><p>마이페이지의 내 멤버십에서 카드와 가입 정보를 확인할 수 있습니다.</p></details><details><summary>주문 내역은 어디서 보나요?</summary><p>마이페이지의 주문 내역에서 결제한 상품을 확인할 수 있습니다.</p></details><details><summary>토크 글은 이미지 없이도 올릴 수 있나요?</summary><p>가능합니다. 이미지 없이 작성하면 썸네일 영역 없이 글만 표시됩니다.</p></details></div><div class="support-form"><div class="detail-title" style="font-size:1.2rem">1대1 문의</div><input class="input" id="supportTitle" placeholder="문의 제목"><textarea class="textarea" id="supportBody" placeholder="문의 내용을 입력해 주세요"></textarea><button class="primary" style="width:100%" onclick="submitSupport()">문의 남기기</button></div></div>`;go('myDetail')}
-window.submitSupport=()=>{let t=document.getElementById('supportTitle').value.trim(),b=document.getElementById('supportBody').value.trim();if(!t||!b)return alert('문의 제목과 내용을 입력해 주세요');alerts.unshift({id:uid(),type:'문의',title:t,thumb:'🎧',time:'방금',read:false,source:null});save();alert('문의가 접수되었습니다.');openSupport()}
+      <div v-show="activeTab === 'notes' && !searchQuery" class="grid grid-cols-2 gap-3">
+        <div v-for="note in notes" :key="note.id" @click="openDetail('note', note)"
+             class="p-4 rounded-3xl bg-white dark:bg-slate-700 shadow-sm border border-gray-100 dark:border-slate-600 active:scale-95 transition cursor-pointer flex flex-col aspect-square">
+          <h4 class="font-bold line-clamp-2 mb-2">{{ note.title }}</h4>
+          <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 flex-1">{{ note.content }}</p>
+          <div class="flex gap-1 overflow-hidden mt-2">
+            <span v-for="tag in note.tags" :key="tag" class="text-[9px] text-brand-500">#{{ tag }}</span>
+          </div>
+        </div>
+      </div>
 
-window.openProfile=()=>{editId=null;modalMode='profile';tempProfile=profile.photo||'';openModal('프로필 관리',profile.nickname,'','');document.getElementById('profileBlock').style.display='block';document.getElementById('thumbBlock').style.display='none';document.getElementById('mBody').style.display='none';document.getElementById('mMeta').style.display='none';document.getElementById('profilePreview').innerHTML=tempProfile?media(tempProfile):'프로필 사진 없음'}
-window.logout=()=>{if(confirm('로그아웃할까요?')){profile={nickname:'',photo:'',name:'',birth:'',phone:''};membership=null;orders=[];cart=[];save();render();go('home')}}
+    </main>
 
+    <button v-show="!searchQuery" @click="openEditor(activeTab)" 
+            class="absolute bottom-24 right-5 w-14 h-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-lg shadow-brand-500/40 flex items-center justify-center text-2xl transition-transform active:scale-90 z-20">
+      <i class="ph ph-plus"></i>
+    </button>
 
+    <nav class="glass fixed bottom-0 w-full max-w-md border-t border-gray-100 dark:border-slate-700 flex justify-around pb-safe pt-2 pb-6 z-30">
+      <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id; searchQuery=''" 
+              class="flex flex-col items-center p-2 w-16 transition-colors"
+              :class="activeTab === tab.id ? 'text-brand-600 dark:text-brand-400' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'">
+        <i :class="[activeTab === tab.id ? tab.iconFill : tab.icon, 'text-2xl mb-1']"></i>
+        <span class="text-[10px] font-medium">{{ tab.label }}</span>
+      </button>
+    </nav>
 
-let selectedPostCategory='예능',selectedVisibility='public';
-const postCategoryOptions=['예능','비하인드','라이브','공지','기타'];
-function updateCategoryTexts(){
- const m=members.find(x=>x.id===selectedPostMember)||members[0];
- const mt=document.getElementById('memberCategoryText'); if(mt) mt.textContent=m.name;
- const pt=document.getElementById('postCategoryText'); if(pt) pt.textContent=selectedPostCategory;
- const vt=document.getElementById('visibilityText'); if(vt) vt.textContent=selectedVisibility==='member'?'멤버십 공개':'전체공개';
-}
-window.openSelectModal=function(type){
- const modal=document.getElementById('categoryModal');
- const panel=document.getElementById('categoryPanel');
- let options=[];
- if(type==='member') options=members.map(m=>({label:m.name,value:m.id,active:selectedPostMember===m.id}));
- if(type==='post') options=postCategoryOptions.map(v=>({label:v,value:v,active:selectedPostCategory===v}));
- if(type==='product') options=['MEMBERSHIP','ALBUM','PRODUCTS'].map(v=>({label:v,value:v,active:selectedProductCat===v}));
- if(type==='visibility') options=[{label:'전체공개',value:'public',active:selectedVisibility==='public'},{label:'멤버십 공개',value:'member',active:selectedVisibility==='member'}];
- if(type==='theme') options=[{label:'화이트',value:'light',active:themeMode==='light'},{label:'다크',value:'dark',active:themeMode==='dark'},{label:'시스템 설정 따르기',value:'system',active:themeMode==='system'}];
- panel.innerHTML=(type==='theme'?'<div class="theme-choice-title">테마 선택</div>':'')+options.map(o=>`<button type="button" class="category-option ${o.active?'active':''}" onclick="chooseCategory('${type}','${o.value}')">${o.label}</button>`).join('');
- modal.classList.add('open');
-}
-window.chooseCategory=function(type,value){
- if(type==='member') selectedPostMember=value;
- if(type==='post') selectedPostCategory=value;
- if(type==='product') selectedProductCat=value;
- if(type==='visibility') selectedVisibility=value;
- if(type==='theme'){themeMode=value; localStorage.setItem('themeMode',themeMode); localStorage.setItem('theme',themeMode); 
-/* LAST SAFETY CLICK BRIDGE: inline onclick이 모바일 Safari에서 먹지 않는 경우 대비 */
-(function(){
-  let lastTapKey='', lastTapAt=0;
-  function runAction(target, ev){
-    if(!target || !target.closest) return false;
-    const el=target.closest('[data-action], .nav-item[data-page], .artist-card, .logo, .header-actions button, .profile-mini');
-    if(!el) return false;
-    const now=Date.now();
-    const key=(el.dataset.action||el.dataset.page||el.className||el.textContent||'')+':' +(el.dataset.id||'');
-    if(ev.type!=='click' && key===lastTapKey && now-lastTapAt<280) return true;
-    lastTapKey=key; lastTapAt=now;
-    const action=el.dataset.action;
-    try{
-      if(action==='select-artist' || el.classList.contains('artist-card')){ const card=el.closest('.artist-card'); const id=el.dataset.id || (card&&card.dataset.artistId); if(id){ev.preventDefault(); ev.stopPropagation(); window.selectArtist(id); return true;} }
-      if(action==='edit-artist'){ev.preventDefault(); ev.stopPropagation(); window.editArtist(el.dataset.id); return true;}
-      if(action==='delete-artist'){ev.preventDefault(); ev.stopPropagation(); window.deleteArtist(el.dataset.id); return true;}
-      if(action==='add-content-cat'){ev.preventDefault(); ev.stopPropagation(); window.addContentCategory(); return true;}
-      if(action==='edit-content-cat'){ev.preventDefault(); ev.stopPropagation(); window.editContentCategory(el.dataset.id); return true;}
-      if(action==='delete-content-cat'){ev.preventDefault(); ev.stopPropagation(); window.deleteContentCategory(el.dataset.id); return true;}
-      if(action==='open-content-all'){ev.preventDefault(); ev.stopPropagation(); window.openContentAll(el.dataset.id, el.dataset.name||''); return true;}
-      if(action==='open-post'){ev.preventDefault(); ev.stopPropagation(); window.openPost(Number(el.dataset.id)); return true;}
-      if(el.matches('.nav-item[data-page]')){ev.preventDefault(); ev.stopPropagation(); window.go(el.dataset.page); return true;}
-      if(el.classList.contains('logo')){ev.preventDefault(); ev.stopPropagation(); window.go(currentArtist?'home':'artistSelect'); return true;}
-    }catch(err){ alert('버튼 오류: '+(err&&err.message?err.message:err)); }
-    return false;
-  }
-  document.addEventListener('click',function(e){runAction(e.target,e)},true);
-  document.addEventListener('touchstart',function(e){runAction(e.target,e)}, {capture:true, passive:false});
-})();
+    <transition name="slide-right">
+      <div v-if="detailView.isOpen" class="absolute inset-0 bg-white dark:bg-slate-800 z-50 overflow-y-auto pb-20 flex flex-col">
+        <div class="sticky top-0 glass px-5 py-4 flex justify-between items-center z-10">
+          <button @click="detailView.isOpen = false" class="p-2 -ml-2 text-xl"><i class="ph ph-arrow-left"></i></button>
+          <div class="flex gap-3">
+            <button @click="editCurrentDetail" class="p-2"><i class="ph ph-pencil-simple text-xl"></i></button>
+            <button @click="deleteCurrentDetail" class="p-2 text-red-500"><i class="ph ph-trash text-xl"></i></button>
+          </div>
+        </div>
+        
+        <div v-if="detailView.type === 'member'" class="flex-1">
+          <div class="h-80 w-full relative">
+            <img :src="detailView.data.image || 'https://via.placeholder.com/400x500'" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-800 to-transparent"></div>
+          </div>
+          <div class="px-6 -mt-20 relative z-10">
+            <span class="bg-brand-100 text-brand-700 dark:bg-brand-900/50 dark:text-brand-300 px-3 py-1 rounded-full text-xs font-bold">{{ detailView.data.position }}</span>
+            <h2 class="text-4xl font-bold mt-3 mb-1">{{ detailView.data.stageName }}</h2>
+            <p class="text-gray-500 mb-6">{{ detailView.data.realName }} • {{ detailView.data.nationality }}</p>
+            
+            <div class="grid grid-cols-2 gap-4 mb-8">
+              <div class="p-4 rounded-3xl bg-gray-50 dark:bg-slate-700/50">
+                <div class="text-xs text-gray-400 mb-1">생년월일</div>
+                <div class="font-bold">{{ detailView.data.birth }}</div>
+              </div>
+              <div class="p-4 rounded-3xl bg-gray-50 dark:bg-slate-700/50">
+                <div class="text-xs text-gray-400 mb-1">MBTI / 키</div>
+                <div class="font-bold">{{ detailView.data.mbti }} / {{ detailView.data.height }}cm</div>
+              </div>
+            </div>
+            
+            <div class="space-y-6">
+              <DetailSection title="성격 & 취향" :content="detailView.data.personality" />
+              <DetailSection title="습관 & 특기" :content="detailView.data.habits" />
+              <DetailSection title="가족 관계" :content="detailView.data.family" />
+              <DetailSection title="자유 메모" :content="detailView.data.memo" />
+            </div>
+          </div>
+        </div>
 
-applyTheme(); renderProfile();}
- document.getElementById('categoryModal').classList.remove('open');
- updateCategoryTexts();
- if(type==='product') renderProductCategoryField();
-}
-function renderProductCategoryField(){
- const box=document.getElementById('pickerArea');
- if(!box)return;
- box.style.display='block';
- box.innerHTML=`<div class="modal-field-label">상품 카테고리</div><button type="button" class="select-like" onclick="openSelectModal('product')"><span>${selectedProductCat}</span><span>⌄</span></button>`;
-}
-document.addEventListener('click',e=>{if(e.target.id==='categoryModal')e.target.classList.remove('open')});
+        <div v-else class="px-6 pt-4 space-y-6">
+          <template v-if="detailView.type === 'schedule'">
+            <div class="text-brand-500 font-bold mb-2">{{ detailView.data.date }} {{ detailView.data.time }}</div>
+            <h2 class="text-3xl font-bold mb-6">{{ detailView.data.title }}</h2>
+            <DetailSection title="참여 멤버" :content="detailView.data.members" />
+            <DetailSection title="메모" :content="detailView.data.memo" />
+            <div class="flex gap-2 flex-wrap">
+              <span v-for="tag in detailView.data.tags" class="px-3 py-1 rounded-full bg-gray-100 dark:bg-slate-700 text-sm">#{{ tag }}</span>
+            </div>
+          </template>
 
-function openModal(title,a='',b='',c=''){document.getElementById('modalTitle').textContent=title;document.getElementById('mTitle').value=a;document.getElementById('mBody').value=b;document.getElementById('mMeta').value=c;document.getElementById('thumbBlock').style.display='block';document.getElementById('profileBlock').style.display='none';document.getElementById('mBody').style.display='block';document.getElementById('mMeta').style.display='block';document.getElementById('thumbPreview').innerHTML=tempImg?media(tempImg):'이미지 없음';document.getElementById('saveBtn').textContent='저장';document.getElementById('pickerArea').style.display='none';document.getElementById('categoryFields').style.display='none';document.getElementById('blogEditor').style.display='none';blogBlocks=[];renderBlogEditor();['memberLabel','memberCategorySelect','postLabel','postCategorySelect','visibilityRow'].forEach(id=>{let el=document.getElementById(id); if(el) el.style.display='';});const cf=document.getElementById('categoryFields'); if(cf) cf.style.display='none'; document.getElementById('modal').classList.add('open')}
-window.closeModal=()=>document.getElementById('modal').classList.remove('open')
-window.pickThumb=async()=>{let u=await upload();if(u){tempImg=u;document.getElementById('thumbPreview').innerHTML=media(u)}}
-window.pickProfilePhoto=async()=>{let u=await upload();if(u){tempProfile=u;document.getElementById('profilePreview').innerHTML=media(u)}}
-window.openAddTalk=()=>{editId=null;modalMode='talk';tempImg='';selectedPostMember=currentMember||members[0].id;openModal('TALK 게시글 추가','','','');document.getElementById('mMeta').style.display='none';document.getElementById('categoryFields').style.display='block';document.getElementById('postLabel').style.display='none';document.getElementById('postCategorySelect').style.display='none';document.getElementById('visibilityRow').style.display='none';updateCategoryTexts()}
-window.openAddProduct=()=>{editId=null;modalMode='product';tempImg='';selectedProductCat='PRODUCTS';openModal('상품 추가','','','');document.getElementById('mMeta').placeholder='가격';document.getElementById('blogEditor').style.display='block';blogBlocks=[{type:'text',value:''}];renderBlogEditor();renderProductCategoryField()}
-window.openAddContent=()=>{editId=null;modalMode='content';tempImg='';openModal('콘텐츠 추가','','','video');document.getElementById('mMeta').placeholder='카테고리 golden/video/atiny/log'}
-window.openAddContentFor=(cat)=>{editId=null;modalMode='content';tempImg='';selectedVisibility='public';openModal('콘텐츠 추가','','',cat);document.getElementById('mMeta').style.display='none';document.getElementById('categoryFields').style.display='block';document.getElementById('memberLabel').style.display='none';document.getElementById('memberCategorySelect').style.display='none';document.getElementById('postLabel').style.display='none';document.getElementById('postCategorySelect').style.display='none';document.getElementById('visibilityRow').style.display='block';document.getElementById('blogEditor').style.display='block';blogBlocks=[{type:'text',value:''}];renderBlogEditor();updateCategoryTexts()}
-window.openAddNotice=()=>{editId=null;modalMode='notice';tempImg='';openModal('공지 추가','','','');document.getElementById('thumbBlock').style.display='none'}
-window.openJoin=()=>{editId=null;modalMode='join';openModal('멤버십 가입 정보','','','');document.getElementById('thumbBlock').style.display='none';document.getElementById('mTitle').placeholder='이름';document.getElementById('mBody').placeholder='생년월일';document.getElementById('mMeta').placeholder='전화번호';document.getElementById('saveBtn').textContent='최종 결제 진행'}
+          <template v-if="detailView.type === 'person'">
+            <div class="w-20 h-20 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-3xl font-bold mb-4">{{ detailView.data.name.charAt(0) }}</div>
+            <h2 class="text-3xl font-bold">{{ detailView.data.name }}</h2>
+            <p class="text-gray-500 mb-6">{{ detailView.data.role }} • {{ detailView.data.relationship }}</p>
+            <DetailSection title="설명" :content="detailView.data.description" />
+            <DetailSection title="메모" :content="detailView.data.memo" />
+          </template>
 
-window.saveModal=()=>{let title=document.getElementById('mTitle').value.trim(),body=document.getElementById('mBody').value.trim(),meta=document.getElementById('mMeta').value.trim();if(modalMode==='profile'){profile.nickname=title;profile.photo=tempProfile;closeModal();render();return}if(modalMode==='editMember'){let m=members.find(x=>x.id===editId);if(m){m.name=title||m.name;m.photo=tempProfile||m.photo;}closeModal();save();render();openMemberSettings();return}if(modalMode==='join'){if(!title||!body||!meta)return alert('전부 입력해줘');let now=new Date(),end=new Date();end.setFullYear(now.getFullYear()+1);membership={name:title,birth:body,phone:meta,code:code(),start:now.toISOString(),end:end.toISOString()};orders.unshift({id:uid(),name:'ATINY MEMBERSHIP',price:'20,000원',thumb:'💎',qty:1,date:fmt(now)});closeModal();render();openMembership();return}if(!title)return alert('제목을 입력해 주세요');if(editId && (modalMode==='talk'||modalMode==='content')){let p=posts.find(x=>x.id===editId);if(p){p.title=title;p.body=body;p.thumb=tempImg||'';if(modalMode==='talk'){p.member=selectedPostMember||p.member}else{p.blocks=collectBlogBlocks();p.body=p.blocks.length?'':body;p.visibility=selectedVisibility||'public';}}closeModal();save();render();openPost(editId);editId=null;return}if(modalMode==='editNotice'){
-  let n=notices.find(x=>x.id===editId);
-  if(n){n.title=title;n.body=body;n.meta=n.meta||'KQ엔터테인먼트 · 방금';}
-  closeModal();save();render();openNotice(editId);editId=null;return;
-}if(modalMode==='editProduct'){
-  let p=products.find(x=>x.id===editId);
-  if(p){let blocks=collectBlogBlocks();p.name=title;p.body=blocks.length?'':body;p.blocks=blocks;p.price=meta||p.price;p.thumb=tempImg||p.thumb;p.cat=selectedProductCat||p.cat||'PRODUCTS';}
-  closeModal();save();render();openProduct(editId);return;
-}if(modalMode==='talk'){let m=members.find(x=>x.id===selectedPostMember)||members.find(x=>x.id===currentMember)||members[0];let p={id:uid(),type:'talk',member:m.id,title,body,thumb:tempImg||'',likes:0,comments:0,author:'ME',createdAt:new Date().toISOString()};posts.unshift(p);alerts.unshift({id:uid(),type:'게시글',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='content'){let blocks=collectBlogBlocks();let p={id:uid(),type:'content',cat:meta||'video',title,body:blocks.length?'':body,blocks,thumb:tempImg||'',author:'ME',createdAt:new Date().toISOString(),visibility:selectedVisibility||'public'};posts.unshift(p);alerts.unshift({id:uid(),type:'콘텐츠',title,thumb:p.thumb,time:'방금',read:false,source:p.id})}if(modalMode==='magazine'){boards.unshift({id:uid(),cat:'magazine',title,body,thumb:tempImg||'📝',date:meta||'방금'});closeModal();save();render();go('community');return}if(modalMode==='product'){{let blocks=collectBlogBlocks();products.unshift({id:uid(),name:title,body:blocks.length?'':(body||'상품 설명'),blocks,price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});}closeModal();save();render();go('shop');return}if(modalMode==='product'){{let blocks=collectBlogBlocks();products.unshift({id:uid(),name:title,body:blocks.length?'':(body||'상품 설명'),blocks,price:meta||'0원',thumb:tempImg||'🛍️',cat:selectedProductCat||'PRODUCTS'});}shopCat=selectedProductCat||'PRODUCTS';closeModal();save();render();go('shop');return}if(modalMode==='notice'){let n={id:uid(),title,body,meta:'KQ엔터테인먼트 · 방금',pinned:false};notices.unshift(n);alerts.unshift({id:uid(),type:'공지',title,thumb:'🔔',time:'방금',read:false,source:n.id})}closeModal();render()}
+          <template v-if="detailView.type === 'note'">
+            <h2 class="text-3xl font-bold mb-6">{{ detailView.data.title }}</h2>
+            <div class="whitespace-pre-wrap leading-relaxed text-gray-700 dark:text-gray-300">{{ detailView.data.content }}</div>
+            <div class="flex gap-2 flex-wrap mt-8">
+              <span v-for="tag in detailView.data.tags" class="px-3 py-1 rounded-full bg-gray-100 dark:bg-slate-700 text-sm">#{{ tag }}</span>
+            </div>
+          </template>
+        </div>
+      </div>
+    </transition>
 
-window.likePost=id=>{let p=posts.find(x=>x.id===id);p.likes=(p.likes||0)+1;renderTalk();save()}
-window.addComment=id=>{let body=prompt('댓글 내용');if(!body)return;let nick=prompt('닉네임')||profile.nickname||'익명';comments.unshift({id:uid(),post:id,nick,photo:profile.photo||'👤',body,time:'방금'});let p=posts.find(x=>x.id===id);p.comments=(p.comments||0)+1;save();openPost(id)}
-window.openMenu=(e,type,id)=>{e.stopPropagation();let m=document.getElementById('menu');m.style.left=Math.min(e.clientX-110,innerWidth-140)+'px';m.style.top=e.clientY+8+'px';m.innerHTML=`<button onclick="menuEdit('${type}',${id})">수정</button><button class="danger" onclick="menuDel('${type}',${id})">삭제</button>`;m.classList.add('open')}
-window.menuEdit=(type,id)=>{document.getElementById('menu').classList.remove('open');if(type==='comment'){let c=comments.find(x=>x.id===id);c.nick=prompt('닉네임',c.nick)||c.nick;c.photo=prompt('프로필 사진 URL/이모지',c.photo)||c.photo;c.body=prompt('내용',c.body)||c.body;save();openPost(c.post)}else editPost(id)}
-window.menuDel=(type,id)=>{document.getElementById('menu').classList.remove('open');if(type==='comment'){let c=comments.find(x=>x.id===id);comments=comments.filter(x=>x.id!==id);save();openPost(c.post)}else deletePost(id)}
-document.addEventListener('click',e=>{if(!e.target.closest('#menu')&&!e.target.closest('.more'))document.getElementById('menu').classList.remove('open')})
-window.editPost=id=>{let p=posts.find(x=>x.id===id);modalMode=p.type;editId=id;tempImg=p.thumb||'';openModal('게시글 수정',p.title,p.body,p.cat||'');if(p.type==='talk'){selectedPostMember=p.member||members[0].id;document.getElementById('mMeta').style.display='none';document.getElementById('categoryFields').style.display='block';document.getElementById('postLabel').style.display='none';document.getElementById('postCategorySelect').style.display='none';document.getElementById('visibilityRow').style.display='none';updateCategoryTexts()}else if(p.type==='content'){selectedVisibility=p.visibility||'public';document.getElementById('mMeta').style.display='none';document.getElementById('categoryFields').style.display='block';document.getElementById('memberLabel').style.display='none';document.getElementById('memberCategorySelect').style.display='none';document.getElementById('postLabel').style.display='none';document.getElementById('postCategorySelect').style.display='none';document.getElementById('visibilityRow').style.display='block';document.getElementById('blogEditor').style.display='block';blogBlocks=Array.isArray(p.blocks)&&p.blocks.length?p.blocks:[{type:'text',value:p.body||''}];renderBlogEditor();updateCategoryTexts()}}
-window.deletePost=id=>{let p=posts.find(x=>x.id===id);if(confirm('삭제할까요?')){posts=posts.filter(x=>x.id!==id);comments=comments.filter(c=>c.post!==id);alerts=alerts.filter(a=>a.source!==id);save();render();go(p.type==='content'?'contents':'talk')}}
-window.editProduct=id=>{
-  const p=products.find(x=>x.id===id);
-  if(!p)return;
-  modalMode='editProduct';
-  editId=id;
-  tempImg=p.thumb||'';
-  selectedProductCat=p.cat||'PRODUCTS';
-  openModal('상품 수정',p.name||'',p.body||'',p.price||'');
-  renderProductCategoryField();
-  document.getElementById('mMeta').placeholder='가격';
-  document.getElementById('thumbPreview').innerHTML=tempImg?media(tempImg):'이미지 없음';
-}
-window.deleteProduct=id=>{products=products.filter(p=>p.id!==id);save();render();go('shop')}
-window.editNotice=id=>{let n=notices.find(x=>x.id===id);if(!n)return;editId=id;modalMode='editNotice';tempImg='';openModal('공지 수정',n.title||'',n.body||'',n.meta||'');document.getElementById('thumbBlock').style.display='none';document.getElementById('mMeta').style.display='none';}
-window.deleteNotice=id=>{notices=notices.filter(n=>n.id!==id);alerts=alerts.filter(a=>a.source!==id);save();render();go('community')}
+    <transition name="slide-up">
+      <div v-if="editor.isOpen" class="absolute inset-0 bg-white dark:bg-slate-800 z-[60] flex flex-col">
+        <div class="glass px-5 py-4 flex justify-between items-center border-b border-gray-100 dark:border-slate-700">
+          <button @click="editor.isOpen = false" class="text-gray-500 font-medium">취소</button>
+          <h3 class="font-bold">{{ editorTitle }}</h3>
+          <button @click="saveData" class="text-brand-600 font-bold">저장</button>
+        </div>
+        <div class="flex-1 overflow-y-auto px-6 py-6 space-y-5 pb-32">
+          
+          <template v-if="editor.type === 'schedule'">
+            <InputField label="제목" v-model="editor.form.title" />
+            <div class="grid grid-cols-2 gap-4">
+              <InputField label="날짜" type="date" v-model="editor.form.date" />
+              <InputField label="시간" type="time" v-model="editor.form.time" />
+            </div>
+            <InputField label="참여 멤버" placeholder="쉼표로 구분" v-model="editor.form.members" />
+            <InputField label="태그" placeholder="쉼표로 구분 (예: 데뷔, 학교)" v-model="editor.form.tagsRaw" />
+            <TextareaField label="메모" v-model="editor.form.memo" />
+          </template>
 
-window.toggleNoticePin=id=>{
-  const n=notices.find(x=>x.id===id); if(!n)return;
-  const cnt=notices.filter(x=>x.pinned&&x.id!==id).length;
-  if(!n.pinned && cnt>=3){alert('상단 고정 공지는 최대 3개까지 가능해.');return}
-  n.pinned=!n.pinned; save(); renderCommunity(); openNotice(id);
-}
-function applyTheme(){
-  document.documentElement.classList.remove('force-dark','force-light');
-  document.documentElement.setAttribute('data-theme',themeMode);
-  if(themeMode==='dark')document.documentElement.classList.add('force-dark');
-  if(themeMode==='light')document.documentElement.classList.add('force-light');
-  localStorage.setItem('themeMode',themeMode);
-}
-window.openThemeSettings=()=>{
-  openSelectModal('theme');
-}
-/* double tap zoom guard disabled to avoid blocking buttons */
+          <template v-if="editor.type === 'members'">
+            <div class="flex flex-col items-center mb-6">
+              <div class="w-24 h-24 rounded-3xl bg-gray-100 dark:bg-slate-700 overflow-hidden relative mb-2 flex items-center justify-center">
+                <img v-if="editor.form.image" :src="editor.form.image" class="w-full h-full object-cover">
+                <i v-else class="ph ph-camera text-3xl text-gray-400"></i>
+                <input type="file" class="absolute inset-0 opacity-0 cursor-pointer" @change="uploadImage">
+              </div>
+              <span class="text-xs text-gray-400" v-if="isUploading">업로드 중...</span>
+            </div>
+            <InputField label="활동명" v-model="editor.form.stageName" />
+            <InputField label="본명" v-model="editor.form.realName" />
+            <div class="grid grid-cols-2 gap-4">
+              <InputField label="국적" v-model="editor.form.nationality" />
+              <InputField label="생년월일" placeholder="YYYY.MM.DD" v-model="editor.form.birth" />
+              <InputField label="키 (cm)" type="number" v-model="editor.form.height" />
+              <InputField label="MBTI" v-model="editor.form.mbti" />
+            </div>
+            <InputField label="포지션" v-model="editor.form.position" />
+            <InputField label="별명" v-model="editor.form.nicknames" />
+            <TextareaField label="성격" v-model="editor.form.personality" />
+            <TextareaField label="취향" v-model="editor.form.tastes" />
+            <TextareaField label="습관 및 특기" v-model="editor.form.habits" />
+            <TextareaField label="가족 관계" v-model="editor.form.family" />
+            <TextareaField label="자유 메모" v-model="editor.form.memo" />
+          </template>
 
-/* LAST SAFETY CLICK BRIDGE: inline onclick이 모바일 Safari에서 먹지 않는 경우 대비 */
-(function(){
-  let lastTapKey='', lastTapAt=0;
-  function runAction(target, ev){
-    if(!target || !target.closest) return false;
-    const el=target.closest('[data-action], .nav-item[data-page], .artist-card, .logo, .header-actions button, .profile-mini');
-    if(!el) return false;
-    const now=Date.now();
-    const key=(el.dataset.action||el.dataset.page||el.className||el.textContent||'')+':' +(el.dataset.id||'');
-    if(ev.type!=='click' && key===lastTapKey && now-lastTapAt<280) return true;
-    lastTapKey=key; lastTapAt=now;
-    const action=el.dataset.action;
-    try{
-      if(action==='select-artist' || el.classList.contains('artist-card')){ const card=el.closest('.artist-card'); const id=el.dataset.id || (card&&card.dataset.artistId); if(id){ev.preventDefault(); ev.stopPropagation(); window.selectArtist(id); return true;} }
-      if(action==='edit-artist'){ev.preventDefault(); ev.stopPropagation(); window.editArtist(el.dataset.id); return true;}
-      if(action==='delete-artist'){ev.preventDefault(); ev.stopPropagation(); window.deleteArtist(el.dataset.id); return true;}
-      if(action==='add-content-cat'){ev.preventDefault(); ev.stopPropagation(); window.addContentCategory(); return true;}
-      if(action==='edit-content-cat'){ev.preventDefault(); ev.stopPropagation(); window.editContentCategory(el.dataset.id); return true;}
-      if(action==='delete-content-cat'){ev.preventDefault(); ev.stopPropagation(); window.deleteContentCategory(el.dataset.id); return true;}
-      if(action==='open-content-all'){ev.preventDefault(); ev.stopPropagation(); window.openContentAll(el.dataset.id, el.dataset.name||''); return true;}
-      if(action==='open-post'){ev.preventDefault(); ev.stopPropagation(); window.openPost(Number(el.dataset.id)); return true;}
-      if(el.matches('.nav-item[data-page]')){ev.preventDefault(); ev.stopPropagation(); window.go(el.dataset.page); return true;}
-      if(el.classList.contains('logo')){ev.preventDefault(); ev.stopPropagation(); window.go(currentArtist?'home':'artistSelect'); return true;}
-    }catch(err){ alert('버튼 오류: '+(err&&err.message?err.message:err)); }
-    return false;
-  }
-  document.addEventListener('click',function(e){runAction(e.target,e)},true);
-  document.addEventListener('touchstart',function(e){runAction(e.target,e)}, {capture:true, passive:false});
-})();
+          <template v-if="editor.type === 'people'">
+            <InputField label="이름" v-model="editor.form.name" />
+            <InputField label="역할" placeholder="예: 매니저, 프로듀서" v-model="editor.form.role" />
+            <InputField label="관계" v-model="editor.form.relationship" />
+            <TextareaField label="설명" v-model="editor.form.description" />
+            <TextareaField label="자유 메모" v-model="editor.form.memo" />
+          </template>
 
-applyTheme();
+          <template v-if="editor.type === 'notes'">
+            <InputField label="제목" v-model="editor.form.title" />
+            <InputField label="태그" placeholder="쉼표로 구분" v-model="editor.form.tagsRaw" />
+            <TextareaField label="내용" v-model="editor.form.content" rows="10" />
+          </template>
 
-function boot(){
-  renderArtistSelect();
-  if(currentArtist){loadArtistData();render();const last=localStorage.getItem(artistKey('lastView'))||'home';go(document.getElementById(last)?last:'home');}
-  else{showArtistLanding();}
-}
+        </div>
+      </div>
+    </transition>
 
-async function upload(){return new Promise(resolve=>{let i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=async()=>{let f=i.files[0];if(!f)return resolve('');let fd=new FormData();fd.append('file',f);fd.append('upload_preset',CLOUDINARY_PRESET);try{let r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});let d=await r.json();resolve(d.secure_url||'')}catch(e){alert('업로드 실패');resolve('')}};i.click()})}
+  </div>
 
-boot();console.log('Firebase + Cloudinary Connected',db);
-</script>
+  <script type="module">
+    import { createApp, ref, computed, onMounted, watch } from 'vue';
+    import { initializeApp } from 'firebase/app';
+    import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, writeBatch } from 'firebase/firestore';
+
+    // Cloudinary Config
+    const CLOUDINARY_CLOUD = 'dbljkloal';
+    const CLOUDINARY_PRESET = 'Everything';
+
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAA6mbdYfLrrgCJjN47PX91_mU7I53RiBs",
+      authDomain: "site-c67b4.firebaseapp.com",
+      projectId: "site-c67b4",
+      storageBucket: "site-c67b4.firebasestorage.app",
+      messagingSenderId: "744761377245",
+      appId: "1:744761377245:web:3ddaee14f184716eeef634"
+    };
+
+    const firebaseApp = initializeApp(firebaseConfig);
+    const db = getFirestore(firebaseApp);
+
+    // Vue Components for Forms
+    const InputField = {
+      props: ['label', 'modelValue', 'type', 'placeholder'],
+      template: `
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1 pl-1">{{ label }}</label>
+          <input :type="type || 'text'" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" :placeholder="placeholder"
+                 class="w-full bg-gray-50 dark:bg-slate-700/50 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-brand-500 transition-all border border-gray-100 dark:border-slate-600">
+        </div>
+      `
+    };
+
+    const TextareaField = {
+      props: ['label', 'modelValue', 'rows'],
+      template: `
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1 pl-1">{{ label }}</label>
+          <textarea :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" :rows="rows || 3"
+                 class="w-full bg-gray-50 dark:bg-slate-700/50 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-brand-500 transition-all border border-gray-100 dark:border-slate-600 resize-none"></textarea>
+        </div>
+      `
+    };
+
+    const DetailSection = {
+      props: ['title', 'content'],
+      template: `
+        <div v-if="content">
+          <h4 class="text-sm font-bold text-brand-500 mb-2">{{ title }}</h4>
+          <p class="text-sm leading-relaxed whitespace-pre-wrap">{{ content }}</p>
+        </div>
+      `
+    };
+
+    createApp({
+      components: { InputField, TextareaField, DetailSection },
+      setup() {
+        const isDark = ref(false);
+        const activeTab = ref('schedule');
+        const searchQuery = ref('');
+        const isUploading = ref(false);
+
+        const tabs = [
+          { id: 'schedule', label: 'Schedule', icon: 'ph-calendar-blank', iconFill: 'ph-fill ph-calendar-blank' },
+          { id: 'members', label: 'Members', icon: 'ph-users', iconFill: 'ph-fill ph-users' },
+          { id: 'people', label: 'People', icon: 'ph-address-book', iconFill: 'ph-fill ph-address-book' },
+          { id: 'notes', label: 'Notes', icon: 'ph-notebook', iconFill: 'ph-fill ph-notebook' }
+        ];
+
+        // Collections
+        const schedules = ref([]);
+        const members = ref([]);
+        const people = ref([]);
+        const notes = ref([]);
+
+        // Calendar logic
+        const today = new Date();
+        const currentMonth = ref(today.getMonth());
+        const currentYear = ref(today.getFullYear());
+        const selectedDate = ref(new Date());
+
+        const daysInMonth = computed(() => new Date(currentYear.value, currentMonth.value + 1, 0).getDate());
+        const blankDays = computed(() => new Date(currentYear.value, currentMonth.value, 1).getDay());
+        
+        const changeMonth = (step) => {
+          let newMonth = currentMonth.value + step;
+          let newYear = currentYear.value;
+          if (newMonth > 11) { newMonth = 0; newYear++; }
+          if (newMonth < 0) { newMonth = 11; newYear--; }
+          currentMonth.value = newMonth;
+          currentYear.value = newYear;
+        };
+
+        const selectDate = (day) => {
+          selectedDate.value = new Date(currentYear.value, currentMonth.value, day);
+        };
+
+        const selectedDateStr = computed(() => {
+          const m = String(selectedDate.value.getMonth() + 1).padStart(2, '0');
+          const d = String(selectedDate.value.getDate()).padStart(2, '0');
+          return `${selectedDate.value.getFullYear()}-${m}-${d}`;
+        });
+
+        const selectedDaySchedules = computed(() => {
+          return schedules.value.filter(s => s.date === selectedDateStr.value).sort((a,b) => a.time.localeCompare(b.time));
+        });
+
+        const hasSchedule = (day) => {
+          const m = String(currentMonth.value + 1).padStart(2, '0');
+          const d = String(day).padStart(2, '0');
+          const dateStr = `${currentYear.value}-${m}-${d}`;
+          return schedules.value.some(s => s.date === dateStr);
+        };
+
+        // Navigation Views
+        const detailView = ref({ isOpen: false, type: '', data: null });
+        const editor = ref({ isOpen: false, type: '', isEdit: false, id: null, form: {} });
+
+        const openDetail = (type, data) => {
+          detailView.value = { isOpen: true, type, data: { ...data } };
+        };
+
+        const openEditor = (type, editData = null) => {
+          editor.value.type = type;
+          editor.value.isEdit = !!editData;
+          editor.value.id = editData ? editData.id : null;
+          
+          if (editData) {
+            editor.value.form = { ...editData };
+            if (editData.tags) editor.value.form.tagsRaw = editData.tags.join(', ');
+          } else {
+            editor.value.form = type === 'schedule' ? { date: selectedDateStr.value, time: '12:00' } : {};
+          }
+          editor.value.isOpen = true;
+        };
+
+        const editCurrentDetail = () => {
+          const mapType = { 'member': 'members', 'person': 'people', 'note': 'notes', 'schedule': 'schedule' };
+          openEditor(mapType[detailView.value.type], detailView.value.data);
+          detailView.value.isOpen = false;
+        };
+
+        const editorTitle = computed(() => {
+          const action = editor.value.isEdit ? '수정' : '추가';
+          const t = editor.value.type;
+          return t === 'schedule' ? `스케줄 ${action}` : t === 'members' ? `멤버 ${action}` : t === 'people' ? `인물 ${action}` : `노트 ${action}`;
+        });
+
+        // Search Logic
+        const searchResults = computed(() => {
+          if (!searchQuery.value) return [];
+          const q = searchQuery.value.toLowerCase();
+          const isTagSearch = q.startsWith('#');
+          const term = isTagSearch ? q.substring(1).trim() : q;
+
+          let results = [];
+          
+          const matchTag = (tags) => tags && tags.some(t => t.toLowerCase().includes(term));
+          const matchText = (text) => text && text.toLowerCase().includes(term);
+
+          schedules.value.forEach(s => {
+            if (isTagSearch ? matchTag(s.tags) : (matchText(s.title) || matchText(s.memo)))
+              results.push({ ...s, type: 'schedule', desc: s.date });
+          });
+          members.value.forEach(m => {
+            if (!isTagSearch && (matchText(m.stageName) || matchText(m.realName)))
+              results.push({ ...m, type: 'member', name: m.stageName, desc: m.position });
+          });
+          people.value.forEach(p => {
+            if (!isTagSearch && (matchText(p.name) || matchText(p.role)))
+              results.push({ ...p, type: 'person', desc: p.role });
+          });
+          notes.value.forEach(n => {
+            if (isTagSearch ? matchTag(n.tags) : (matchText(n.title) || matchText(n.content)))
+              results.push({ ...n, type: 'note', desc: n.content });
+          });
+
+          return results;
+        });
+
+        // Cloudinary Upload
+        const uploadImage = async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          isUploading.value = true;
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', CLOUDINARY_PRESET);
+          
+          try {
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
+              method: 'POST', body: formData
+            });
+            const data = await res.json();
+            editor.value.form.image = data.secure_url;
+          } catch (err) {
+            alert('이미지 업로드 실패');
+          } finally {
+            isUploading.value = false;
+          }
+        };
+
+        // Firebase Sync
+        const initFirebaseSync = () => {
+          const collections = ['schedules', 'members', 'people', 'notes'];
+          const stateRefs = { schedules, members, people, notes };
+
+          collections.forEach(colName => {
+            onSnapshot(collection(db, colName), (snapshot) => {
+              stateRefs[colName].value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+              // Dummy Data Seed (if empty)
+              if (snapshot.empty && colName === 'members') seedDummyData();
+            });
+          });
+        };
+
+        const seedDummyData = async () => {
+          // Add subtle dummy data to make it look like an active project
+          await setDoc(doc(collection(db, 'members')), {
+            stageName: '공주영', realName: '공주영', nationality: '대한민국',
+            birth: '2008.08.09', height: '174', mbti: 'ENFP', position: '리드보컬',
+            personality: '활발하고 긍정적', habits: '', family: '부모님, 여동생', memo: '교복 컨셉 촬영 완료.'
+          });
+          await setDoc(doc(collection(db, 'notes')), {
+            title: 'Starline 브랜드 컨셉 설정', content: 'Y2K 감성의 스티커팩 및 CD 플레이트 아트워크 기획.', tags: ['디자인', '스타라인', 'Y2K']
+          });
+        };
+
+        const saveData = async () => {
+          const colName = editor.value.type;
+          const data = { ...editor.value.form };
+          
+          // Process Tags
+          if (data.tagsRaw !== undefined) {
+            data.tags = data.tagsRaw.split(',').map(t => t.trim()).filter(t => t);
+            delete data.tagsRaw;
+          }
+
+          try {
+            const docRef = editor.value.isEdit ? doc(db, colName, editor.value.id) : doc(collection(db, colName));
+            await setDoc(docRef, data);
+            editor.value.isOpen = false;
+          } catch (e) {
+            alert('저장 실패: ' + e.message);
+          }
+        };
+
+        const deleteCurrentDetail = async () => {
+          if (!confirm('정말 삭제하시겠습니까?')) return;
+          const colMap = { 'member': 'members', 'person': 'people', 'note': 'notes', 'schedule': 'schedules' };
+          const colName = colMap[detailView.value.type];
+          await deleteDoc(doc(db, colName, detailView.value.data.id));
+          detailView.value.isOpen = false;
+        };
+
+        // Export / Import
+        const exportData = () => {
+          const data = {
+            schedules: schedules.value, members: members.value, people: people.value, notes: notes.value
+          };
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `idol_archive_${new Date().toISOString().slice(0,10)}.json`;
+          a.click();
+        };
+
+        const importData = (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = async (event) => {
+            try {
+              const data = JSON.parse(event.target.result);
+              const batch = writeBatch(db);
+              
+              ['schedules', 'members', 'people', 'notes'].forEach(colName => {
+                if(data[colName]) {
+                  data[colName].forEach(item => {
+                    const id = item.id;
+                    delete item.id;
+                    batch.set(doc(db, colName, id), item);
+                  });
+                }
+              });
+              await batch.commit();
+              alert('복원 완료!');
+            } catch (err) {
+              alert('잘못된 JSON 파일입니다.');
+            }
+          };
+          reader.readAsText(file);
+        };
+
+        // Dark Mode Toggle
+        const toggleDarkMode = () => {
+          isDark.value = !isDark.value;
+          document.documentElement.classList.toggle('dark', isDark.value);
+        };
+
+        onMounted(() => {
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            toggleDarkMode();
+          }
+          initFirebaseSync();
+        });
+
+        return {
+          isDark, toggleDarkMode, activeTab, tabs, searchQuery, searchResults,
+          currentMonth, currentYear, daysInMonth, blankDays, changeMonth, selectDate, selectedDate, selectedDateStr,
+          hasSchedule, selectedDaySchedules,
+          schedules, members, people, notes,
+          detailView, openDetail, editCurrentDetail, deleteCurrentDetail,
+          editor, openEditor, editorTitle, saveData, uploadImage, isUploading,
+          exportData, importData
+        };
+      }
+    }).mount('#app');
+  </script>
 </body>
 </html>
