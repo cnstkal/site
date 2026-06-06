@@ -11,7 +11,6 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
   const firebaseConfig = {
     apiKey: "AIzaSyAA6mbdYfLrrgCJjN47PX91_mU7I53RiBs",
     authDomain: "site-c67b4.firebaseapp.com",
@@ -20,7 +19,6 @@
     messagingSenderId: "744761377245",
     appId: "1:744761377245:web:3ddaee14f184716eeef634"
   };
-
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   window.__db = db;
@@ -30,38 +28,45 @@
 
 <style>
 :root {
-  --bg: #0a0a0f;
-  --bg2: #111118;
-  --bg3: #1a1a25;
-  --card: #16161f;
-  --card2: #1e1e2a;
+  --bg: #08080f;
+  --bg2: #0f0f1a;
+  --bg3: #171726;
+  --card: #13131e;
+  --card2: #1c1c2b;
   --border: rgba(255,255,255,0.07);
-  --text: #f0f0f8;
-  --text2: #9090a8;
-  --text3: #5a5a72;
-  --accent: #c8a4ff;
-  --accent2: #7b6cff;
-  --accent3: #ff8ac8;
-  --pink: #ff6eb4;
-  --teal: #5dd8c8;
-  --yellow: #ffd166;
-  --radius: 18px;
+  --border2: rgba(255,255,255,0.12);
+  --text: #ededf8;
+  --text2: #8888a8;
+  --text3: #4a4a6a;
+  --accent: #b896ff;
+  --accent2: #6c5fff;
+  --accent3: #ff7ec7;
+  --pink: #ff5faa;
+  --teal: #3dd8c0;
+  --yellow: #ffc94a;
+  --red: #ff5555;
+  --radius: 16px;
   --radius-sm: 10px;
-  --shadow: 0 8px 32px rgba(0,0,0,0.4);
-  --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+  --shadow: 0 8px 32px rgba(0,0,0,0.5);
+  --shadow-accent: 0 4px 20px rgba(108,95,255,0.3);
+  --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+  --sidebar-w: 240px;
+  --content-max: 900px;
 }
 
 [data-theme="light"] {
-  --bg: #f5f4ff;
-  --bg2: #eeedf8;
-  --bg3: #e6e4f5;
+  --bg: #f2f0ff;
+  --bg2: #eae8f8;
+  --bg3: #e0ddf5;
   --card: #ffffff;
-  --card2: #f8f7ff;
-  --border: rgba(0,0,0,0.07);
-  --text: #1a1828;
+  --card2: #f5f3ff;
+  --border: rgba(0,0,0,0.06);
+  --border2: rgba(0,0,0,0.1);
+  --text: #18162a;
   --text2: #5a5870;
-  --text3: #9898b0;
-  --shadow: 0 8px 32px rgba(120,100,200,0.12);
+  --text3: #9898b8;
+  --shadow: 0 8px 32px rgba(100,80,200,0.1);
+  --shadow-accent: 0 4px 20px rgba(108,95,255,0.15);
 }
 
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -75,31 +80,135 @@ html, body {
   overflow: hidden;
 }
 
-/* ── APP SHELL ── */
+/* ═══ APP SHELL ═══ */
 #app {
   height: 100dvh;
   display: flex;
-  flex-direction: column;
   overflow: hidden;
+}
+
+/* ═══ SIDEBAR (PC) ═══ */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.sidebar-logo {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  letter-spacing: 4px;
+  background: linear-gradient(135deg, var(--accent), var(--accent3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
+}
+
+.logo-sub {
+  font-size: 9px;
+  color: var(--text3);
+  letter-spacing: 2px;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2px;
+  display: block;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text2);
+  font-size: 13px;
+  font-weight: 500;
   position: relative;
 }
 
-/* ── TOP BAR ── */
-.topbar {
+.sidebar-nav-item:hover { background: var(--card); color: var(--text); }
+.sidebar-nav-item.active { background: rgba(184,150,255,0.12); color: var(--accent); }
+.sidebar-nav-item.active::before {
+  content:'';
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
+}
+
+.sidebar-nav-icon { font-size: 18px; width: 22px; text-align: center; }
+.sidebar-nav-count {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--text3);
+  font-family: 'Space Mono', monospace;
+}
+
+.sidebar-bottom {
+  padding: 12px 10px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-action {
   display: flex;
   align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text3);
+  font-size: 12px;
+}
+.sidebar-action:hover { background: var(--card); color: var(--text2); }
+
+/* ═══ MAIN AREA ═══ */
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* ═══ TOP BAR (mobile only & PC search) ═══ */
+.topbar {
+  display: none;
+  align-items: center;
   justify-content: space-between;
-  padding: 14px 20px 10px;
+  padding: 12px 16px 10px;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
-  position: relative;
   z-index: 10;
 }
 
 .topbar-logo {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
+  font-size: 20px;
   letter-spacing: 3px;
   background: linear-gradient(135deg, var(--accent), var(--accent3));
   -webkit-background-clip: text;
@@ -107,22 +216,57 @@ html, body {
   background-clip: text;
 }
 
-.topbar-actions { display:flex; gap:10px; align-items:center; }
+.topbar-actions { display:flex; gap:8px; align-items:center; }
 
 .icon-btn {
-  width: 36px; height: 36px;
+  width: 34px; height: 34px;
   border-radius: 50%;
   background: var(--card);
   border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
   transition: var(--transition);
   color: var(--text2);
 }
 .icon-btn:active { transform: scale(0.92); }
 
-/* ── CONTENT AREA ── */
+/* PC topbar */
+.pc-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  background: var(--bg);
+}
+
+.pc-page-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 3px;
+  color: var(--text);
+}
+
+.pc-topbar-right { display: flex; align-items: center; gap: 10px; }
+
+.pc-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 8px 16px;
+  min-width: 200px;
+  cursor: text;
+  transition: var(--transition);
+}
+.pc-search-bar:hover { border-color: var(--border2); }
+.pc-search-bar span { font-size: 12px; color: var(--text3); }
+
+/* ═══ CONTENT ═══ */
 .content-area {
   flex: 1;
   overflow-y: auto;
@@ -131,13 +275,18 @@ html, body {
   scroll-behavior: smooth;
 }
 
-/* ── BOTTOM NAV ── */
+.page-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 0 120px;
+}
+
+/* ═══ BOTTOM NAV (mobile) ═══ */
 .bottom-nav {
-  display: flex;
+  display: none;
   background: var(--bg2);
   border-top: 1px solid var(--border);
   flex-shrink: 0;
-  position: relative;
   z-index: 10;
   padding-bottom: env(safe-area-inset-bottom, 0);
 }
@@ -154,19 +303,8 @@ html, body {
   position: relative;
 }
 
-.nav-item .nav-icon {
-  font-size: 20px;
-  transition: var(--transition);
-}
-
-.nav-item .nav-label {
-  font-size: 10px;
-  letter-spacing: 0.5px;
-  color: var(--text3);
-  font-weight: 500;
-  transition: var(--transition);
-}
-
+.nav-item .nav-icon { font-size: 19px; transition: var(--transition); }
+.nav-item .nav-label { font-size: 9px; letter-spacing: 0.5px; color: var(--text3); font-weight: 500; transition: var(--transition); }
 .nav-item.active .nav-label { color: var(--accent); }
 .nav-item.active .nav-icon { transform: translateY(-2px); }
 .nav-item.active::after {
@@ -174,18 +312,18 @@ html, body {
   position: absolute;
   bottom: 0;
   left: 50%; transform: translateX(-50%);
-  width: 24px; height: 2px;
+  width: 20px; height: 2px;
   background: var(--accent);
   border-radius: 2px 2px 0 0;
 }
 
-/* ── PAGES ── */
-.page { display: none; padding: 0 0 100px 0; }
+/* ═══ PAGES ═══ */
+.page { display: none; }
 .page.active { display: block; }
 
-/* ── SECTION HEADER ── */
+/* ═══ SECTION HEADER ═══ */
 .section-header {
-  padding: 20px 20px 8px;
+  padding: 20px 24px 8px;
   display: flex;
   align-items: baseline;
   gap: 10px;
@@ -193,72 +331,166 @@ html, body {
 
 .section-title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px;
+  font-size: 24px;
   letter-spacing: 2px;
   color: var(--text);
 }
 
 .section-sub {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text3);
   letter-spacing: 1px;
   text-transform: uppercase;
   font-family: 'Space Mono', monospace;
 }
 
-/* ── CARD ── */
+/* ═══ CARD ═══ */
 .card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  margin: 0 16px 12px;
+  margin: 0 24px 12px;
   overflow: hidden;
   transition: var(--transition);
 }
-
-.card:active { transform: scale(0.98); }
-
 .card-inner { padding: 16px; }
 
-/* ── SCHEDULE ── */
-.calendar-wrap { padding: 0 16px 12px; }
+/* ═══ CALENDAR ═══ */
+.calendar-wrap { padding: 0 24px 12px; }
 
 .cal-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 4px 12px;
+  padding: 12px 0 10px;
+  gap: 8px;
 }
 
-.cal-month {
+.cal-month-btn {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 24px;
+  font-size: 22px;
   letter-spacing: 2px;
   color: var(--text);
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 8px;
+  transition: var(--transition);
+  border: 1px solid transparent;
+  user-select: none;
 }
+.cal-month-btn:hover { border-color: var(--border2); background: var(--card); }
+
+.cal-year-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  color: var(--text2);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+.cal-year-btn:hover { border-color: var(--border); background: var(--card); color: var(--text); }
+
+.cal-nav-arrows { display: flex; gap: 6px; align-items: center; }
 
 .cal-arrow {
-  width: 34px; height: 34px;
+  width: 30px; height: 30px;
   border-radius: 50%;
   background: var(--card);
   border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text2);
   transition: var(--transition);
 }
 .cal-arrow:active { background: var(--accent); color: #fff; }
 
+/* Month picker popup */
+.month-picker-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+}
+.month-picker-overlay.open { display: flex; }
+
+.month-picker-card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  padding: 20px;
+  width: 320px;
+  box-shadow: var(--shadow);
+  animation: popIn 0.18s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes popIn {
+  from { transform: scale(0.88); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.month-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.month-picker-year {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 2px;
+}
+
+.month-picker-year-nav { display: flex; gap: 6px; }
+.month-picker-year-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text2);
+  transition: var(--transition);
+}
+.month-picker-year-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.month-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.month-picker-item {
+  padding: 10px 6px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--card);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  color: var(--text2);
+}
+.month-picker-item:hover { border-color: var(--accent); color: var(--accent); }
+.month-picker-item.current-month { background: rgba(184,150,255,0.15); border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
 .cal-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
+  gap: 2px;
 }
 
 .cal-weekday {
   text-align: center;
-  font-size: 10px;
+  font-size: 9px;
   color: var(--text3);
   letter-spacing: 1px;
   font-family: 'Space Mono', monospace;
@@ -271,126 +503,50 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   position: relative;
   transition: var(--transition);
   gap: 2px;
 }
-
 .cal-day:active { background: var(--card2); }
 .cal-day.today { background: var(--card2); }
 .cal-day.today .cal-day-num { color: var(--accent); font-weight: 700; }
 .cal-day.selected { background: var(--accent); }
 .cal-day.selected .cal-day-num { color: #fff; }
-.cal-day.other-month .cal-day-num { color: var(--text3); }
-
-.cal-day-num {
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1;
-}
-
-.cal-dots {
-  display: flex;
-  gap: 2px;
-  align-items: center;
-  min-height: 6px;
-}
-
-.cal-dot {
-  width: 4px; height: 4px;
-  border-radius: 50%;
-  background: var(--accent3);
-  flex-shrink: 0;
-}
-
+.cal-day.other-month .cal-day-num { color: var(--text3); opacity: 0.5; }
+.cal-day-num { font-size: 12px; font-weight: 500; line-height: 1; }
+.cal-dots { display:flex; gap:2px; align-items:center; min-height:5px; }
+.cal-dot { width:3px; height:3px; border-radius:50%; background:var(--accent3); flex-shrink:0; }
 .cal-dot.tag-concert { background: var(--pink); }
 .cal-dot.tag-schedule { background: var(--teal); }
 .cal-dot.tag-content { background: var(--yellow); }
 
-/* Schedule day detail */
-.day-detail {
-  margin: 0 16px 12px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
+/* Day detail */
+.day-detail { margin: 0 24px 12px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+.day-detail-header { padding:12px 16px 10px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.day-detail-date { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; color:var(--accent); }
+.schedule-item { padding:12px 16px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:12px; cursor:pointer; transition:var(--transition); }
+.schedule-item:last-child { border-bottom:none; }
+.schedule-item:hover { background:var(--card2); }
+.sch-time { font-family:'Space Mono',monospace; font-size:10px; color:var(--text3); min-width:38px; padding-top:2px; }
+.sch-body { flex:1; min-width:0; }
+.sch-title { font-weight:500; font-size:14px; color:var(--text); }
+.sch-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
+.sch-members { display:flex; gap:-4px; margin-top:5px; }
+.member-dot { width:18px; height:18px; border-radius:50%; background:var(--accent2); border:2px solid var(--card); display:flex; align-items:center; justify-content:center; font-size:8px; color:#fff; font-weight:700; margin-left:-4px; }
+.member-dot:first-child { margin-left:0; }
 
-.day-detail-header {
-  padding: 14px 16px 10px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+/* Tag chip */
+.tag-chip { font-size:9px; padding:2px 7px; border-radius:20px; background:var(--card2); color:var(--text2); border:1px solid var(--border); font-family:'Space Mono',monospace; white-space:nowrap; }
+.tag-chip.accent { background:rgba(184,150,255,0.1); color:var(--accent); border-color:rgba(184,150,255,0.2); }
 
-.day-detail-date {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  letter-spacing: 2px;
-  color: var(--accent);
-}
-
-.schedule-item {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  cursor: pointer;
-  transition: var(--transition);
-}
-.schedule-item:last-child { border-bottom: none; }
-.schedule-item:active { background: var(--card2); }
-
-.sch-time {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  color: var(--text3);
-  min-width: 40px;
-  padding-top: 2px;
-}
-
-.sch-body { flex:1; min-width: 0; }
-.sch-title { font-weight: 500; font-size: 14px; color: var(--text); }
-.sch-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
-
-.tag-chip {
-  font-size: 10px;
-  padding: 2px 8px;
-  border-radius: 20px;
-  background: var(--card2);
-  color: var(--text2);
-  border: 1px solid var(--border);
-  font-family: 'Space Mono', monospace;
-  white-space: nowrap;
-}
-
-.tag-chip.accent { background: rgba(200,164,255,0.12); color: var(--accent); border-color: rgba(200,164,255,0.2); }
-
-.sch-members { display:flex; gap:-4px; margin-top:6px; }
-
-.member-dot {
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  background: var(--accent2);
-  border: 2px solid var(--card);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 9px;
-  color: #fff;
-  font-weight: 700;
-  margin-left: -4px;
-}
-.member-dot:first-child { margin-left: 0; }
-
-/* ── MEMBERS ── */
+/* ═══ MEMBERS ═══ */
 .members-grid {
-  padding: 0 16px;
+  padding: 0 24px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
 }
 
 .member-card {
@@ -401,53 +557,18 @@ html, body {
   cursor: pointer;
   transition: var(--transition);
 }
-.member-card:active { transform: scale(0.96); }
+.member-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: var(--shadow); }
+.member-card:active { transform: scale(0.97); }
 
-.member-photo {
-  aspect-ratio: 3/4;
-  background: var(--card2);
-  position: relative;
-  overflow: hidden;
-}
-
+.member-photo { aspect-ratio: 3/4; background:var(--card2); position:relative; overflow:hidden; }
 .member-photo img { width:100%; height:100%; object-fit:cover; }
+.member-photo-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:40px; background:linear-gradient(135deg,var(--bg3),var(--card2)); }
+.member-photo-overlay { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,0.75)); padding:20px 10px 10px; }
+.member-name { font-weight:700; font-size:14px; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,0.5); }
+.member-position { font-size:9px; color:rgba(255,255,255,0.65); margin-top:1px; }
+.member-info-strip { padding:8px 10px; display:flex; gap:5px; flex-wrap:wrap; }
 
-.member-photo-placeholder {
-  width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 40px;
-  background: linear-gradient(135deg, var(--bg3), var(--card2));
-}
-
-.member-photo-overlay {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  background: linear-gradient(transparent, rgba(0,0,0,0.7));
-  padding: 24px 10px 10px;
-}
-
-.member-name {
-  font-weight: 700;
-  font-size: 15px;
-  color: #fff;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-}
-
-.member-position {
-  font-size: 10px;
-  color: rgba(255,255,255,0.7);
-  letter-spacing: 0.5px;
-  margin-top: 2px;
-}
-
-.member-info-strip {
-  padding: 10px 12px;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-/* ── MEMBER DETAIL PAGE ── */
+/* ═══ MEMBER DETAIL PAGE ═══ */
 .detail-page {
   position: fixed;
   inset: 0;
@@ -458,7 +579,6 @@ html, body {
   transform: translateX(100%);
   transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
 }
-
 .detail-page.open { transform: translateX(0); }
 
 .detail-header {
@@ -469,129 +589,147 @@ html, body {
   padding: 14px 20px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   z-index: 10;
 }
 
 .back-btn {
-  width: 34px; height: 34px;
+  width: 32px; height: 32px;
   border-radius: 50%;
   background: var(--card);
   border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
   color: var(--text2);
   flex-shrink: 0;
 }
 
-.detail-header-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  letter-spacing: 2px;
+.detail-header-title { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px; }
+
+.detail-hero { height:260px; background:linear-gradient(135deg,var(--bg3),var(--card2)); position:relative; overflow:hidden; display:flex; align-items:flex-end; }
+.detail-hero img { width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; }
+.detail-hero-overlay { position:relative; z-index:2; padding:20px; background:linear-gradient(transparent,rgba(0,0,0,0.8)); width:100%; }
+.detail-hero-name { font-family:'Bebas Neue',sans-serif; font-size:34px; letter-spacing:3px; color:#fff; text-shadow:0 2px 12px rgba(0,0,0,0.5); }
+.detail-hero-sub { font-size:12px; color:rgba(255,255,255,0.65); letter-spacing:1px; }
+
+.detail-body { padding:16px 20px; padding-bottom:100px; }
+
+.info-section { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:12px; overflow:hidden; }
+.info-section-title { padding:11px 16px 8px; font-size:9px; color:var(--text3); letter-spacing:2px; text-transform:uppercase; font-family:'Space Mono',monospace; border-bottom:1px solid var(--border); }
+.info-row { display:flex; align-items:flex-start; padding:10px 16px; border-bottom:1px solid var(--border); gap:12px; }
+.info-row:last-child { border-bottom:none; }
+.info-label { font-size:10px; color:var(--text3); min-width:60px; padding-top:2px; font-family:'Space Mono',monospace; }
+.info-value { font-size:13px; color:var(--text); flex:1; line-height:1.6; }
+
+/* ═══ FAMILY CARDS ═══ */
+.family-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  padding: 12px 16px;
 }
 
-.detail-hero {
-  height: 240px;
-  background: linear-gradient(135deg, var(--bg3), var(--card2));
-  position: relative;
+.family-card {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
   overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-}
-
-.detail-hero img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0; left: 0;
-}
-
-.detail-hero-overlay {
   position: relative;
-  z-index: 2;
-  padding: 20px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.75));
-  width: 100%;
 }
 
-.detail-hero-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 36px;
-  letter-spacing: 3px;
+.family-photo {
+  aspect-ratio: 1;
+  background: var(--bg3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  overflow: hidden;
+  position: relative;
+}
+
+.family-photo img { width:100%; height:100%; object-fit:cover; }
+
+.family-photo-del {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(255,80,80,0.85);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
   color: #fff;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  display: none;
+}
+.family-card:hover .family-photo-del { display: flex; }
+
+.family-info { padding: 8px; }
+.family-name { font-weight: 600; font-size: 12px; }
+.family-age { font-size: 10px; color: var(--text3); margin-top: 1px; }
+.family-trait { font-size: 10px; color: var(--text2); margin-top: 3px; line-height: 1.4; }
+
+/* Add family card button */
+.family-add-btn {
+  aspect-ratio: 1;
+  background: var(--card);
+  border: 2px dashed var(--border2);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text3);
+  font-size: 11px;
+}
+.family-add-btn:hover { border-color: var(--accent); color: var(--accent); }
+.family-add-btn .add-icon { font-size: 24px; }
+
+/* ═══ PEOPLE / PROFILES ═══ */
+.category-filter {
+  display: flex;
+  gap: 6px;
+  padding: 0 24px 12px;
+  flex-wrap: wrap;
 }
 
-.detail-hero-sub {
-  font-size: 12px;
-  color: rgba(255,255,255,0.7);
-  letter-spacing: 1px;
-}
-
-.detail-body { padding: 16px; padding-bottom: 80px; }
-
-.info-section {
+.cat-btn {
+  padding: 5px 12px;
+  border-radius: 20px;
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  margin-bottom: 12px;
-  overflow: hidden;
-}
-
-.info-section-title {
-  padding: 12px 16px 8px;
-  font-size: 10px;
-  color: var(--text3);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-family: 'Space Mono', monospace;
-  border-bottom: 1px solid var(--border);
-}
-
-.info-row {
-  display: flex;
-  align-items: flex-start;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--border);
-  gap: 12px;
-}
-.info-row:last-child { border-bottom: none; }
-
-.info-label {
   font-size: 11px;
-  color: var(--text3);
-  min-width: 60px;
-  padding-top: 2px;
-  font-family: 'Space Mono', monospace;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text2);
+  white-space: nowrap;
 }
+.cat-btn:hover { border-color: var(--border2); color: var(--text); }
+.cat-btn.active { background: rgba(184,150,255,0.15); border-color: var(--accent); color: var(--accent); font-weight: 600; }
 
-.info-value {
-  font-size: 14px;
-  color: var(--text);
-  flex: 1;
-  line-height: 1.6;
-}
-
-/* ── PEOPLE ── */
-.people-list { padding: 0 16px; }
+.people-list { padding: 0 24px; }
 
 .people-item {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  margin-bottom: 10px;
-  padding: 14px 16px;
+  margin-bottom: 8px;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   cursor: pointer;
   transition: var(--transition);
 }
+.people-item:hover { border-color: var(--border2); background: var(--card2); }
 .people-item:active { transform: scale(0.98); }
 
 .people-avatar {
-  width: 46px; height: 46px;
+  width: 44px; height: 44px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent2), var(--accent3));
   display: flex; align-items: center; justify-content: center;
@@ -599,129 +737,63 @@ html, body {
   flex-shrink: 0;
   overflow: hidden;
 }
-
 .people-avatar img { width:100%; height:100%; object-fit:cover; }
-
 .people-info { flex:1; min-width:0; }
-.people-name { font-weight: 600; font-size: 15px; }
-.people-role { font-size: 11px; color: var(--text2); margin-top: 2px; }
-.people-rel { font-size: 11px; color: var(--text3); }
+.people-name { font-weight:600; font-size:14px; }
+.people-role { font-size:10px; color:var(--text2); margin-top:1px; }
 
-/* ── NOTES ── */
-.notes-list { padding: 0 16px; }
-
-.note-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  margin-bottom: 10px;
-  padding: 16px;
-  cursor: pointer;
-  transition: var(--transition);
-  position: relative;
-}
-.note-card:active { transform: scale(0.98); }
-
-.note-accent-bar {
-  position: absolute;
-  left: 0; top: 16px; bottom: 16px;
-  width: 3px;
-  border-radius: 0 2px 2px 0;
-  background: var(--accent);
-}
-
-.note-title {
-  font-weight: 600;
-  font-size: 15px;
-  padding-left: 12px;
-  margin-bottom: 6px;
-}
-
-.note-preview {
-  font-size: 12px;
-  color: var(--text2);
-  line-height: 1.6;
-  padding-left: 12px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.note-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 10px;
-  padding-left: 12px;
-}
-
-.note-date {
-  font-size: 10px;
-  color: var(--text3);
+.people-category-badge {
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 20px;
   font-family: 'Space Mono', monospace;
-}
-
-/* ── SEARCH ── */
-.search-bar {
-  padding: 12px 16px;
-  position: relative;
-}
-
-.search-input {
-  width: 100%;
-  background: var(--card);
+  background: var(--card2);
   border: 1px solid var(--border);
-  border-radius: 30px;
-  padding: 10px 16px 10px 40px;
-  color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 14px;
-  outline: none;
-  transition: var(--transition);
-}
-
-.search-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(200,164,255,0.1);
-}
-
-.search-input::placeholder { color: var(--text3); }
-
-.search-icon {
-  position: absolute;
-  left: 28px;
-  top: 50%; transform: translateY(-50%);
-  font-size: 15px;
   color: var(--text3);
-  pointer-events: none;
+  white-space: nowrap;
 }
 
-/* ── FAB ── */
+/* ═══ NOTES ═══ */
+.notes-list { padding: 0 24px; }
+.note-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:10px; padding:16px; cursor:pointer; transition:var(--transition); position:relative; }
+.note-card:hover { border-color:var(--border2); transform:translateY(-1px); }
+.note-card:active { transform:scale(0.98); }
+.note-accent-bar { position:absolute; left:0; top:16px; bottom:16px; width:3px; border-radius:0 2px 2px 0; background:var(--accent); }
+.note-title { font-weight:600; font-size:14px; padding-left:12px; margin-bottom:5px; }
+.note-preview { font-size:11px; color:var(--text2); line-height:1.6; padding-left:12px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.note-meta { display:flex; align-items:center; justify-content:space-between; margin-top:10px; padding-left:12px; }
+.note-date { font-size:10px; color:var(--text3); font-family:'Space Mono',monospace; }
+.note-card[data-color="purple"] .note-accent-bar { background:var(--accent); }
+.note-card[data-color="pink"] .note-accent-bar { background:var(--pink); }
+.note-card[data-color="teal"] .note-accent-bar { background:var(--teal); }
+.note-card[data-color="yellow"] .note-accent-bar { background:var(--yellow); }
+
+/* ═══ FAB ═══ */
 .fab {
   position: fixed;
-  right: 20px;
-  bottom: calc(68px + env(safe-area-inset-bottom, 0px) + 16px);
-  width: 54px; height: 54px;
+  right: 24px;
+  bottom: 24px;
+  width: 52px; height: 52px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent2), var(--accent));
   display: flex; align-items: center; justify-content: center;
-  font-size: 24px;
+  font-size: 22px;
   color: #fff;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(123,108,255,0.4);
+  box-shadow: var(--shadow-accent);
   z-index: 50;
   transition: var(--transition);
   border: none;
 }
+.fab:hover { transform: scale(1.06); }
 .fab:active { transform: scale(0.92); }
 
-/* ── MODAL ── */
+/* ═══ MODAL ═══ */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(8px);
   z-index: 200;
   display: none;
   align-items: flex-end;
@@ -733,436 +805,282 @@ html, body {
   background: var(--bg2);
   border-radius: var(--radius) var(--radius) 0 0;
   width: 100%;
-  max-height: 90dvh;
+  max-width: 540px;
+  max-height: 92dvh;
   overflow-y: auto;
-  padding-bottom: env(safe-area-inset-bottom, 20px);
-  animation: slideUp 0.28s cubic-bezier(0.4,0,0.2,1);
+  padding-bottom: env(safe-area-inset-bottom, 24px);
+  animation: slideUp 0.26s cubic-bezier(0.4,0,0.2,1);
 }
 
-@keyframes slideUp {
-  from { transform: translateY(100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+@keyframes slideUp { from { transform:translateY(100%); opacity:0; } to { transform:translateY(0); opacity:1; } }
+
+.modal-handle { width:32px; height:4px; border-radius:2px; background:var(--text3); margin:12px auto 14px; }
+.modal-title { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; padding:0 20px 14px; border-bottom:1px solid var(--border); }
+.modal-body { padding:16px 20px; }
+.form-group { margin-bottom:14px; }
+.form-label { display:block; font-size:10px; color:var(--text3); letter-spacing:1px; text-transform:uppercase; font-family:'Space Mono',monospace; margin-bottom:5px; }
+.form-input, .form-textarea, .form-select { width:100%; background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 13px; color:var(--text); font-family:'Noto Sans KR',sans-serif; font-size:13px; outline:none; transition:var(--transition); }
+.form-input:focus, .form-textarea:focus, .form-select:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,150,255,0.1); }
+.form-input::placeholder, .form-textarea::placeholder { color:var(--text3); }
+.form-select { color:var(--text); appearance:none; }
+.form-textarea { min-height:70px; resize:none; line-height:1.6; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.member-checkboxes { display:flex; flex-wrap:wrap; gap:6px; }
+.member-checkbox { padding:5px 11px; border-radius:20px; background:var(--card); border:1px solid var(--border); font-size:11px; cursor:pointer; transition:var(--transition); color:var(--text2); }
+.member-checkbox.checked { background:rgba(184,150,255,0.15); border-color:var(--accent); color:var(--accent); }
+.btn-primary { width:100%; padding:13px; background:linear-gradient(135deg,var(--accent2),var(--accent)); border:none; border-radius:var(--radius-sm); color:#fff; font-family:'Noto Sans KR',sans-serif; font-size:14px; font-weight:600; cursor:pointer; transition:var(--transition); margin-top:6px; }
+.btn-primary:active { opacity:0.9; }
+.btn-danger { width:100%; padding:11px; background:transparent; border:1px solid rgba(255,100,100,0.25); border-radius:var(--radius-sm); color:#ff6666; font-family:'Noto Sans KR',sans-serif; font-size:13px; cursor:pointer; margin-top:6px; transition:var(--transition); }
+.btn-danger:active { background:rgba(255,100,100,0.1); }
+.btn-cancel-plain { width:100%; padding:11px; background:transparent; border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--text2); font-family:'Noto Sans KR',sans-serif; font-size:13px; cursor:pointer; margin-top:6px; transition:var(--transition); }
+
+/* ═══ UPLOAD ═══ */
+.upload-area { border:2px dashed var(--border); border-radius:var(--radius-sm); padding:20px; text-align:center; cursor:pointer; transition:var(--transition); background:var(--card); display:flex; align-items:center; gap:12px; }
+.upload-area:hover { border-color:var(--accent); background:rgba(184,150,255,0.04); }
+.upload-preview { width:72px; height:72px; border-radius:8px; object-fit:cover; border:2px solid var(--border); }
+
+/* Family member upload in modal */
+.family-mini-upload { width:60px; height:60px; border-radius:8px; background:var(--card2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; flex-shrink:0; transition:var(--transition); }
+.family-mini-upload:hover { border-color:var(--accent); }
+.family-mini-upload img { width:100%; height:100%; object-fit:cover; }
+
+/* ═══ SEARCH ═══ */
+.search-result-group { margin-bottom:14px; }
+.search-result-label { font-size:9px; color:var(--text3); letter-spacing:2px; text-transform:uppercase; font-family:'Space Mono',monospace; padding:0 20px 6px; }
+.search-result-item { padding:11px 20px; border-bottom:1px solid var(--border); cursor:pointer; transition:var(--transition); display:flex; gap:12px; align-items:center; }
+.search-result-item:hover { background:var(--card); }
+.search-result-item:last-child { border-bottom:none; }
+
+/* ═══ EMPTY STATE ═══ */
+.empty-state { text-align:center; padding:48px 24px; color:var(--text3); }
+.empty-state .empty-icon { font-size:36px; margin-bottom:10px; opacity:0.4; }
+.empty-state p { font-size:12px; line-height:1.6; }
+
+/* ═══ TOGGLE ═══ */
+.toggle { width:42px; height:23px; border-radius:12px; background:var(--card2); border:1px solid var(--border); position:relative; cursor:pointer; transition:var(--transition); flex-shrink:0; }
+.toggle.on { background:var(--accent); border-color:var(--accent); }
+.toggle::after { content:''; position:absolute; width:17px; height:17px; border-radius:50%; background:#fff; top:2px; left:2px; transition:var(--transition); }
+.toggle.on::after { left:21px; }
+
+/* ═══ TOAST ═══ */
+.toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--card2); border:1px solid var(--border); border-radius:30px; padding:9px 18px; font-size:12px; color:var(--text); z-index:300; opacity:0; transition:all 0.22s cubic-bezier(0.4,0,0.2,1); white-space:nowrap; box-shadow:var(--shadow); }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* Color picker */
+.color-picker { display:flex; gap:8px; }
+.color-option { width:26px; height:26px; border-radius:50%; cursor:pointer; border:3px solid transparent; transition:var(--transition); }
+.color-option.selected { border-color:var(--text); transform:scale(1.15); }
+
+/* ═══ SETTINGS ═══ */
+.settings-item { padding:13px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); cursor:pointer; transition:var(--transition); }
+.settings-item:hover { background:var(--card); }
+.settings-label { font-size:13px; }
+.settings-sub { font-size:10px; color:var(--text3); margin-top:2px; }
+
+/* ═══ MISC ═══ */
+.no-schedule { padding:20px; text-align:center; color:var(--text3); font-size:12px; }
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+.search-page-wrap { padding-bottom:80px; }
+
+/* ═══ MOBILE RESPONSIVE ═══ */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .topbar { display: flex; }
+  .bottom-nav { display: flex; }
+  .pc-topbar { display: none; }
+  .fab { bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 14px); right: 18px; width: 50px; height: 50px; font-size: 20px; }
+  .toast { bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 72px); }
+  .page-inner { padding-bottom: 80px; }
+  .members-grid { grid-template-columns: 1fr 1fr; padding: 0 14px; gap: 10px; }
+  .people-list { padding: 0 14px; }
+  .notes-list { padding: 0 14px; }
+  .category-filter { padding: 0 14px 10px; }
+  .section-header { padding: 16px 14px 6px; }
+  .calendar-wrap { padding: 0 14px 10px; }
+  .day-detail { margin: 0 14px 10px; }
+  .card { margin: 0 14px 10px; }
 }
 
-.modal-handle {
-  width: 36px; height: 4px;
-  border-radius: 2px;
-  background: var(--text3);
-  margin: 12px auto 16px;
+@media (min-width: 769px) {
+  .topbar { display: none; }
+  .bottom-nav { display: none !important; }
+  .pc-topbar { display: flex; }
+  .fab { bottom: 28px; right: 28px; }
+  .toast { bottom: 40px; }
+  .members-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
 }
-
-.modal-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  letter-spacing: 2px;
-  padding: 0 20px 16px;
-  border-bottom: 1px solid var(--border);
-}
-
-.modal-body { padding: 16px 20px; }
-
-.form-group { margin-bottom: 16px; }
-
-.form-label {
-  display: block;
-  font-size: 11px;
-  color: var(--text3);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  font-family: 'Space Mono', monospace;
-  margin-bottom: 6px;
-}
-
-.form-input, .form-textarea, .form-select {
-  width: 100%;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 11px 14px;
-  color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 14px;
-  outline: none;
-  transition: var(--transition);
-}
-
-.form-input:focus, .form-textarea:focus, .form-select:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(200,164,255,0.1);
-}
-
-.form-input::placeholder, .form-textarea::placeholder { color: var(--text3); }
-.form-select { color: var(--text); appearance: none; }
-.form-textarea { min-height: 80px; resize: none; line-height: 1.6; }
-
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-.member-checkboxes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.member-checkbox {
-  padding: 5px 12px;
-  border-radius: 20px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  font-size: 12px;
-  cursor: pointer;
-  transition: var(--transition);
-  color: var(--text2);
-}
-
-.member-checkbox.checked {
-  background: rgba(200,164,255,0.15);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.tag-input-wrap {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.tag-input {
-  flex: 1;
-  min-width: 100px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 8px 12px;
-  color: var(--text);
-  font-size: 13px;
-  outline: none;
-  font-family: 'Noto Sans KR', sans-serif;
-}
-
-.tag-input:focus { border-color: var(--accent); }
-
-.btn-primary {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, var(--accent2), var(--accent));
-  border: none;
-  border-radius: var(--radius-sm);
-  color: #fff;
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  letter-spacing: 0.5px;
-  transition: var(--transition);
-  margin-top: 8px;
-}
-.btn-primary:active { transform: scale(0.98); opacity: 0.9; }
-
-.btn-danger {
-  width: 100%;
-  padding: 12px;
-  background: transparent;
-  border: 1px solid rgba(255,100,100,0.3);
-  border-radius: var(--radius-sm);
-  color: #ff6666;
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 14px;
-  cursor: pointer;
-  margin-top: 6px;
-  transition: var(--transition);
-}
-.btn-danger:active { background: rgba(255,100,100,0.1); }
-
-.btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
-
-.btn-secondary {
-  padding: 12px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text2);
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 14px;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-/* ── SEARCH RESULTS ── */
-.search-result-group { margin-bottom: 16px; }
-.search-result-label {
-  font-size: 10px;
-  color: var(--text3);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-family: 'Space Mono', monospace;
-  padding: 0 20px 8px;
-}
-
-.search-result-item {
-  padding: 12px 20px;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-.search-result-item:active { background: var(--card); }
-.search-result-item:last-child { border-bottom: none; }
-
-/* ── UPLOAD ── */
-.upload-area {
-  border: 2px dashed var(--border);
-  border-radius: var(--radius-sm);
-  padding: 24px;
-  text-align: center;
-  cursor: pointer;
-  transition: var(--transition);
-  background: var(--card);
-}
-.upload-area:active { border-color: var(--accent); background: rgba(200,164,255,0.05); }
-.upload-area p { font-size: 12px; color: var(--text3); margin-top: 8px; }
-
-.upload-preview {
-  width: 80px; height: 80px;
-  border-radius: var(--radius-sm);
-  object-fit: cover;
-  border: 2px solid var(--border);
-}
-
-/* ── EMPTY STATE ── */
-.empty-state {
-  text-align: center;
-  padding: 48px 24px;
-  color: var(--text3);
-}
-
-.empty-state .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.5; }
-.empty-state p { font-size: 13px; line-height: 1.6; }
-
-/* ── TAG PAGE ── */
-.tag-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 0 16px 12px;
-}
-
-.tag-cloud-item {
-  padding: 6px 14px;
-  border-radius: 20px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  font-size: 12px;
-  cursor: pointer;
-  transition: var(--transition);
-  color: var(--text2);
-  font-family: 'Space Mono', monospace;
-}
-.tag-cloud-item:active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* ── SETTINGS PANEL ── */
-.settings-item {
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  transition: var(--transition);
-}
-.settings-item:active { background: var(--card); }
-.settings-label { font-size: 14px; }
-.settings-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
-
-/* Note editor */
-.note-editor-area {
-  width: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 14px;
-  line-height: 1.8;
-  resize: none;
-  min-height: 200px;
-}
-
-/* ── TOGGLE ── */
-.toggle {
-  width: 44px; height: 24px;
-  border-radius: 12px;
-  background: var(--card2);
-  border: 1px solid var(--border);
-  position: relative;
-  cursor: pointer;
-  transition: var(--transition);
-  flex-shrink: 0;
-}
-.toggle.on { background: var(--accent); border-color: var(--accent); }
-.toggle::after {
-  content: '';
-  position: absolute;
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  background: #fff;
-  top: 2px; left: 2px;
-  transition: var(--transition);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-}
-.toggle.on::after { left: 22px; }
-
-/* ── TOAST ── */
-.toast {
-  position: fixed;
-  bottom: calc(68px + env(safe-area-inset-bottom, 0px) + 80px);
-  left: 50%; transform: translateX(-50%) translateY(20px);
-  background: var(--card2);
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  padding: 10px 20px;
-  font-size: 13px;
-  color: var(--text);
-  z-index: 300;
-  opacity: 0;
-  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-  white-space: nowrap;
-  box-shadow: var(--shadow);
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-/* ── MISC ── */
-.divider { height: 1px; background: var(--border); margin: 8px 0; }
-.spacer { height: 12px; }
-
-.color-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 5px;
-}
-
-.no-schedule {
-  padding: 24px;
-  text-align: center;
-  color: var(--text3);
-  font-size: 13px;
-}
-
-/* Color accents for notes */
-.note-card[data-color="purple"] .note-accent-bar { background: var(--accent); }
-.note-card[data-color="pink"] .note-accent-bar { background: var(--pink); }
-.note-card[data-color="teal"] .note-accent-bar { background: var(--teal); }
-.note-card[data-color="yellow"] .note-accent-bar { background: var(--yellow); }
-
-.color-picker { display:flex; gap:8px; align-items:center; }
-.color-option {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 3px solid transparent;
-  transition: var(--transition);
-}
-.color-option.selected { border-color: var(--text); transform: scale(1.15); }
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-/* search page */
-#page-search { display:block; }
-.search-page-wrap { padding-bottom: 80px; }
 </style>
 </head>
 <body>
 
 <div id="app">
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="topbar-logo">ARCHIVE</div>
-    <div class="topbar-actions">
-      <div class="icon-btn" id="btn-search-open" title="검색">🔍</div>
-      <div class="icon-btn" id="btn-theme" title="테마 전환">🌙</div>
-      <div class="icon-btn" id="btn-settings" title="설정">⚙️</div>
+
+  <!-- ═══ SIDEBAR (PC) ═══ -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-text">ARCHIVE</span>
+      <span class="logo-sub">VIRTUAL IDOL SYSTEM</span>
     </div>
-  </div>
-
-  <!-- CONTENT -->
-  <div class="content-area" id="content-area">
-
-    <!-- ══ PAGE: SCHEDULE ══ -->
-    <div class="page active" id="page-schedule">
-      <div class="section-header">
-        <span class="section-title">SCHEDULE</span>
-        <span class="section-sub" id="cal-year-label">2026</span>
+    <div class="sidebar-nav">
+      <div class="sidebar-nav-item active" data-page="schedule">
+        <span class="sidebar-nav-icon">📅</span>
+        <span>스케줄</span>
+        <span class="sidebar-nav-count" id="sidebar-sch-count"></span>
       </div>
-      <div class="calendar-wrap">
-        <div class="cal-nav">
-          <div class="cal-arrow" id="cal-prev">‹</div>
-          <div class="cal-month" id="cal-month-label">JUNE</div>
-          <div class="cal-arrow" id="cal-next">›</div>
-        </div>
-        <div class="cal-grid" id="cal-weekdays"></div>
-        <div class="cal-grid" id="cal-days"></div>
+      <div class="sidebar-nav-item" data-page="members">
+        <span class="sidebar-nav-icon">👤</span>
+        <span>멤버</span>
+        <span class="sidebar-nav-count" id="sidebar-mem-count"></span>
       </div>
-      <div id="day-detail-container"></div>
-    </div>
-
-    <!-- ══ PAGE: MEMBERS ══ -->
-    <div class="page" id="page-members">
-      <div class="section-header">
-        <span class="section-title">MEMBERS</span>
-        <span class="section-sub" id="members-count">0명</span>
+      <div class="sidebar-nav-item" data-page="people">
+        <span class="sidebar-nav-icon">👥</span>
+        <span>프로필 (지인)</span>
+        <span class="sidebar-nav-count" id="sidebar-ppl-count"></span>
       </div>
-      <div class="members-grid" id="members-grid"></div>
-    </div>
-
-    <!-- ══ PAGE: PEOPLE ══ -->
-    <div class="page" id="page-people">
-      <div class="section-header">
-        <span class="section-title">PEOPLE</span>
-        <span class="section-sub" id="people-count">0명</span>
+      <div class="sidebar-nav-item" data-page="notes">
+        <span class="sidebar-nav-icon">📝</span>
+        <span>노트</span>
+        <span class="sidebar-nav-count" id="sidebar-note-count"></span>
       </div>
-      <div class="people-list" id="people-list"></div>
     </div>
-
-    <!-- ══ PAGE: NOTES ══ -->
-    <div class="page" id="page-notes">
-      <div class="section-header">
-        <span class="section-title">NOTES</span>
-        <span class="section-sub" id="notes-count">0개</span>
+    <div class="sidebar-bottom">
+      <div class="sidebar-action" id="sidebar-search">
+        <span>🔍</span><span>검색</span>
       </div>
-      <div class="notes-list" id="notes-list"></div>
-    </div>
-
-  </div>
-
-  <!-- BOTTOM NAV -->
-  <nav class="bottom-nav">
-    <div class="nav-item active" data-page="schedule">
-      <div class="nav-icon">📅</div>
-      <div class="nav-label">SCHEDULE</div>
-    </div>
-    <div class="nav-item" data-page="members">
-      <div class="nav-icon">👤</div>
-      <div class="nav-label">MEMBERS</div>
-    </div>
-    <div class="nav-item" data-page="people">
-      <div class="nav-icon">👥</div>
-      <div class="nav-label">PEOPLE</div>
-    </div>
-    <div class="nav-item" data-page="notes">
-      <div class="nav-icon">📝</div>
-      <div class="nav-label">NOTES</div>
+      <div class="sidebar-action" id="sidebar-theme">
+        <span id="sidebar-theme-icon">🌙</span><span>테마 전환</span>
+      </div>
+      <div class="sidebar-action" id="sidebar-settings">
+        <span>⚙️</span><span>설정</span>
+      </div>
     </div>
   </nav>
-</div>
+
+  <!-- ═══ MAIN AREA ═══ -->
+  <div class="main-area">
+
+    <!-- TOPBAR (mobile) -->
+    <div class="topbar">
+      <div class="topbar-logo">ARCHIVE</div>
+      <div class="topbar-actions">
+        <div class="icon-btn" id="btn-search-open">🔍</div>
+        <div class="icon-btn" id="btn-theme">🌙</div>
+        <div class="icon-btn" id="btn-settings">⚙️</div>
+      </div>
+    </div>
+
+    <!-- PC TOPBAR -->
+    <div class="pc-topbar">
+      <div class="pc-page-title" id="pc-page-title">SCHEDULE</div>
+      <div class="pc-topbar-right">
+        <div class="pc-search-bar" id="pc-search-open">
+          <span>🔍</span>
+          <span>검색...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content-area" id="content-area">
+
+      <!-- ══ SCHEDULE ══ -->
+      <div class="page active" id="page-schedule">
+        <div class="page-inner">
+          <div class="calendar-wrap">
+            <div class="cal-nav">
+              <div style="display:flex;align-items:center;gap:6px">
+                <div class="cal-month-btn" id="cal-month-label">JUNE</div>
+                <div class="cal-year-btn" id="cal-year-label">2026</div>
+              </div>
+              <div class="cal-nav-arrows">
+                <div class="cal-arrow" id="cal-prev">‹</div>
+                <div class="cal-arrow" id="cal-next">›</div>
+              </div>
+            </div>
+            <div class="cal-grid" id="cal-weekdays"></div>
+            <div class="cal-grid" id="cal-days"></div>
+          </div>
+          <div id="day-detail-container"></div>
+        </div>
+      </div>
+
+      <!-- ══ MEMBERS ══ -->
+      <div class="page" id="page-members">
+        <div class="page-inner">
+          <div class="section-header">
+            <span class="section-title">MEMBERS</span>
+            <span class="section-sub" id="members-count">0명</span>
+          </div>
+          <div class="members-grid" id="members-grid"></div>
+        </div>
+      </div>
+
+      <!-- ══ PEOPLE ══ -->
+      <div class="page" id="page-people">
+        <div class="page-inner">
+          <div class="section-header">
+            <span class="section-title">프로필 (지인)</span>
+            <span class="section-sub" id="people-count">0명</span>
+          </div>
+          <div class="category-filter" id="people-cat-filter"></div>
+          <div class="people-list" id="people-list"></div>
+        </div>
+      </div>
+
+      <!-- ══ NOTES ══ -->
+      <div class="page" id="page-notes">
+        <div class="page-inner">
+          <div class="section-header">
+            <span class="section-title">NOTES</span>
+            <span class="section-sub" id="notes-count">0개</span>
+          </div>
+          <div class="notes-list" id="notes-list"></div>
+        </div>
+      </div>
+
+    </div><!-- /content-area -->
+
+    <!-- BOTTOM NAV (mobile) -->
+    <nav class="bottom-nav">
+      <div class="nav-item active" data-page="schedule">
+        <div class="nav-icon">📅</div>
+        <div class="nav-label">스케줄</div>
+      </div>
+      <div class="nav-item" data-page="members">
+        <div class="nav-icon">👤</div>
+        <div class="nav-label">멤버</div>
+      </div>
+      <div class="nav-item" data-page="people">
+        <div class="nav-icon">👥</div>
+        <div class="nav-label">지인</div>
+      </div>
+      <div class="nav-item" data-page="notes">
+        <div class="nav-icon">📝</div>
+        <div class="nav-label">노트</div>
+      </div>
+    </nav>
+
+  </div><!-- /main-area -->
+</div><!-- /app -->
 
 <!-- FAB -->
 <button class="fab" id="fab">＋</button>
+
+<!-- ══ MONTH PICKER ══ -->
+<div class="month-picker-overlay" id="month-picker-overlay">
+  <div class="month-picker-card">
+    <div class="month-picker-header">
+      <div class="month-picker-year" id="mp-year-label">2026</div>
+      <div class="month-picker-year-nav">
+        <div class="month-picker-year-btn" id="mp-year-prev">‹</div>
+        <div class="month-picker-year-btn" id="mp-year-next">›</div>
+      </div>
+    </div>
+    <div class="month-picker-grid" id="mp-grid"></div>
+  </div>
+</div>
 
 <!-- ══ DETAIL PAGES ══ -->
 <div class="detail-page" id="detail-member">
@@ -1209,22 +1127,22 @@ html, body {
   <div id="detail-schedule-content"></div>
 </div>
 
-<!-- ══ SEARCH OVERLAY ══ -->
+<!-- SEARCH OVERLAY -->
 <div class="detail-page" id="search-overlay">
   <div class="detail-header">
     <div class="back-btn" id="close-search">←</div>
     <div style="flex:1; padding-left:8px;">
-      <input class="search-input" id="search-input-main" placeholder="검색어를 입력하세요" style="padding-left:14px;" autofocus>
+      <input style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:8px 16px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:13px;outline:none;" id="search-input-main" placeholder="검색어를 입력하세요" autofocus>
     </div>
   </div>
   <div class="search-page-wrap" id="search-results"></div>
 </div>
 
-<!-- ══ SETTINGS OVERLAY ══ -->
+<!-- SETTINGS OVERLAY -->
 <div class="detail-page" id="settings-overlay">
   <div class="detail-header">
     <div class="back-btn" id="close-settings">←</div>
-    <div class="detail-header-title">SETTINGS</div>
+    <div class="detail-header-title">설정</div>
   </div>
   <div style="padding: 16px 0 80px;">
     <div class="settings-item" id="settings-theme-toggle">
@@ -1249,8 +1167,8 @@ html, body {
       <span style="color:var(--text3)">›</span>
     </div>
     <input type="file" id="import-file-input" accept=".json" style="display:none">
-    <div style="padding: 20px 20px 0; font-size:11px; color:var(--text3); font-family:'Space Mono',monospace; line-height:1.8;">
-      ARCHIVE v1.0<br>
+    <div style="padding: 20px 20px 0; font-size:10px; color:var(--text3); font-family:'Space Mono',monospace; line-height:1.8;">
+      ARCHIVE v2.0<br>
       가상 아이돌 아카이빙 시스템<br>
       Firebase + Cloudinary
     </div>
@@ -1292,7 +1210,7 @@ html, body {
         <textarea class="form-textarea" id="sch-memo" placeholder="메모를 입력하세요"></textarea>
       </div>
       <button class="btn-primary" id="btn-save-schedule">저장</button>
-      <button class="btn-danger" id="btn-cancel-schedule" style="margin-top:8px; display:block; width:100%; padding:12px; background:transparent; border:1px solid var(--border); border-radius:10px; color:var(--text2); font-family:'Noto Sans KR',sans-serif; font-size:14px; cursor:pointer;">취소</button>
+      <button class="btn-cancel-plain" id="btn-cancel-schedule">취소</button>
     </div>
   </div>
 </div>
@@ -1305,11 +1223,11 @@ html, body {
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">프로필 사진</label>
-        <div id="member-photo-upload" class="upload-area" style="display:flex;align-items:center;gap:12px;">
-          <span style="font-size:28px">📸</span>
+        <div id="member-photo-upload" class="upload-area">
+          <span style="font-size:26px">📸</span>
           <div>
-            <p style="font-size:13px;color:var(--text2);margin:0">사진 업로드</p>
-            <p style="margin-top:2px!important">Cloudinary 자동 업로드</p>
+            <p style="font-size:12px;color:var(--text2);margin:0">사진 업로드</p>
+            <p style="font-size:10px;color:var(--text3);margin-top:2px">Cloudinary 자동 업로드</p>
           </div>
           <img id="member-photo-preview" class="upload-preview" style="display:none;margin-left:auto">
         </div>
@@ -1358,26 +1276,22 @@ html, body {
       </div>
       <div class="form-group">
         <label class="form-label">성격</label>
-        <textarea class="form-textarea" id="mem-personality" placeholder="성격 설명" style="min-height:60px"></textarea>
+        <textarea class="form-textarea" id="mem-personality" placeholder="성격 설명" style="min-height:56px"></textarea>
       </div>
       <div class="form-group">
         <label class="form-label">취향</label>
-        <textarea class="form-textarea" id="mem-taste" placeholder="취향 설명" style="min-height:60px"></textarea>
+        <textarea class="form-textarea" id="mem-taste" placeholder="취향 설명" style="min-height:56px"></textarea>
       </div>
       <div class="form-group">
         <label class="form-label">습관 / 특기</label>
-        <textarea class="form-textarea" id="mem-habit" placeholder="습관, 특기 설명" style="min-height:60px"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">가족관계</label>
-        <textarea class="form-textarea" id="mem-family" placeholder="가족관계 설명" style="min-height:60px"></textarea>
+        <textarea class="form-textarea" id="mem-habit" placeholder="습관, 특기 설명" style="min-height:56px"></textarea>
       </div>
       <div class="form-group">
         <label class="form-label">자유 메모</label>
         <textarea class="form-textarea" id="mem-memo" placeholder="자유 메모"></textarea>
       </div>
       <button class="btn-primary" id="btn-save-member">저장</button>
-      <button class="btn-danger" id="btn-cancel-member">취소</button>
+      <button class="btn-cancel-plain" id="btn-cancel-member">취소</button>
     </div>
   </div>
 </div>
@@ -1390,9 +1304,12 @@ html, body {
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">프로필 사진</label>
-        <div id="people-photo-upload" class="upload-area" style="display:flex;align-items:center;gap:12px;">
-          <span style="font-size:28px">👤</span>
-          <div><p style="font-size:13px;color:var(--text2);margin:0">사진 업로드</p><p style="margin-top:2px!important">Cloudinary 자동 업로드</p></div>
+        <div id="people-photo-upload" class="upload-area">
+          <span style="font-size:26px">👤</span>
+          <div>
+            <p style="font-size:12px;color:var(--text2);margin:0">사진 업로드</p>
+            <p style="font-size:10px;color:var(--text3);margin-top:2px">Cloudinary 자동 업로드</p>
+          </div>
           <img id="people-photo-preview" class="upload-preview" style="display:none;margin-left:auto">
         </div>
         <input type="file" id="people-photo-input" accept="image/*" style="display:none">
@@ -1401,6 +1318,22 @@ html, body {
       <div class="form-group">
         <label class="form-label">이름</label>
         <input class="form-input" id="ppl-name" placeholder="이름">
+      </div>
+      <div class="form-group">
+        <label class="form-label">카테고리</label>
+        <select class="form-select" id="ppl-category">
+          <option value="">-- 선택 --</option>
+          <option value="아이돌">아이돌</option>
+          <option value="가수">가수</option>
+          <option value="배우">배우</option>
+          <option value="래퍼">래퍼</option>
+          <option value="인플루언서">인플루언서</option>
+          <option value="방송인">방송인</option>
+          <option value="프로듀서">프로듀서</option>
+          <option value="모델">모델</option>
+          <option value="일반인">일반인</option>
+          <option value="기타">기타</option>
+        </select>
       </div>
       <div class="form-row">
         <div class="form-group">
@@ -1421,7 +1354,7 @@ html, body {
         <textarea class="form-textarea" id="ppl-memo" placeholder="자유 메모"></textarea>
       </div>
       <button class="btn-primary" id="btn-save-people">저장</button>
-      <button class="btn-danger" id="btn-cancel-people">취소</button>
+      <button class="btn-cancel-plain" id="btn-cancel-people">취소</button>
     </div>
   </div>
 </div>
@@ -1447,14 +1380,59 @@ html, body {
       </div>
       <div class="form-group">
         <label class="form-label">내용</label>
-        <textarea class="form-textarea" id="note-content-input" placeholder="자유롭게 작성하세요" style="min-height:160px"></textarea>
+        <textarea class="form-textarea" id="note-content-input" placeholder="자유롭게 작성하세요" style="min-height:140px"></textarea>
       </div>
       <div class="form-group">
         <label class="form-label">태그 (쉼표로 구분)</label>
         <input class="form-input" id="note-tags-input" placeholder="#컨셉, #세계관">
       </div>
       <button class="btn-primary" id="btn-save-note">저장</button>
-      <button class="btn-danger" id="btn-cancel-note">취소</button>
+      <button class="btn-cancel-plain" id="btn-cancel-note">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- Family Member Modal -->
+<div class="modal-overlay" id="modal-family">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">가족 추가</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">사진</label>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div id="family-photo-upload" class="family-mini-upload">
+            <span id="family-photo-placeholder" style="font-size:22px">👨‍👩‍👧</span>
+            <img id="family-photo-preview" style="display:none;width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div>
+            <p style="font-size:12px;color:var(--text2)">사진 업로드</p>
+            <p style="font-size:10px;color:var(--text3);margin-top:2px">Cloudinary 자동 업로드</p>
+          </div>
+        </div>
+        <input type="file" id="family-photo-input" accept="image/*" style="display:none">
+        <input type="hidden" id="family-photo-url">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">이름</label>
+          <input class="form-input" id="fam-name" placeholder="이름">
+        </div>
+        <div class="form-group">
+          <label class="form-label">나이</label>
+          <input class="form-input" id="fam-age" placeholder="45세">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">관계</label>
+        <input class="form-input" id="fam-relation" placeholder="어머니, 남동생 등">
+      </div>
+      <div class="form-group">
+        <label class="form-label">간단한 특징</label>
+        <textarea class="form-textarea" id="fam-trait" placeholder="성격이나 특징을 간단히 적어주세요" style="min-height:60px"></textarea>
+      </div>
+      <button class="btn-primary" id="btn-save-family">저장</button>
+      <button class="btn-cancel-plain" id="btn-cancel-family">취소</button>
     </div>
   </div>
 </div>
@@ -1468,41 +1446,48 @@ const CLOUDINARY_CLOUD = 'dbljkloal';
 const CLOUDINARY_PRESET = 'Everything';
 const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`;
 
+// People categories
+const PEOPLE_CATEGORIES = ['전체','아이돌','가수','배우','래퍼','인플루언서','방송인','프로듀서','모델','일반인','기타'];
+
 // ══ STATE ══
 let db, fbModules;
 let currentPage = 'schedule';
-let calYear = 2026, calMonth = 5; // 0-indexed
+let calYear = 2026, calMonth = 5;
+let mpYear = 2026; // month picker temp year
 let selectedDate = null;
 let schedules = [], members = [], peoples = [], notes = [];
 let editingId = null;
 let currentNoteColor = 'purple';
 let isDark = true;
+let currentPeopleCategory = '전체';
+let familyEditingMemberId = null; // which member we're adding family to
+let familyPhotoUrl = '';
+
+// Page titles
+const PAGE_TITLES = { schedule:'SCHEDULE', members:'MEMBERS', people:'프로필 (지인)', notes:'NOTES' };
 
 // Dummy data
 const DUMMY_MEMBERS = [
-  { stagename:'하늘', realname:'김하늘', nationality:'한국', birthday:'2003-03-15', height:'165cm', position:'메인보컬', mbti:'INFJ', nickname:'하늘이, 천사', personality:'조용하고 섬세하다. 혼자 있는 시간을 좋아하지만 팀원들에게는 따뜻하다.', taste:'클래식 음악, 수채화, 비오는 날', habit:'무언가 생각할 때 머리를 만지는 습관. 피아노 연주 특기.', family:'부모님과 남동생 1명', memo:'그룹의 센터이자 감성 담당', photo:'' },
-  { stagename:'리아', realname:'이리아', nationality:'한국', birthday:'2004-07-22', height:'162cm', position:'리드댄서', mbti:'ENFP', nickname:'리아, 에너지폭탄', personality:'활발하고 긍정적. 어떤 상황에서도 팀 분위기를 밝게 만든다.', taste:'R&B, 스트릿 패션, 카페 탐방', habit:'기분 좋을 때 콧노래, 춤 연습 중독.', family:'부모님과 언니 1명', memo:'그룹의 에너지 담당, 안무 창작 참여', photo:'' },
-  { stagename:'세린', realname:'박세린', nationality:'한국', birthday:'2002-11-08', height:'168cm', position:'메인래퍼', mbti:'INTJ', nickname:'세린, 아이스퀸', personality:'냉철하고 논리적이지만 가끔 유머감각이 폭발.', taste:'힙합, 스케이트보드, 독서', habit:'공책에 가사 메모, 음악 들을 때 눈 감는 버릇.', family:'부모님 (독자)', memo:'그룹의 리더 역할 담당', photo:'' },
+  { stagename:'하늘', realname:'김하늘', nationality:'한국', birthday:'2003-03-15', height:'165cm', position:'메인보컬', mbti:'INFJ', nickname:'하늘이, 천사', personality:'조용하고 섬세하다.', taste:'클래식 음악, 수채화', habit:'피아노 연주 특기.', memo:'그룹의 센터이자 감성 담당', photo:'', family_members:[] },
+  { stagename:'리아', realname:'이리아', nationality:'한국', birthday:'2004-07-22', height:'162cm', position:'리드댄서', mbti:'ENFP', nickname:'리아, 에너지폭탄', personality:'활발하고 긍정적.', taste:'R&B, 스트릿 패션', habit:'기분 좋을 때 콧노래.', memo:'그룹의 에너지 담당', photo:'', family_members:[] },
+  { stagename:'세린', realname:'박세린', nationality:'한국', birthday:'2002-11-08', height:'168cm', position:'메인래퍼', mbti:'INTJ', nickname:'세린, 아이스퀸', personality:'냉철하고 논리적.', taste:'힙합, 스케이트보드', habit:'공책에 가사 메모.', memo:'그룹의 리더 역할 담당', photo:'', family_members:[] },
 ];
 const DUMMY_PEOPLE = [
-  { name:'박민수', role:'프로듀서', relation:'소속사 관계자', desc:'주력 앨범 프로듀서. 데뷔 전부터 함께해온 음악 파트너.', memo:'감성적인 곡 스타일 선호', photo:'' },
-  { name:'이나리', role:'안무가', relation:'협업 아티스트', desc:'컴백 때마다 안무를 맡아온 안무가. 세린과 특히 잘 맞음.', memo:'스트릿댄스 베이스', photo:'' },
-  { name:'정수아', role:'팬', relation:'팬덤 대표', desc:'팬클럽 1기 회원. 팬미팅에서 자주 만나는 얼굴.', memo:'하늘 최애', photo:'' },
+  { name:'박민수', category:'프로듀서', role:'프로듀서', relation:'소속사 관계자', desc:'주력 앨범 프로듀서.', memo:'감성적인 곡 스타일 선호', photo:'' },
+  { name:'이나리', category:'인플루언서', role:'안무가', relation:'협업 아티스트', desc:'컴백 때마다 안무를 맡아온 안무가.', memo:'스트릿댄스 베이스', photo:'' },
+  { name:'정수아', category:'일반인', role:'팬', relation:'팬덤 대표', desc:'팬클럽 1기 회원.', memo:'하늘 최애', photo:'' },
 ];
 const DUMMY_NOTES = [
-  { title:'컴백 컨셉 아이디어', content:'다크 판타지 + 사이버펑크 융합 컨셉 고려.\n\n- 세계관: 기억을 잃은 아이돌이 자신의 과거를 찾아가는 스토리\n- 색감: 딥 퍼플, 네온 핑크, 블랙\n- 키워드: 기억, 거울, 달빛\n\n타이틀곡 후보:\n1. "MIRROR" - 자기 자신과의 대면\n2. "ECHO" - 사라진 기억의 메아리', tags:'#컨셉,#컴백,#세계관', color:'purple', date:'2026-06-01' },
-  { title:'세계관 설정 — 라이벌 그룹', content:'라이벌 그룹 "ECLIPSE" 설정\n\n같은 소속사 출신이지만 다른 길을 걷게 된 그룹.\n리더와 하늘 사이에 과거의 인연이 있음.', tags:'#세계관,#라이벌', color:'pink', date:'2026-05-28' },
-  { title:'미정 설정 모음', content:'아직 확정되지 않은 설정들:\n\n- 리아의 해외 유학 경험 여부\n- 세린의 데뷔 전 솔로 활동\n- 그룹명의 의미와 유래\n- 팬클럽명 후보 목록', tags:'#미정,#설정', color:'teal', date:'2026-05-20' },
+  { title:'컴백 컨셉 아이디어', content:'다크 판타지 + 사이버펑크 융합 컨셉 고려.\n\n- 세계관: 기억을 잃은 아이돌이 자신의 과거를 찾아가는 스토리\n- 색감: 딥 퍼플, 네온 핑크, 블랙\n- 키워드: 기억, 거울, 달빛', tags:'#컨셉,#컴백,#세계관', color:'purple', date:'2026-06-01' },
+  { title:'세계관 설정 — 라이벌 그룹', content:'라이벌 그룹 "ECLIPSE" 설정\n\n같은 소속사 출신이지만 다른 길을 걷게 된 그룹.', tags:'#세계관,#라이벌', color:'pink', date:'2026-05-28' },
 ];
 const DUMMY_SCHEDULES = [
   { date:'2026-06-06', time:'14:00', title:'팬사인회', members:['하늘','리아','세린'], tags:'#팬사인회,#공식행사', memo:'강남 코엑스 행사장. 300명 규모.' },
   { date:'2026-06-06', time:'19:30', title:'뮤직뱅크 사전녹화', members:['하늘','리아','세린'], tags:'#방송,#음방', memo:'KBS 여의도 공개홀' },
-  { date:'2026-06-12', time:'13:00', title:'자체 콘텐츠 촬영', members:['리아','세린'], tags:'#콘텐츠,#유튜브', memo:'멤버 일상 브이로그 촬영' },
   { date:'2026-06-18', time:'20:00', title:'단독 콘서트', members:['하늘','리아','세린'], tags:'#콘서트,#공연', memo:'올림픽홀 2일차 공연' },
-  { date:'2026-06-25', time:'15:00', title:'잡지 화보 촬영', members:['하늘'], tags:'#화보,#잡지', memo:'보그코리아 7월호 커버 화보' },
 ];
 
-// ══ FIREBASE INIT ══
+// ══ FIREBASE ══
 window.addEventListener('firebase-ready', async () => {
   db = window.__db;
   fbModules = window.__fbModules;
@@ -1517,14 +1502,11 @@ async function loadAll() {
     members = await loadCollection('members');
     peoples = await loadCollection('peoples');
     notes = await loadCollection('notes');
-  } catch(e) {
-    console.error('Firebase load error:', e);
-    loadFromLocal();
-  }
+  } catch(e) { loadFromLocal(); }
 }
 
 async function loadCollection(name) {
-  const { collection, getDocs, query, orderBy } = fbModules;
+  const { collection, getDocs, query } = fbModules;
   const q = query(collection(db, name));
   const snap = await getDocs(q);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -1562,9 +1544,7 @@ async function addItem(col, data) {
   } catch(e) {
     const id = 'local_' + Date.now() + '_' + Math.random().toString(36).slice(2);
     const arr = col==='schedules'?schedules:col==='members'?members:col==='peoples'?peoples:notes;
-    arr.push({ id, ...data });
-    saveLocal();
-    return id;
+    arr.push({ id, ...data }); saveLocal(); return id;
   }
 }
 
@@ -1575,7 +1555,7 @@ async function updateItem(col, id, data) {
   } catch(e) {
     const arr = col==='schedules'?schedules:col==='members'?members:col==='peoples'?peoples:notes;
     const i = arr.findIndex(x=>x.id===id);
-    if(i>=0) { arr[i] = {...arr[i],...data}; saveLocal(); }
+    if(i>=0) { arr[i]={...arr[i],...data}; saveLocal(); }
   }
 }
 
@@ -1603,14 +1583,18 @@ function updateCounts() {
   document.getElementById('members-count').textContent = members.length + '명';
   document.getElementById('people-count').textContent = peoples.length + '명';
   document.getElementById('notes-count').textContent = notes.length + '개';
+  document.getElementById('sidebar-mem-count').textContent = members.length;
+  document.getElementById('sidebar-ppl-count').textContent = peoples.length;
+  document.getElementById('sidebar-note-count').textContent = notes.length;
 }
 
 // ── Calendar ──
-const MONTHS = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
-const WEEKDAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+const MONTHS_KR = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+const MONTHS_EN = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+const WEEKDAYS = ['일','월','화','수','목','금','토'];
 
 function renderCalendar() {
-  document.getElementById('cal-month-label').textContent = MONTHS[calMonth];
+  document.getElementById('cal-month-label').textContent = MONTHS_EN[calMonth];
   document.getElementById('cal-year-label').textContent = calYear;
 
   const wdEl = document.getElementById('cal-weekdays');
@@ -1654,22 +1638,18 @@ function renderCalendar() {
   if(selectedDate) renderDayDetail(selectedDate);
 }
 
-function selectDate(dateStr) {
-  selectedDate = dateStr;
-  renderCalendar();
-}
+function selectDate(dateStr) { selectedDate = dateStr; renderCalendar(); }
 
 function renderDayDetail(dateStr) {
   const container = document.getElementById('day-detail-container');
   const daySchs = schedules.filter(s=>s.date===dateStr).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
-
   const [y,m,d] = dateStr.split('-');
-  const dateLabel = `${y}.${m}.${d}`;
+  const dateLabel = `${y}년 ${parseInt(m)}월 ${parseInt(d)}일`;
 
   let html = `<div class="day-detail">
     <div class="day-detail-header">
       <div class="day-detail-date">${dateLabel}</div>
-      <div style="font-size:11px;color:var(--text3)">${daySchs.length}개의 스케줄</div>
+      <div style="font-size:10px;color:var(--text3)">${daySchs.length}개의 스케줄</div>
     </div>`;
 
   if(daySchs.length===0) {
@@ -1685,7 +1665,7 @@ function renderDayDetail(dateStr) {
           ${tags?`<div class="sch-tags">${tags}</div>`:''}
           ${mems?`<div class="sch-members">${mems}</div>`:''}
         </div>
-        <div style="color:var(--text3);font-size:18px">›</div>
+        <div style="color:var(--text3);font-size:16px">›</div>
       </div>`;
     });
   }
@@ -1720,23 +1700,39 @@ function renderMembers() {
 
 // ── People ──
 function renderPeople() {
+  // Build category filter
+  const usedCats = new Set(['전체']);
+  peoples.forEach(p => { if(p.category) usedCats.add(p.category); });
+  const filterEl = document.getElementById('people-cat-filter');
+  filterEl.innerHTML = PEOPLE_CATEGORIES.filter(c=>usedCats.has(c)).map(c=>
+    `<div class="cat-btn${currentPeopleCategory===c?' active':''}" onclick="setPeopleCategory('${c}')">${c}</div>`
+  ).join('');
+
   const list = document.getElementById('people-list');
-  if(peoples.length===0) {
-    list.innerHTML = `<div class="empty-state"><div class="empty-icon">👥</div><p>인물이 없습니다.<br>+ 버튼으로 추가하세요.</p></div>`;
+  const filtered = currentPeopleCategory==='전체' ? peoples : peoples.filter(p=>p.category===currentPeopleCategory);
+
+  if(filtered.length===0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">👥</div><p>${currentPeopleCategory==='전체'?'인물이 없습니다.<br>+ 버튼으로 추가하세요.':currentPeopleCategory+' 카테고리에 인물이 없습니다.'}</p></div>`;
     return;
   }
-  list.innerHTML = peoples.map(p => {
-    const photo = p.photo ? `<img src="${p.photo}" alt="${p.name}">` : getEmoji(p.name);
+  list.innerHTML = filtered.map(p => {
+    const badge = p.category ? `<div class="people-category-badge">${p.category}</div>` : '';
     return `<div class="people-item" onclick="openPeopleDetail('${p.id}')">
-      <div class="people-avatar">${p.photo?`<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:'<span style="font-size:20px">'+getEmoji(p.name)+'</span>'}</div>
+      <div class="people-avatar">${p.photo?`<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:'<span style="font-size:18px">'+getEmoji(p.name)+'</span>'}</div>
       <div class="people-info">
         <div class="people-name">${p.name||'?'}</div>
         <div class="people-role">${p.role||''} ${p.relation?'· '+p.relation:''}</div>
       </div>
-      <div style="color:var(--text3)">›</div>
+      ${badge}
+      <div style="color:var(--text3);font-size:14px;margin-left:4px">›</div>
     </div>`;
   }).join('');
 }
+
+window.setPeopleCategory = function(cat) {
+  currentPeopleCategory = cat;
+  renderPeople();
+};
 
 // ── Notes ──
 function renderNotes() {
@@ -1768,8 +1764,40 @@ function openMemberDetail(id) {
 
   const photo = m.photo ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:60px;background:linear-gradient(135deg,var(--bg3),var(--card2))">${getEmoji(m.stagename)}</div>`;
 
+  // Family section
+  const familyMembers = m.family_members || [];
+  let familyHtml = '';
+  if(familyMembers.length > 0 || true) {
+    const familyCards = familyMembers.map((f, idx) => `
+      <div class="family-card">
+        <div class="family-photo">
+          ${f.photo ? `<img src="${f.photo}" alt="${f.name}">` : '<span style="font-size:28px">👤</span>'}
+          <div class="family-photo-del" onclick="deleteFamilyMember('${id}',${idx})">✕</div>
+        </div>
+        <div class="family-info">
+          <div class="family-name">${f.name||'?'} <span style="color:var(--text3);font-size:9px">${f.relation||''}</span></div>
+          <div class="family-age">${f.age||''}</div>
+          <div class="family-trait">${f.trait||''}</div>
+        </div>
+      </div>`).join('');
+
+    familyHtml = `<div class="info-section">
+      <div class="info-section-title" style="display:flex;align-items:center;justify-content:space-between">
+        <span>FAMILY</span>
+        <span style="cursor:pointer;color:var(--accent);font-size:11px;padding-right:4px" onclick="openFamilyModal('${id}')">+ 추가</span>
+      </div>
+      <div class="family-grid">
+        ${familyCards}
+        <div class="family-add-btn" onclick="openFamilyModal('${id}')">
+          <span class="add-icon">＋</span>
+          <span>가족 추가</span>
+        </div>
+      </div>
+    </div>`;
+  }
+
   document.getElementById('detail-member-content').innerHTML = `
-    <div class="detail-hero" style="height:280px">
+    <div class="detail-hero" style="height:260px">
       ${photo}
       <div class="detail-hero-overlay">
         <div class="detail-hero-name">${m.stagename||''}</div>
@@ -1778,18 +1806,82 @@ function openMemberDetail(id) {
     </div>
     <div class="detail-body">
       <div class="info-section">
-        <div class="info-section-title">BASIC INFO</div>
+        <div class="info-section-title">기본 정보</div>
         ${infoRow('국적',m.nationality)}${infoRow('생년월일',m.birthday?m.birthday+(m.birthday?' ('+getAge(m.birthday)+')':''):'')}${infoRow('키',m.height)}${infoRow('포지션',m.position)}${infoRow('MBTI',m.mbti)}${infoRow('별명',m.nickname)}
       </div>
-      ${m.personality?`<div class="info-section"><div class="info-section-title">PERSONALITY</div><div class="info-row"><div class="info-value">${m.personality}</div></div></div>`:''}
-      ${m.taste?`<div class="info-section"><div class="info-section-title">TASTE & INTERESTS</div><div class="info-row"><div class="info-value">${m.taste}</div></div></div>`:''}
-      ${m.habit?`<div class="info-section"><div class="info-section-title">HABIT & SKILLS</div><div class="info-row"><div class="info-value">${m.habit}</div></div></div>`:''}
-      ${m.family?`<div class="info-section"><div class="info-section-title">FAMILY</div><div class="info-row"><div class="info-value">${m.family}</div></div></div>`:''}
-      ${m.memo?`<div class="info-section"><div class="info-section-title">MEMO</div><div class="info-row"><div class="info-value">${m.memo}</div></div></div>`:''}
+      ${m.personality?`<div class="info-section"><div class="info-section-title">성격</div><div class="info-row"><div class="info-value">${m.personality}</div></div></div>`:''}
+      ${m.taste?`<div class="info-section"><div class="info-section-title">취향 & 관심사</div><div class="info-row"><div class="info-value">${m.taste}</div></div></div>`:''}
+      ${m.habit?`<div class="info-section"><div class="info-section-title">습관 & 특기</div><div class="info-row"><div class="info-value">${m.habit}</div></div></div>`:''}
+      ${familyHtml}
+      ${m.memo?`<div class="info-section"><div class="info-section-title">메모</div><div class="info-row"><div class="info-value">${m.memo}</div></div></div>`:''}
     </div>`;
 
   document.getElementById('detail-member').classList.add('open');
 }
+
+window.deleteFamilyMember = async function(memberId, idx) {
+  const m = members.find(x=>x.id===memberId);
+  if(!m) return;
+  if(!confirm('가족 정보를 삭제하시겠습니까?')) return;
+  const fams = [...(m.family_members||[])];
+  fams.splice(idx, 1);
+  await updateItem('members', memberId, { family_members: fams });
+  const mi = members.findIndex(x=>x.id===memberId);
+  if(mi>=0) members[mi].family_members = fams;
+  openMemberDetail(memberId);
+  showToast('삭제되었습니다');
+};
+
+window.openFamilyModal = function(memberId) {
+  familyEditingMemberId = memberId;
+  familyPhotoUrl = '';
+  document.getElementById('fam-name').value = '';
+  document.getElementById('fam-age').value = '';
+  document.getElementById('fam-relation').value = '';
+  document.getElementById('fam-trait').value = '';
+  document.getElementById('family-photo-url').value = '';
+  document.getElementById('family-photo-preview').style.display = 'none';
+  document.getElementById('family-photo-placeholder').style.display = '';
+  document.getElementById('modal-family').classList.add('open');
+};
+
+document.getElementById('family-photo-upload').addEventListener('click', ()=>document.getElementById('family-photo-input').click());
+document.getElementById('family-photo-input').addEventListener('change', async function(){
+  const file = this.files[0]; if(!file) return;
+  showToast('업로드 중...');
+  const url = await uploadToCloudinary(file);
+  if(url) {
+    familyPhotoUrl = url;
+    document.getElementById('family-photo-url').value = url;
+    document.getElementById('family-photo-preview').src = url;
+    document.getElementById('family-photo-preview').style.display = 'block';
+    document.getElementById('family-photo-placeholder').style.display = 'none';
+    showToast('업로드 완료!');
+  }
+});
+
+document.getElementById('btn-save-family').addEventListener('click', async () => {
+  const name = document.getElementById('fam-name').value.trim();
+  if(!name) { showToast('이름을 입력해주세요'); return; }
+  const familyData = {
+    name,
+    age: document.getElementById('fam-age').value,
+    relation: document.getElementById('fam-relation').value,
+    trait: document.getElementById('fam-trait').value,
+    photo: document.getElementById('family-photo-url').value,
+  };
+  const m = members.find(x=>x.id===familyEditingMemberId);
+  if(!m) return;
+  const fams = [...(m.family_members||[]), familyData];
+  await updateItem('members', familyEditingMemberId, { family_members: fams });
+  const mi = members.findIndex(x=>x.id===familyEditingMemberId);
+  if(mi>=0) members[mi].family_members = fams;
+  document.getElementById('modal-family').classList.remove('open');
+  openMemberDetail(familyEditingMemberId);
+  showToast('가족이 추가되었습니다');
+});
+
+document.getElementById('btn-cancel-family').addEventListener('click', ()=>document.getElementById('modal-family').classList.remove('open'));
 
 function openPeopleDetail(id) {
   const p = peoples.find(x=>x.id===id);
@@ -1805,16 +1897,16 @@ function openPeopleDetail(id) {
       ${photo}
       <div class="detail-hero-overlay">
         <div class="detail-hero-name">${p.name||''}</div>
-        <div class="detail-hero-sub">${p.role||''} ${p.relation?'· '+p.relation:''}</div>
+        <div class="detail-hero-sub">${p.category?p.category+' · ':''}${p.role||''} ${p.relation?'· '+p.relation:''}</div>
       </div>
     </div>
     <div class="detail-body">
       <div class="info-section">
-        <div class="info-section-title">INFO</div>
-        ${infoRow('역할',p.role)}${infoRow('관계',p.relation)}
+        <div class="info-section-title">정보</div>
+        ${infoRow('카테고리',p.category)}${infoRow('역할',p.role)}${infoRow('관계',p.relation)}
       </div>
-      ${p.desc?`<div class="info-section"><div class="info-section-title">DESCRIPTION</div><div class="info-row"><div class="info-value">${p.desc}</div></div></div>`:''}
-      ${p.memo?`<div class="info-section"><div class="info-section-title">MEMO</div><div class="info-row"><div class="info-value">${p.memo}</div></div></div>`:''}
+      ${p.desc?`<div class="info-section"><div class="info-section-title">설명</div><div class="info-row"><div class="info-value">${p.desc}</div></div></div>`:''}
+      ${p.memo?`<div class="info-section"><div class="info-section-title">메모</div><div class="info-row"><div class="info-value">${p.memo}</div></div></div>`:''}
     </div>`;
 
   document.getElementById('detail-people').classList.add('open');
@@ -1825,22 +1917,19 @@ function openNoteDetail(id) {
   if(!n) return;
   editingId = id;
   document.getElementById('detail-note-name-header').textContent = n.title||'노트';
-
   const tags = (n.tags||'').split(',').filter(Boolean).map(t=>`<div class="tag-chip accent">${t.trim()}</div>`).join('');
-
   document.getElementById('detail-note-content').innerHTML = `
     <div style="padding:20px 20px 100px">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
         <div style="width:4px;height:32px;border-radius:2px;background:${getColorVar(n.color)}"></div>
         <div>
-          <div style="font-size:22px;font-weight:700">${n.title||''}</div>
-          <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:2px">${n.date||''}</div>
+          <div style="font-size:20px;font-weight:700">${n.title||''}</div>
+          <div style="font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:2px">${n.date||''}</div>
         </div>
       </div>
       ${tags?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">${tags}</div>`:''}
-      <div style="font-size:14px;line-height:1.9;color:var(--text);white-space:pre-wrap">${n.content||''}</div>
+      <div style="font-size:13px;line-height:1.9;color:var(--text);white-space:pre-wrap">${n.content||''}</div>
     </div>`;
-
   document.getElementById('detail-note').classList.add('open');
 }
 
@@ -1848,21 +1937,18 @@ function openScheduleDetail(id) {
   const s = schedules.find(x=>x.id===id);
   if(!s) return;
   editingId = id;
-
   const tags = (s.tags||'').split(',').filter(Boolean).map(t=>`<div class="tag-chip accent">${t.trim()}</div>`).join('');
   const mems = (s.members||[]).map(m=>`<div class="tag-chip">${m}</div>`).join('');
-
   document.getElementById('detail-schedule-content').innerHTML = `
     <div style="padding:20px 20px 100px">
       <div style="margin-bottom:16px">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;color:var(--text)">${s.title||''}</div>
-        <div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);margin-top:4px">${s.date||''} ${s.time||''}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;color:var(--text)">${s.title||''}</div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);margin-top:4px">${s.date||''} ${s.time||''}</div>
       </div>
-      ${tags?`<div class="info-section" style="margin-bottom:12px"><div class="info-section-title">TAGS</div><div class="info-row"><div style="display:flex;flex-wrap:wrap;gap:6px">${tags}</div></div></div>`:''}
-      ${mems?`<div class="info-section" style="margin-bottom:12px"><div class="info-section-title">MEMBERS</div><div class="info-row"><div style="display:flex;flex-wrap:wrap;gap:6px">${mems}</div></div></div>`:''}
-      ${s.memo?`<div class="info-section"><div class="info-section-title">MEMO</div><div class="info-row"><div class="info-value">${s.memo}</div></div></div>`:''}
+      ${tags?`<div class="info-section" style="margin-bottom:12px"><div class="info-section-title">태그</div><div class="info-row"><div style="display:flex;flex-wrap:wrap;gap:6px">${tags}</div></div></div>`:''}
+      ${mems?`<div class="info-section" style="margin-bottom:12px"><div class="info-section-title">참여 멤버</div><div class="info-row"><div style="display:flex;flex-wrap:wrap;gap:6px">${mems}</div></div></div>`:''}
+      ${s.memo?`<div class="info-section"><div class="info-section-title">메모</div><div class="info-row"><div class="info-value">${s.memo}</div></div></div>`:''}
     </div>`;
-
   document.getElementById('detail-schedule').classList.add('open');
 }
 
@@ -1872,19 +1958,21 @@ function infoRow(label, value) {
 }
 
 // ══ NAVIGATION ══
-document.querySelectorAll('.nav-item').forEach(item => {
-  item.addEventListener('click', () => {
-    const page = item.dataset.page;
-    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
-    item.classList.add('active');
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    document.getElementById('page-'+page).classList.add('active');
-    currentPage = page;
-    document.getElementById('content-area').scrollTop = 0;
-  });
+function navigateTo(page) {
+  document.querySelectorAll('.nav-item').forEach(i=>i.classList.toggle('active', i.dataset.page===page));
+  document.querySelectorAll('.sidebar-nav-item').forEach(i=>i.classList.toggle('active', i.dataset.page===page));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById('pc-page-title').textContent = PAGE_TITLES[page]||page.toUpperCase();
+  currentPage = page;
+  document.getElementById('content-area').scrollTop = 0;
+}
+
+document.querySelectorAll('.nav-item, .sidebar-nav-item').forEach(item => {
+  item.addEventListener('click', () => { if(item.dataset.page) navigateTo(item.dataset.page); });
 });
 
-// ══ DETAIL PAGE CLOSE ══
+// ══ DETAIL CLOSE ══
 ['member','people','note','schedule'].forEach(type => {
   document.getElementById('close-'+type+'-detail').addEventListener('click', ()=>{
     document.getElementById('detail-'+type).classList.remove('open');
@@ -1895,33 +1983,47 @@ document.querySelectorAll('.nav-item').forEach(item => {
 // ══ CALENDAR NAV ══
 document.getElementById('cal-prev').addEventListener('click', ()=>{
   calMonth--; if(calMonth<0){calMonth=11;calYear--;}
-  selectedDate=null;
-  document.getElementById('day-detail-container').innerHTML='';
-  renderCalendar();
+  selectedDate=null; document.getElementById('day-detail-container').innerHTML=''; renderCalendar();
 });
 document.getElementById('cal-next').addEventListener('click', ()=>{
   calMonth++; if(calMonth>11){calMonth=0;calYear++;}
-  selectedDate=null;
-  document.getElementById('day-detail-container').innerHTML='';
-  renderCalendar();
+  selectedDate=null; document.getElementById('day-detail-container').innerHTML=''; renderCalendar();
 });
+
+// ══ MONTH PICKER ══
+function openMonthPicker() {
+  mpYear = calYear;
+  renderMonthPicker();
+  document.getElementById('month-picker-overlay').classList.add('open');
+}
+
+function renderMonthPicker() {
+  document.getElementById('mp-year-label').textContent = mpYear;
+  const grid = document.getElementById('mp-grid');
+  grid.innerHTML = MONTHS_KR.map((m, i) =>
+    `<div class="month-picker-item${mpYear===calYear&&i===calMonth?' current-month':''}" onclick="selectMonth(${i})">${m}</div>`
+  ).join('');
+}
+
+window.selectMonth = function(idx) {
+  calMonth = idx; calYear = mpYear;
+  selectedDate = null; document.getElementById('day-detail-container').innerHTML = '';
+  renderCalendar();
+  document.getElementById('month-picker-overlay').classList.remove('open');
+};
+
+document.getElementById('cal-month-label').addEventListener('click', openMonthPicker);
+document.getElementById('cal-year-label').addEventListener('click', openMonthPicker);
+document.getElementById('month-picker-overlay').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
+document.getElementById('mp-year-prev').addEventListener('click', ()=>{ mpYear--; renderMonthPicker(); });
+document.getElementById('mp-year-next').addEventListener('click', ()=>{ mpYear++; renderMonthPicker(); });
 
 // ══ FAB ══
 document.getElementById('fab').addEventListener('click', () => {
-  const page = currentPage;
-  if(page==='schedule') {
-    editingId = null;
-    openScheduleModal(selectedDate);
-  } else if(page==='members') {
-    editingId = null;
-    openMemberModal();
-  } else if(page==='people') {
-    editingId = null;
-    openPeopleModal();
-  } else if(page==='notes') {
-    editingId = null;
-    openNoteModal();
-  }
+  if(currentPage==='schedule') { editingId=null; openScheduleModal(selectedDate); }
+  else if(currentPage==='members') { editingId=null; openMemberModal(); }
+  else if(currentPage==='people') { editingId=null; openPeopleModal(); }
+  else if(currentPage==='notes') { editingId=null; openNoteModal(); }
 });
 
 // ══ SCHEDULE MODAL ══
@@ -1937,11 +2039,9 @@ function openScheduleModal(date) {
       document.getElementById('sch-memo').value = s.memo||'';
     }
   } else {
-    document.getElementById('sch-title').value='';
+    ['sch-title','sch-tags','sch-memo'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('sch-date').value = date||'';
-    document.getElementById('sch-time').value='';
-    document.getElementById('sch-tags').value='';
-    document.getElementById('sch-memo').value='';
+    document.getElementById('sch-time').value = '';
   }
   const mems = document.getElementById('sch-members');
   const selected = editingId ? (schedules.find(x=>x.id===editingId)?.members||[]) : [];
@@ -1953,58 +2053,31 @@ document.getElementById('btn-save-schedule').addEventListener('click', async () 
   const title = document.getElementById('sch-title').value.trim();
   if(!title) { showToast('제목을 입력해주세요'); return; }
   const selectedMems = [...document.querySelectorAll('#sch-members .member-checkbox.checked')].map(el=>el.dataset.name);
-  const data = {
-    title,
-    date: document.getElementById('sch-date').value,
-    time: document.getElementById('sch-time').value,
-    members: selectedMems,
-    tags: document.getElementById('sch-tags').value,
-    memo: document.getElementById('sch-memo').value,
-  };
-  if(editingId) {
-    await updateItem('schedules', editingId, data);
-    const i = schedules.findIndex(x=>x.id===editingId);
-    if(i>=0) schedules[i] = {...schedules[i], ...data};
-  } else {
-    const id = await addItem('schedules', data);
-    if(!schedules.find(x=>x.id===id)) schedules.push({id,...data});
-  }
+  const data = { title, date:document.getElementById('sch-date').value, time:document.getElementById('sch-time').value, members:selectedMems, tags:document.getElementById('sch-tags').value, memo:document.getElementById('sch-memo').value };
+  if(editingId) { await updateItem('schedules',editingId,data); const i=schedules.findIndex(x=>x.id===editingId); if(i>=0) schedules[i]={...schedules[i],...data}; }
+  else { const id=await addItem('schedules',data); if(!schedules.find(x=>x.id===id)) schedules.push({id,...data}); }
   document.getElementById('modal-schedule').classList.remove('open');
-  renderCalendar();
-  if(selectedDate) renderDayDetail(selectedDate);
-  showToast(editingId?'스케줄이 수정되었습니다':'스케줄이 추가되었습니다');
-  editingId=null;
+  renderCalendar(); if(selectedDate) renderDayDetail(selectedDate);
+  showToast(editingId?'스케줄이 수정되었습니다':'스케줄이 추가되었습니다'); editingId=null;
 });
-
 document.getElementById('btn-cancel-schedule').addEventListener('click',()=>document.getElementById('modal-schedule').classList.remove('open'));
-
-document.getElementById('btn-edit-schedule').addEventListener('click',()=>{
-  if(!editingId) return;
-  document.getElementById('detail-schedule').classList.remove('open');
-  openScheduleModal(null);
-});
-
+document.getElementById('btn-edit-schedule').addEventListener('click',()=>{ if(!editingId)return; document.getElementById('detail-schedule').classList.remove('open'); openScheduleModal(null); });
 document.getElementById('btn-delete-schedule').addEventListener('click', async ()=>{
-  if(!editingId) return;
-  if(!confirm('스케줄을 삭제하시겠습니까?')) return;
-  await deleteItem('schedules', editingId);
-  schedules = schedules.filter(x=>x.id!==editingId);
-  document.getElementById('detail-schedule').classList.remove('open');
-  renderCalendar();
-  if(selectedDate) renderDayDetail(selectedDate);
-  showToast('삭제되었습니다');
-  editingId=null;
+  if(!editingId)return; if(!confirm('스케줄을 삭제하시겠습니까?'))return;
+  await deleteItem('schedules',editingId); schedules=schedules.filter(x=>x.id!==editingId);
+  document.getElementById('detail-schedule').classList.remove('open'); renderCalendar();
+  if(selectedDate) renderDayDetail(selectedDate); showToast('삭제되었습니다'); editingId=null;
 });
 
 // ══ MEMBER MODAL ══
 function openMemberModal() {
   document.getElementById('modal-member-title').textContent = editingId ? '멤버 수정' : '멤버 추가';
-  const fields = ['stagename','realname','nationality','birthday','height','position','mbti','nickname','personality','taste','habit','family','memo'];
+  const fields = ['stagename','realname','nationality','birthday','height','position','mbti','nickname','personality','taste','habit','memo'];
   if(editingId) {
     const m = members.find(x=>x.id===editingId);
     if(m) {
       fields.forEach(f=>{ const el=document.getElementById('mem-'+f); if(el) el.value=m[f]||''; });
-      document.getElementById('member-photo-url').value = m.photo||'';
+      document.getElementById('member-photo-url').value=m.photo||'';
       if(m.photo) { document.getElementById('member-photo-preview').src=m.photo; document.getElementById('member-photo-preview').style.display='block'; }
       else document.getElementById('member-photo-preview').style.display='none';
     }
@@ -2018,100 +2091,90 @@ function openMemberModal() {
 
 document.getElementById('member-photo-upload').addEventListener('click',()=>document.getElementById('member-photo-input').click());
 document.getElementById('member-photo-input').addEventListener('change', async function(){
-  const file = this.files[0]; if(!file) return;
+  const file=this.files[0]; if(!file) return;
   showToast('업로드 중...');
-  const url = await uploadToCloudinary(file);
-  if(url) {
-    document.getElementById('member-photo-url').value=url;
-    document.getElementById('member-photo-preview').src=url;
-    document.getElementById('member-photo-preview').style.display='block';
-    showToast('업로드 완료!');
-  }
+  const url=await uploadToCloudinary(file);
+  if(url){document.getElementById('member-photo-url').value=url;document.getElementById('member-photo-preview').src=url;document.getElementById('member-photo-preview').style.display='block';showToast('업로드 완료!');}
 });
 
 document.getElementById('btn-save-member').addEventListener('click', async () => {
-  const stagename = document.getElementById('mem-stagename').value.trim();
-  if(!stagename) { showToast('활동명을 입력해주세요'); return; }
-  const fields = ['stagename','realname','nationality','birthday','height','position','mbti','nickname','personality','taste','habit','family','memo'];
-  const data = {};
-  fields.forEach(f=>{ data[f]=document.getElementById('mem-'+f).value; });
-  data.photo = document.getElementById('member-photo-url').value;
+  const stagename=document.getElementById('mem-stagename').value.trim();
+  if(!stagename){showToast('활동명을 입력해주세요');return;}
+  const fields=['stagename','realname','nationality','birthday','height','position','mbti','nickname','personality','taste','habit','memo'];
+  const data={};
+  fields.forEach(f=>{data[f]=document.getElementById('mem-'+f).value;});
+  data.photo=document.getElementById('member-photo-url').value;
+  // preserve family_members if editing
   if(editingId) {
-    await updateItem('members', editingId, data);
-    const i = members.findIndex(x=>x.id===editingId);
-    if(i>=0) members[i]={...members[i],...data};
+    const existing = members.find(x=>x.id===editingId);
+    if(existing) data.family_members = existing.family_members||[];
+    await updateItem('members',editingId,data);
+    const i=members.findIndex(x=>x.id===editingId); if(i>=0) members[i]={...members[i],...data};
   } else {
-    const id = await addItem('members', data);
-    if(!members.find(x=>x.id===id)) members.push({id,...data});
+    data.family_members = [];
+    const id=await addItem('members',data); if(!members.find(x=>x.id===id)) members.push({id,...data});
   }
   document.getElementById('modal-member').classList.remove('open');
   renderMembers(); updateCounts();
-  showToast(editingId?'수정되었습니다':'멤버가 추가되었습니다');
-  editingId=null;
+  showToast(editingId?'수정되었습니다':'멤버가 추가되었습니다'); editingId=null;
 });
 document.getElementById('btn-cancel-member').addEventListener('click',()=>document.getElementById('modal-member').classList.remove('open'));
-document.getElementById('btn-edit-member').addEventListener('click',()=>{
-  if(!editingId) return;
-  document.getElementById('detail-member').classList.remove('open');
-  openMemberModal();
-});
+document.getElementById('btn-edit-member').addEventListener('click',()=>{ if(!editingId)return; document.getElementById('detail-member').classList.remove('open'); openMemberModal(); });
 document.getElementById('btn-delete-member').addEventListener('click', async ()=>{
-  if(!editingId) return;
-  if(!confirm('멤버를 삭제하시겠습니까?')) return;
-  await deleteItem('members', editingId);
-  members=members.filter(x=>x.id!==editingId);
-  document.getElementById('detail-member').classList.remove('open');
-  renderMembers(); updateCounts();
+  if(!editingId)return; if(!confirm('멤버를 삭제하시겠습니까?'))return;
+  await deleteItem('members',editingId); members=members.filter(x=>x.id!==editingId);
+  document.getElementById('detail-member').classList.remove('open'); renderMembers(); updateCounts();
   showToast('삭제되었습니다'); editingId=null;
 });
 
 // ══ PEOPLE MODAL ══
 function openPeopleModal() {
   document.getElementById('modal-people-title').textContent = editingId ? '인물 수정' : '인물 추가';
-  const fields = ['name','role','relation','desc','memo'];
+  const fields=['name','role','relation','desc','memo'];
   if(editingId) {
-    const p = peoples.find(x=>x.id===editingId);
-    if(p) {
-      fields.forEach(f=>{ const el=document.getElementById('ppl-'+f); if(el) el.value=p[f]||''; });
+    const p=peoples.find(x=>x.id===editingId);
+    if(p){
+      fields.forEach(f=>{const el=document.getElementById('ppl-'+f);if(el)el.value=p[f]||'';});
+      document.getElementById('ppl-category').value=p.category||'';
       document.getElementById('people-photo-url').value=p.photo||'';
       if(p.photo){document.getElementById('people-photo-preview').src=p.photo;document.getElementById('people-photo-preview').style.display='block';}
       else document.getElementById('people-photo-preview').style.display='none';
     }
   } else {
-    fields.forEach(f=>{ const el=document.getElementById('ppl-'+f); if(el) el.value=''; });
+    fields.forEach(f=>{const el=document.getElementById('ppl-'+f);if(el)el.value='';});
+    document.getElementById('ppl-category').value='';
     document.getElementById('people-photo-url').value='';
     document.getElementById('people-photo-preview').style.display='none';
   }
   document.getElementById('modal-people').classList.add('open');
 }
+
 document.getElementById('people-photo-upload').addEventListener('click',()=>document.getElementById('people-photo-input').click());
 document.getElementById('people-photo-input').addEventListener('change', async function(){
-  const file=this.files[0]; if(!file) return;
-  showToast('업로드 중...');
-  const url = await uploadToCloudinary(file);
+  const file=this.files[0];if(!file)return;showToast('업로드 중...');
+  const url=await uploadToCloudinary(file);
   if(url){document.getElementById('people-photo-url').value=url;document.getElementById('people-photo-preview').src=url;document.getElementById('people-photo-preview').style.display='block';showToast('업로드 완료!');}
 });
+
 document.getElementById('btn-save-people').addEventListener('click', async ()=>{
   const name=document.getElementById('ppl-name').value.trim();
   if(!name){showToast('이름을 입력해주세요');return;}
   const fields=['name','role','relation','desc','memo'];
   const data={};
   fields.forEach(f=>{data[f]=document.getElementById('ppl-'+f).value;});
+  data.category=document.getElementById('ppl-category').value;
   data.photo=document.getElementById('people-photo-url').value;
   if(editingId){await updateItem('peoples',editingId,data);const i=peoples.findIndex(x=>x.id===editingId);if(i>=0)peoples[i]={...peoples[i],...data};}
   else{const id=await addItem('peoples',data);if(!peoples.find(x=>x.id===id))peoples.push({id,...data});}
   document.getElementById('modal-people').classList.remove('open');
-  renderPeople();updateCounts();
-  showToast(editingId?'수정되었습니다':'인물이 추가되었습니다');editingId=null;
+  renderPeople();updateCounts();showToast(editingId?'수정되었습니다':'인물이 추가되었습니다');editingId=null;
 });
 document.getElementById('btn-cancel-people').addEventListener('click',()=>document.getElementById('modal-people').classList.remove('open'));
 document.getElementById('btn-edit-people').addEventListener('click',()=>{if(!editingId)return;document.getElementById('detail-people').classList.remove('open');openPeopleModal();});
 document.getElementById('btn-delete-people').addEventListener('click', async ()=>{
-  if(!editingId)return;
-  if(!confirm('인물을 삭제하시겠습니까?'))return;
+  if(!editingId)return; if(!confirm('인물을 삭제하시겠습니까?'))return;
   await deleteItem('peoples',editingId);peoples=peoples.filter(x=>x.id!==editingId);
-  document.getElementById('detail-people').classList.remove('open');renderPeople();updateCounts();
-  showToast('삭제되었습니다');editingId=null;
+  document.getElementById('detail-people').classList.remove('open');renderPeople();updateCounts();showToast('삭제되었습니다');editingId=null;
 });
 
 // ══ NOTE MODAL ══
@@ -2135,11 +2198,13 @@ function openNoteModal() {
   }
   document.getElementById('modal-note').classList.add('open');
 }
+
 window.selectNoteColor = function(color, el) {
   currentNoteColor=color;
   document.querySelectorAll('.color-option').forEach(e=>e.classList.remove('selected'));
   el.classList.add('selected');
 };
+
 document.getElementById('btn-save-note').addEventListener('click', async ()=>{
   const title=document.getElementById('note-title-input').value.trim();
   if(!title){showToast('제목을 입력해주세요');return;}
@@ -2147,38 +2212,35 @@ document.getElementById('btn-save-note').addEventListener('click', async ()=>{
   if(editingId){await updateItem('notes',editingId,data);const i=notes.findIndex(x=>x.id===editingId);if(i>=0)notes[i]={...notes[i],...data};}
   else{const id=await addItem('notes',data);if(!notes.find(x=>x.id===id))notes.push({id,...data});}
   document.getElementById('modal-note').classList.remove('open');
-  renderNotes();updateCounts();
-  showToast(editingId?'수정되었습니다':'노트가 추가되었습니다');editingId=null;
+  renderNotes();updateCounts();showToast(editingId?'수정되었습니다':'노트가 추가되었습니다');editingId=null;
 });
 document.getElementById('btn-cancel-note').addEventListener('click',()=>document.getElementById('modal-note').classList.remove('open'));
 document.getElementById('btn-edit-note').addEventListener('click',()=>{if(!editingId)return;document.getElementById('detail-note').classList.remove('open');openNoteModal();});
 document.getElementById('btn-delete-note').addEventListener('click', async ()=>{
-  if(!editingId)return;
-  if(!confirm('노트를 삭제하시겠습니까?'))return;
+  if(!editingId)return; if(!confirm('노트를 삭제하시겠습니까?'))return;
   await deleteItem('notes',editingId);notes=notes.filter(x=>x.id!==editingId);
-  document.getElementById('detail-note').classList.remove('open');renderNotes();updateCounts();
-  showToast('삭제되었습니다');editingId=null;
+  document.getElementById('detail-note').classList.remove('open');renderNotes();updateCounts();showToast('삭제되었습니다');editingId=null;
 });
 
 // ══ SEARCH ══
-document.getElementById('btn-search-open').addEventListener('click',()=>document.getElementById('search-overlay').classList.add('open'));
+function openSearch() { document.getElementById('search-overlay').classList.add('open'); setTimeout(()=>document.getElementById('search-input-main').focus(),100); }
 document.getElementById('close-search').addEventListener('click',()=>{document.getElementById('search-overlay').classList.remove('open');document.getElementById('search-results').innerHTML='';document.getElementById('search-input-main').value='';});
+document.getElementById('btn-search-open')?.addEventListener('click', openSearch);
+document.getElementById('sidebar-search')?.addEventListener('click', openSearch);
+document.getElementById('pc-search-open')?.addEventListener('click', openSearch);
 
 document.getElementById('search-input-main').addEventListener('input', function(){
   const q=this.value.trim().toLowerCase();
   if(!q){document.getElementById('search-results').innerHTML='';return;}
-  
-  const rs = schedules.filter(s=>(s.title||'').toLowerCase().includes(q)||(s.tags||'').toLowerCase().includes(q)||(s.memo||'').toLowerCase().includes(q));
-  const rm = members.filter(m=>(m.stagename||'').toLowerCase().includes(q)||(m.realname||'').toLowerCase().includes(q)||(m.position||'').toLowerCase().includes(q));
-  const rp = peoples.filter(p=>(p.name||'').toLowerCase().includes(q)||(p.role||'').toLowerCase().includes(q)||(p.desc||'').toLowerCase().includes(q));
-  const rn = notes.filter(n=>(n.title||'').toLowerCase().includes(q)||(n.content||'').toLowerCase().includes(q)||(n.tags||'').toLowerCase().includes(q));
-
-  let html = '';
-  if(rs.length) html+=`<div class="search-result-group"><div class="search-result-label">SCHEDULE</div>${rs.map(s=>`<div class="search-result-item" onclick="document.getElementById('search-overlay').classList.remove('open');setTimeout(()=>openScheduleDetail('${s.id}'),200)"><div style="font-size:16px">📅</div><div><div style="font-weight:500">${s.title}</div><div style="font-size:11px;color:var(--text3)">${s.date}</div></div></div>`).join('')}</div>`;
-  if(rm.length) html+=`<div class="search-result-group"><div class="search-result-label">MEMBERS</div>${rm.map(m=>`<div class="search-result-item" onclick="document.getElementById('search-overlay').classList.remove('open');setTimeout(()=>{document.querySelectorAll('.nav-item')[1].click();setTimeout(()=>openMemberDetail('${m.id}'),100)},200)"><div style="font-size:16px">👤</div><div><div style="font-weight:500">${m.stagename}</div><div style="font-size:11px;color:var(--text3)">${m.position||''}</div></div></div>`).join('')}</div>`;
-  if(rp.length) html+=`<div class="search-result-group"><div class="search-result-label">PEOPLE</div>${rp.map(p=>`<div class="search-result-item" onclick="document.getElementById('search-overlay').classList.remove('open');setTimeout(()=>{document.querySelectorAll('.nav-item')[2].click();setTimeout(()=>openPeopleDetail('${p.id}'),100)},200)"><div style="font-size:16px">👥</div><div><div style="font-weight:500">${p.name}</div><div style="font-size:11px;color:var(--text3)">${p.role||''}</div></div></div>`).join('')}</div>`;
-  if(rn.length) html+=`<div class="search-result-group"><div class="search-result-label">NOTES</div>${rn.map(n=>`<div class="search-result-item" onclick="document.getElementById('search-overlay').classList.remove('open');setTimeout(()=>{document.querySelectorAll('.nav-item')[3].click();setTimeout(()=>openNoteDetail('${n.id}'),100)},200)"><div style="font-size:16px">📝</div><div><div style="font-weight:500">${n.title}</div><div style="font-size:11px;color:var(--text3)">${(n.content||'').slice(0,40)}...</div></div></div>`).join('')}</div>`;
-
+  const rs=schedules.filter(s=>(s.title||'').toLowerCase().includes(q)||(s.tags||'').toLowerCase().includes(q));
+  const rm=members.filter(m=>(m.stagename||'').toLowerCase().includes(q)||(m.realname||'').toLowerCase().includes(q));
+  const rp=peoples.filter(p=>(p.name||'').toLowerCase().includes(q)||(p.role||'').toLowerCase().includes(q)||(p.category||'').toLowerCase().includes(q));
+  const rn=notes.filter(n=>(n.title||'').toLowerCase().includes(q)||(n.content||'').toLowerCase().includes(q));
+  let html='';
+  if(rs.length) html+=`<div class="search-result-group"><div class="search-result-label">스케줄</div>${rs.map(s=>`<div class="search-result-item" onclick="document.getElementById('search-overlay').classList.remove('open');setTimeout(()=>openScheduleDetail('${s.id}'),200)"><div style="font-size:16px">📅</div><div><div style="font-weight:500">${s.title}</div><div style="font-size:10px;color:var(--text3)">${s.date}</div></div></div>`).join('')}</div>`;
+  if(rm.length) html+=`<div class="search-result-group"><div class="search-result-label">멤버</div>${rm.map(m=>`<div class="search-result-item" onclick="document.getElementById('search-overlay').classList.remove('open');setTimeout(()=>{navigateTo('members');setTimeout(()=>openMemberDetail('${m.id}'),100)},200)"><div style="font-size:16px">👤</div><div><div style="font-weight:500">${m.stagename}</div><div style="font-size:10px;color:var(--text3)">${m.position||''}</div></div></div>`).join('')}</div>`;
+  if(rp.length) html+=`<div class="search-result-group"><div class="search-result-label">지인</div>${rp.map(p=>`<div class="search-result-item" onclick="document.getElementById('search-overlay').classList.remove('open');setTimeout(()=>{navigateTo('people');setTimeout(()=>openPeopleDetail('${p.id}'),100)},200)"><div style="font-size:16px">👥</div><div><div style="font-weight:500">${p.name}</div><div style="font-size:10px;color:var(--text3)">${p.category||''} ${p.role||''}</div></div></div>`).join('')}</div>`;
+  if(rn.length) html+=`<div class="search-result-group"><div class="search-result-label">노트</div>${rn.map(n=>`<div class="search-result-item" onclick="document.getElementById('search-overlay').classList.remove('open');setTimeout(()=>{navigateTo('notes');setTimeout(()=>openNoteDetail('${n.id}'),100)},200)"><div style="font-size:16px">📝</div><div><div style="font-weight:500">${n.title}</div></div></div>`).join('')}</div>`;
   if(!html) html=`<div class="empty-state" style="padding-top:40px"><div class="empty-icon">🔍</div><p>"${q}"에 대한 결과가 없습니다</p></div>`;
   document.getElementById('search-results').innerHTML=html;
 });
@@ -2187,24 +2249,25 @@ document.getElementById('search-input-main').addEventListener('input', function(
 function applyTheme() {
   document.documentElement.setAttribute('data-theme', isDark?'dark':'light');
   document.getElementById('btn-theme').textContent = isDark?'🌙':'☀️';
-  const toggle = document.getElementById('theme-toggle-switch');
-  toggle.classList.toggle('on', isDark);
+  document.getElementById('sidebar-theme-icon').textContent = isDark?'🌙':'☀️';
+  document.getElementById('theme-toggle-switch').classList.toggle('on', isDark);
 }
 
-document.getElementById('btn-theme').addEventListener('click',()=>{isDark=!isDark;applyTheme();localStorage.setItem('arch_theme',isDark?'dark':'light');});
-document.getElementById('settings-theme-toggle').addEventListener('click',()=>{isDark=!isDark;applyTheme();localStorage.setItem('arch_theme',isDark?'dark':'light');});
+function toggleTheme() { isDark=!isDark; applyTheme(); localStorage.setItem('arch_theme',isDark?'dark':'light'); }
+document.getElementById('btn-theme').addEventListener('click', toggleTheme);
+document.getElementById('sidebar-theme').addEventListener('click', toggleTheme);
+document.getElementById('settings-theme-toggle').addEventListener('click', toggleTheme);
 
 // ══ SETTINGS ══
 document.getElementById('btn-settings').addEventListener('click',()=>document.getElementById('settings-overlay').classList.add('open'));
+document.getElementById('sidebar-settings').addEventListener('click',()=>document.getElementById('settings-overlay').classList.add('open'));
 document.getElementById('close-settings').addEventListener('click',()=>document.getElementById('settings-overlay').classList.remove('open'));
 
 document.getElementById('settings-export').addEventListener('click',()=>{
   const data={schedules,members,peoples,notes,exportedAt:new Date().toISOString()};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=`archive_backup_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`archive_backup_${new Date().toISOString().slice(0,10)}.json`; a.click();
   showToast('백업 파일이 다운로드됩니다');
 });
 
@@ -2218,8 +2281,7 @@ document.getElementById('import-file-input').addEventListener('change', async fu
     if(data.members) { for(const m of data.members) await addItem('members',m); members=[...members,...data.members]; }
     if(data.peoples) { for(const p of data.peoples) await addItem('peoples',p); peoples=[...peoples,...data.peoples]; }
     if(data.notes) { for(const n of data.notes) await addItem('notes',n); notes=[...notes,...data.notes]; }
-    renderAll();
-    showToast('데이터를 불러왔습니다');
+    renderAll(); showToast('데이터를 불러왔습니다');
   } catch(e) { showToast('파일 형식이 올바르지 않습니다'); }
 });
 
@@ -2228,7 +2290,7 @@ document.querySelectorAll('.modal-overlay').forEach(overlay=>{
   overlay.addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
 });
 
-// ══ CLOUDINARY UPLOAD ══
+// ══ CLOUDINARY ══
 async function uploadToCloudinary(file) {
   const formData=new FormData();
   formData.append('file',file);
@@ -2243,15 +2305,13 @@ async function uploadToCloudinary(file) {
 // ══ HELPERS ══
 function showToast(msg) {
   const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2000);
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
 }
 
 function getAge(birthday) {
   if(!birthday) return '';
-  const birth=new Date(birthday);
-  const today=new Date();
+  const birth=new Date(birthday), today=new Date();
   let age=today.getFullYear()-birth.getFullYear();
   if(today.getMonth()<birth.getMonth()||(today.getMonth()===birth.getMonth()&&today.getDate()<birth.getDate())) age--;
   return age+'세';
@@ -2268,12 +2328,12 @@ function getEmoji(name) {
   return emojis[h%emojis.length];
 }
 
-// ══ INIT THEME ══
+// ══ INIT ══
 const savedTheme=localStorage.getItem('arch_theme');
 if(savedTheme==='light') isDark=false;
 applyTheme();
 
-// ══ FALLBACK: if Firebase not ready after 3s, load from local ══
+// Fallback
 setTimeout(()=>{
   if(schedules.length===0&&members.length===0) {
     loadFromLocal();
