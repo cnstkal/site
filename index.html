@@ -1,663 +1,2292 @@
 <!DOCTYPE html>
-<html lang="ko" class="light">
+<html lang="ko" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Idol Archive</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Noto Sans KR', 'sans-serif'] },
-          colors: {
-            brand: { 50: '#f5f3ff', 100: '#ede9fe', 500: '#8b5cf6', 600: '#7c3aed', 900: '#4c1d95' }
-          }
-        }
-      }
-    }
-  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ARCHIVE — Virtual Idol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
 
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  <script type="importmap">
-    {
-      "imports": {
-        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
-        "firebase/app": "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js",
-        "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"
-      }
-    }
-  </script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAA6mbdYfLrrgCJjN47PX91_mU7I53RiBs",
+    authDomain: "site-c67b4.firebaseapp.com",
+    projectId: "site-c67b4",
+    storageBucket: "site-c67b4.firebasestorage.app",
+    messagingSenderId: "744761377245",
+    appId: "1:744761377245:web:3ddaee14f184716eeef634"
+  };
 
-  <style>
-    body { overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
-    /* Hide Scrollbar */
-    ::-webkit-scrollbar { width: 0px; background: transparent; }
-    
-    /* Smooth Transitions */
-    .fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease; }
-    .fade-enter-from, .fade-leave-to { opacity: 0; }
-    
-    .slide-up-enter-active, .slide-up-leave-active { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s; }
-    .slide-up-enter-from, .slide-up-leave-to { transform: translateY(100%); opacity: 0; }
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  window.__db = db;
+  window.__fbModules = { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy };
+  window.dispatchEvent(new Event('firebase-ready'));
+</script>
 
-    .slide-right-enter-active, .slide-right-leave-active { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-    .slide-right-enter-from, .slide-right-leave-to { transform: translateX(100%); }
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #1a1a25;
+  --card: #16161f;
+  --card2: #1e1e2a;
+  --border: rgba(255,255,255,0.07);
+  --text: #f0f0f8;
+  --text2: #9090a8;
+  --text3: #5a5a72;
+  --accent: #c8a4ff;
+  --accent2: #7b6cff;
+  --accent3: #ff8ac8;
+  --pink: #ff6eb4;
+  --teal: #5dd8c8;
+  --yellow: #ffd166;
+  --radius: 18px;
+  --radius-sm: 10px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+}
 
-    /* Glassmorphism */
-    .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-    .dark .glass { background: rgba(15, 23, 42, 0.8); }
-  </style>
+[data-theme="light"] {
+  --bg: #f5f4ff;
+  --bg2: #eeedf8;
+  --bg3: #e6e4f5;
+  --card: #ffffff;
+  --card2: #f8f7ff;
+  --border: rgba(0,0,0,0.07);
+  --text: #1a1828;
+  --text2: #5a5870;
+  --text3: #9898b0;
+  --shadow: 0 8px 32px rgba(120,100,200,0.12);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── APP SHELL ── */
+#app {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px 10px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.topbar-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, var(--accent), var(--accent3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.topbar-actions { display:flex; gap:10px; align-items:center; }
+
+.icon-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: var(--transition);
+  color: var(--text2);
+}
+.icon-btn:active { transform: scale(0.92); }
+
+/* ── CONTENT AREA ── */
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  display: flex;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 4px 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.nav-item .nav-icon {
+  font-size: 20px;
+  transition: var(--transition);
+}
+
+.nav-item .nav-label {
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: var(--text3);
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.nav-item.active .nav-label { color: var(--accent); }
+.nav-item.active .nav-icon { transform: translateY(-2px); }
+.nav-item.active::after {
+  content:'';
+  position: absolute;
+  bottom: 0;
+  left: 50%; transform: translateX(-50%);
+  width: 24px; height: 2px;
+  background: var(--accent);
+  border-radius: 2px 2px 0 0;
+}
+
+/* ── PAGES ── */
+.page { display: none; padding: 0 0 100px 0; }
+.page.active { display: block; }
+
+/* ── SECTION HEADER ── */
+.section-header {
+  padding: 20px 20px 8px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 2px;
+  color: var(--text);
+}
+
+.section-sub {
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: 'Space Mono', monospace;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 0 16px 12px;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.card:active { transform: scale(0.98); }
+
+.card-inner { padding: 16px; }
+
+/* ── SCHEDULE ── */
+.calendar-wrap { padding: 0 16px 12px; }
+
+.cal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 4px 12px;
+}
+
+.cal-month {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 2px;
+  color: var(--text);
+}
+
+.cal-arrow {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text2);
+  transition: var(--transition);
+}
+.cal-arrow:active { background: var(--accent); color: #fff; }
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.cal-weekday {
+  text-align: center;
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 1px;
+  font-family: 'Space Mono', monospace;
+  padding: 4px 0 6px;
+}
+
+.cal-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  transition: var(--transition);
+  gap: 2px;
+}
+
+.cal-day:active { background: var(--card2); }
+.cal-day.today { background: var(--card2); }
+.cal-day.today .cal-day-num { color: var(--accent); font-weight: 700; }
+.cal-day.selected { background: var(--accent); }
+.cal-day.selected .cal-day-num { color: #fff; }
+.cal-day.other-month .cal-day-num { color: var(--text3); }
+
+.cal-day-num {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.cal-dots {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  min-height: 6px;
+}
+
+.cal-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--accent3);
+  flex-shrink: 0;
+}
+
+.cal-dot.tag-concert { background: var(--pink); }
+.cal-dot.tag-schedule { background: var(--teal); }
+.cal-dot.tag-content { background: var(--yellow); }
+
+/* Schedule day detail */
+.day-detail {
+  margin: 0 16px 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.day-detail-header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.day-detail-date {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 2px;
+  color: var(--accent);
+}
+
+.schedule-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.schedule-item:last-child { border-bottom: none; }
+.schedule-item:active { background: var(--card2); }
+
+.sch-time {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+}
+
+.sch-body { flex:1; min-width: 0; }
+.sch-title { font-weight: 500; font-size: 14px; color: var(--text); }
+.sch-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+
+.tag-chip {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: var(--card2);
+  color: var(--text2);
+  border: 1px solid var(--border);
+  font-family: 'Space Mono', monospace;
+  white-space: nowrap;
+}
+
+.tag-chip.accent { background: rgba(200,164,255,0.12); color: var(--accent); border-color: rgba(200,164,255,0.2); }
+
+.sch-members { display:flex; gap:-4px; margin-top:6px; }
+
+.member-dot {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--accent2);
+  border: 2px solid var(--card);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px;
+  color: #fff;
+  font-weight: 700;
+  margin-left: -4px;
+}
+.member-dot:first-child { margin-left: 0; }
+
+/* ── MEMBERS ── */
+.members-grid {
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.member-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.member-card:active { transform: scale(0.96); }
+
+.member-photo {
+  aspect-ratio: 3/4;
+  background: var(--card2);
+  position: relative;
+  overflow: hidden;
+}
+
+.member-photo img { width:100%; height:100%; object-fit:cover; }
+
+.member-photo-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;
+  background: linear-gradient(135deg, var(--bg3), var(--card2));
+}
+
+.member-photo-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  padding: 24px 10px 10px;
+}
+
+.member-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+.member-position {
+  font-size: 10px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.member-info-strip {
+  padding: 10px 12px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* ── MEMBER DETAIL PAGE ── */
+.detail-page {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 100;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+.detail-page.open { transform: translateX(0); }
+
+.detail-header {
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 10;
+}
+
+.back-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text2);
+  flex-shrink: 0;
+}
+
+.detail-header-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+
+.detail-hero {
+  height: 240px;
+  background: linear-gradient(135deg, var(--bg3), var(--card2));
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.detail-hero img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0; left: 0;
+}
+
+.detail-hero-overlay {
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.75));
+  width: 100%;
+}
+
+.detail-hero-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 3px;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+
+.detail-hero-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 1px;
+}
+
+.detail-body { padding: 16px; padding-bottom: 80px; }
+
+.info-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.info-section-title {
+  padding: 12px 16px 8px;
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: 'Space Mono', monospace;
+  border-bottom: 1px solid var(--border);
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+}
+.info-row:last-child { border-bottom: none; }
+
+.info-label {
+  font-size: 11px;
+  color: var(--text3);
+  min-width: 60px;
+  padding-top: 2px;
+  font-family: 'Space Mono', monospace;
+}
+
+.info-value {
+  font-size: 14px;
+  color: var(--text);
+  flex: 1;
+  line-height: 1.6;
+}
+
+/* ── PEOPLE ── */
+.people-list { padding: 0 16px; }
+
+.people-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.people-item:active { transform: scale(0.98); }
+
+.people-avatar {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent2), var(--accent3));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.people-avatar img { width:100%; height:100%; object-fit:cover; }
+
+.people-info { flex:1; min-width:0; }
+.people-name { font-weight: 600; font-size: 15px; }
+.people-role { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.people-rel { font-size: 11px; color: var(--text3); }
+
+/* ── NOTES ── */
+.notes-list { padding: 0 16px; }
+
+.note-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  padding: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+.note-card:active { transform: scale(0.98); }
+
+.note-accent-bar {
+  position: absolute;
+  left: 0; top: 16px; bottom: 16px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--accent);
+}
+
+.note-title {
+  font-weight: 600;
+  font-size: 15px;
+  padding-left: 12px;
+  margin-bottom: 6px;
+}
+
+.note-preview {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.6;
+  padding-left: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.note-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-left: 12px;
+}
+
+.note-date {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: 'Space Mono', monospace;
+}
+
+/* ── SEARCH ── */
+.search-bar {
+  padding: 12px 16px;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 10px 16px 10px 40px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(200,164,255,0.1);
+}
+
+.search-input::placeholder { color: var(--text3); }
+
+.search-icon {
+  position: absolute;
+  left: 28px;
+  top: 50%; transform: translateY(-50%);
+  font-size: 15px;
+  color: var(--text3);
+  pointer-events: none;
+}
+
+/* ── FAB ── */
+.fab {
+  position: fixed;
+  right: 20px;
+  bottom: calc(68px + env(safe-area-inset-bottom, 0px) + 16px);
+  width: 54px; height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(123,108,255,0.4);
+  z-index: 50;
+  transition: var(--transition);
+  border: none;
+}
+.fab:active { transform: scale(0.92); }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+
+.modal-sheet {
+  background: var(--bg2);
+  border-radius: var(--radius) var(--radius) 0 0;
+  width: 100%;
+  max-height: 90dvh;
+  overflow-y: auto;
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+  animation: slideUp 0.28s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-handle {
+  width: 36px; height: 4px;
+  border-radius: 2px;
+  background: var(--text3);
+  margin: 12px auto 16px;
+}
+
+.modal-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 2px;
+  padding: 0 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-body { padding: 16px 20px; }
+
+.form-group { margin-bottom: 16px; }
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: 'Space Mono', monospace;
+  margin-bottom: 6px;
+}
+
+.form-input, .form-textarea, .form-select {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(200,164,255,0.1);
+}
+
+.form-input::placeholder, .form-textarea::placeholder { color: var(--text3); }
+.form-select { color: var(--text); appearance: none; }
+.form-textarea { min-height: 80px; resize: none; line-height: 1.6; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.member-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.member-checkbox {
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text2);
+}
+
+.member-checkbox.checked {
+  background: rgba(200,164,255,0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tag-input-wrap {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.tag-input {
+  flex: 1;
+  min-width: 100px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.tag-input:focus { border-color: var(--accent); }
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: var(--transition);
+  margin-top: 8px;
+}
+.btn-primary:active { transform: scale(0.98); opacity: 0.9; }
+
+.btn-danger {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid rgba(255,100,100,0.3);
+  border-radius: var(--radius-sm);
+  color: #ff6666;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: var(--transition);
+}
+.btn-danger:active { background: rgba(255,100,100,0.1); }
+
+.btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+
+.btn-secondary {
+  padding: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+/* ── SEARCH RESULTS ── */
+.search-result-group { margin-bottom: 16px; }
+.search-result-label {
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: 'Space Mono', monospace;
+  padding: 0 20px 8px;
+}
+
+.search-result-item {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.search-result-item:active { background: var(--card); }
+.search-result-item:last-child { border-bottom: none; }
+
+/* ── UPLOAD ── */
+.upload-area {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  background: var(--card);
+}
+.upload-area:active { border-color: var(--accent); background: rgba(200,164,255,0.05); }
+.upload-area p { font-size: 12px; color: var(--text3); margin-top: 8px; }
+
+.upload-preview {
+  width: 80px; height: 80px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  border: 2px solid var(--border);
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text3);
+}
+
+.empty-state .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.5; }
+.empty-state p { font-size: 13px; line-height: 1.6; }
+
+/* ── TAG PAGE ── */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 16px 12px;
+}
+
+.tag-cloud-item {
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text2);
+  font-family: 'Space Mono', monospace;
+}
+.tag-cloud-item:active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ── SETTINGS PANEL ── */
+.settings-item {
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.settings-item:active { background: var(--card); }
+.settings-label { font-size: 14px; }
+.settings-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* Note editor */
+.note-editor-area {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+  resize: none;
+  min-height: 200px;
+}
+
+/* ── TOGGLE ── */
+.toggle {
+  width: 44px; height: 24px;
+  border-radius: 12px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.toggle.on { background: var(--accent); border-color: var(--accent); }
+.toggle::after {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  top: 2px; left: 2px;
+  transition: var(--transition);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.toggle.on::after { left: 22px; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: calc(68px + env(safe-area-inset-bottom, 0px) + 80px);
+  left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-size: 13px;
+  color: var(--text);
+  z-index: 300;
+  opacity: 0;
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  white-space: nowrap;
+  box-shadow: var(--shadow);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── MISC ── */
+.divider { height: 1px; background: var(--border); margin: 8px 0; }
+.spacer { height: 12px; }
+
+.color-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.no-schedule {
+  padding: 24px;
+  text-align: center;
+  color: var(--text3);
+  font-size: 13px;
+}
+
+/* Color accents for notes */
+.note-card[data-color="purple"] .note-accent-bar { background: var(--accent); }
+.note-card[data-color="pink"] .note-accent-bar { background: var(--pink); }
+.note-card[data-color="teal"] .note-accent-bar { background: var(--teal); }
+.note-card[data-color="yellow"] .note-accent-bar { background: var(--yellow); }
+
+.color-picker { display:flex; gap:8px; align-items:center; }
+.color-option {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: var(--transition);
+}
+.color-option.selected { border-color: var(--text); transform: scale(1.15); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* search page */
+#page-search { display:block; }
+.search-page-wrap { padding-bottom: 80px; }
+</style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+<body>
 
-  <div id="app" class="max-w-md mx-auto min-h-screen relative shadow-2xl bg-white dark:bg-slate-800 pb-20 overflow-hidden flex flex-col">
-    
-    <header class="glass sticky top-0 z-30 px-5 py-4 flex items-center justify-between border-b border-gray-100 dark:border-slate-700">
-      <div class="flex items-center gap-2">
-        <i class="ph-fill ph-star-four text-brand-500 text-xl"></i>
-        <h1 class="font-bold text-lg tracking-tight">Archive</h1>
-      </div>
-      <div class="flex items-center gap-3">
-        <button @click="toggleDarkMode" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-          <i :class="isDark ? 'ph ph-sun' : 'ph ph-moon'" class="text-xl"></i>
-        </button>
-        <button @click="exportData" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition" title="JSON Export">
-          <i class="ph ph-download-simple text-xl"></i>
-        </button>
-        <label class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition cursor-pointer" title="JSON Import">
-          <i class="ph ph-upload-simple text-xl"></i>
-          <input type="file" accept=".json" @change="importData" class="hidden">
-        </label>
-      </div>
-    </header>
+<div id="app">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-logo">ARCHIVE</div>
+    <div class="topbar-actions">
+      <div class="icon-btn" id="btn-search-open" title="검색">🔍</div>
+      <div class="icon-btn" id="btn-theme" title="테마 전환">🌙</div>
+      <div class="icon-btn" id="btn-settings" title="설정">⚙️</div>
+    </div>
+  </div>
 
-    <div class="px-5 py-3 bg-white dark:bg-slate-800 z-20 sticky top-[65px]">
-      <div class="relative">
-        <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-        <input v-model="searchQuery" type="text" placeholder="스케줄, 멤버, 태그 검색..." 
-               class="w-full bg-gray-100 dark:bg-slate-700 text-sm rounded-2xl py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-brand-500 transition-all">
-        <i v-if="searchQuery" @click="searchQuery = ''" class="ph-fill ph-x-circle absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"></i>
+  <!-- CONTENT -->
+  <div class="content-area" id="content-area">
+
+    <!-- ══ PAGE: SCHEDULE ══ -->
+    <div class="page active" id="page-schedule">
+      <div class="section-header">
+        <span class="section-title">SCHEDULE</span>
+        <span class="section-sub" id="cal-year-label">2026</span>
       </div>
+      <div class="calendar-wrap">
+        <div class="cal-nav">
+          <div class="cal-arrow" id="cal-prev">‹</div>
+          <div class="cal-month" id="cal-month-label">JUNE</div>
+          <div class="cal-arrow" id="cal-next">›</div>
+        </div>
+        <div class="cal-grid" id="cal-weekdays"></div>
+        <div class="cal-grid" id="cal-days"></div>
+      </div>
+      <div id="day-detail-container"></div>
     </div>
 
-    <main class="flex-1 overflow-y-auto px-5 py-4 hide-scrollbar relative">
-      
-      <div v-if="searchQuery" class="absolute inset-0 bg-white dark:bg-slate-800 z-10 p-5 overflow-y-auto">
-        <h3 class="text-xs font-bold text-gray-400 mb-4 uppercase tracking-wider">검색 결과</h3>
-        <div v-if="searchResults.length === 0" class="text-center text-gray-400 py-10">결과가 없습니다.</div>
-        <div class="space-y-3">
-          <div v-for="item in searchResults" :key="item.id" @click="openDetail(item.type, item)"
-               class="p-4 rounded-2xl bg-gray-50 dark:bg-slate-700 active:scale-95 transition cursor-pointer">
-            <div class="text-xs text-brand-500 font-bold mb-1">{{ item.type.toUpperCase() }}</div>
-            <div class="font-bold">{{ item.title || item.name }}</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400 line-clamp-1 mt-1">{{ item.desc || item.memo }}</div>
-          </div>
-        </div>
+    <!-- ══ PAGE: MEMBERS ══ -->
+    <div class="page" id="page-members">
+      <div class="section-header">
+        <span class="section-title">MEMBERS</span>
+        <span class="section-sub" id="members-count">0명</span>
       </div>
+      <div class="members-grid" id="members-grid"></div>
+    </div>
 
-      <div v-show="activeTab === 'schedule' && !searchQuery" class="space-y-6">
-        <div class="flex justify-between items-center bg-brand-50 dark:bg-slate-700 p-4 rounded-3xl">
-          <button @click="changeMonth(-1)"><i class="ph-bold ph-caret-left"></i></button>
-          <h2 class="font-bold">{{ currentYear }}년 {{ currentMonth + 1 }}월</h2>
-          <button @click="changeMonth(1)"><i class="ph-bold ph-caret-right"></i></button>
-        </div>
-        <div class="grid grid-cols-7 gap-1 text-center text-xs mb-2">
-          <div v-for="day in ['일','월','화','수','목','금','토']" :key="day" class="text-gray-400 py-2">{{ day }}</div>
-          <div v-for="blank in blankDays" :key="'blank'+blank"></div>
-          <div v-for="day in daysInMonth" :key="day" 
-               @click="selectDate(day)"
-               class="aspect-square flex flex-col items-center justify-center rounded-2xl cursor-pointer transition-all relative"
-               :class="selectedDate.getDate() === day && selectedDate.getMonth() === currentMonth ? 'bg-brand-600 text-white font-bold shadow-lg shadow-brand-500/30' : 'hover:bg-gray-100 dark:hover:bg-slate-700'">
-            <span>{{ day }}</span>
-            <div v-if="hasSchedule(day)" class="w-1.5 h-1.5 bg-brand-400 rounded-full mt-0.5"></div>
-          </div>
-        </div>
-
-        <div class="mt-8">
-          <div class="flex items-end justify-between mb-4">
-            <h3 class="font-bold text-lg">{{ selectedDateStr }} 일정</h3>
-          </div>
-          <div v-if="selectedDaySchedules.length === 0" class="text-center text-gray-400 py-8 bg-gray-50 dark:bg-slate-700/50 rounded-3xl">
-            일정이 없습니다.
-          </div>
-          <div class="space-y-3">
-            <div v-for="sch in selectedDaySchedules" :key="sch.id" @click="openDetail('schedule', sch)"
-                 class="p-4 rounded-3xl bg-white dark:bg-slate-700 shadow-sm border border-gray-100 dark:border-slate-600 active:scale-95 transition cursor-pointer flex gap-4 items-center">
-              <div class="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-slate-600 flex flex-col items-center justify-center text-brand-600 dark:text-brand-400 flex-shrink-0">
-                <span class="text-xs font-bold">{{ sch.time.split(':')[0] }}</span>
-                <span class="text-[10px]">{{ sch.time.split(':')[1] }}</span>
-              </div>
-              <div class="flex-1">
-                <h4 class="font-bold">{{ sch.title }}</h4>
-                <div class="flex gap-2 mt-1 flex-wrap">
-                  <span v-for="tag in sch.tags" :key="tag" @click.stop="searchQuery = '#'+tag" class="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-500">#{{ tag }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- ══ PAGE: PEOPLE ══ -->
+    <div class="page" id="page-people">
+      <div class="section-header">
+        <span class="section-title">PEOPLE</span>
+        <span class="section-sub" id="people-count">0명</span>
       </div>
+      <div class="people-list" id="people-list"></div>
+    </div>
 
-      <div v-show="activeTab === 'members' && !searchQuery" class="space-y-4">
-        <div class="grid grid-cols-2 gap-4">
-          <div v-for="member in members" :key="member.id" @click="openDetail('member', member)"
-               class="relative rounded-3xl overflow-hidden aspect-[4/5] cursor-pointer group active:scale-95 transition-transform shadow-sm">
-            <img :src="member.image || 'https://via.placeholder.com/400x500?text=No+Image'" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4">
-              <span class="text-brand-300 text-xs font-bold mb-1">{{ member.position }}</span>
-              <h3 class="text-white font-bold text-lg">{{ member.stageName }}</h3>
-            </div>
-          </div>
-        </div>
+    <!-- ══ PAGE: NOTES ══ -->
+    <div class="page" id="page-notes">
+      <div class="section-header">
+        <span class="section-title">NOTES</span>
+        <span class="section-sub" id="notes-count">0개</span>
       </div>
-
-      <div v-show="activeTab === 'people' && !searchQuery" class="space-y-3">
-        <div v-for="person in people" :key="person.id" @click="openDetail('person', person)"
-             class="flex items-center gap-4 p-4 rounded-3xl bg-white dark:bg-slate-700 shadow-sm border border-gray-100 dark:border-slate-600 active:scale-95 transition cursor-pointer">
-          <div class="w-12 h-12 rounded-full bg-gray-100 dark:bg-slate-600 flex items-center justify-center text-xl">
-            {{ person.name.charAt(0) }}
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h4 class="font-bold">{{ person.name }}</h4>
-              <span class="text-[10px] px-2 py-0.5 rounded-full bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-300">{{ person.role }}</span>
-            </div>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ person.relationship }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div v-show="activeTab === 'notes' && !searchQuery" class="grid grid-cols-2 gap-3">
-        <div v-for="note in notes" :key="note.id" @click="openDetail('note', note)"
-             class="p-4 rounded-3xl bg-white dark:bg-slate-700 shadow-sm border border-gray-100 dark:border-slate-600 active:scale-95 transition cursor-pointer flex flex-col aspect-square">
-          <h4 class="font-bold line-clamp-2 mb-2">{{ note.title }}</h4>
-          <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 flex-1">{{ note.content }}</p>
-          <div class="flex gap-1 overflow-hidden mt-2">
-            <span v-for="tag in note.tags" :key="tag" class="text-[9px] text-brand-500">#{{ tag }}</span>
-          </div>
-        </div>
-      </div>
-
-    </main>
-
-    <button v-show="!searchQuery" @click="openEditor(activeTab)" 
-            class="absolute bottom-24 right-5 w-14 h-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-lg shadow-brand-500/40 flex items-center justify-center text-2xl transition-transform active:scale-90 z-20">
-      <i class="ph ph-plus"></i>
-    </button>
-
-    <nav class="glass fixed bottom-0 w-full max-w-md border-t border-gray-100 dark:border-slate-700 flex justify-around pb-safe pt-2 pb-6 z-30">
-      <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id; searchQuery=''" 
-              class="flex flex-col items-center p-2 w-16 transition-colors"
-              :class="activeTab === tab.id ? 'text-brand-600 dark:text-brand-400' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'">
-        <i :class="[activeTab === tab.id ? tab.iconFill : tab.icon, 'text-2xl mb-1']"></i>
-        <span class="text-[10px] font-medium">{{ tab.label }}</span>
-      </button>
-    </nav>
-
-    <transition name="slide-right">
-      <div v-if="detailView.isOpen" class="absolute inset-0 bg-white dark:bg-slate-800 z-50 overflow-y-auto pb-20 flex flex-col">
-        <div class="sticky top-0 glass px-5 py-4 flex justify-between items-center z-10">
-          <button @click="detailView.isOpen = false" class="p-2 -ml-2 text-xl"><i class="ph ph-arrow-left"></i></button>
-          <div class="flex gap-3">
-            <button @click="editCurrentDetail" class="p-2"><i class="ph ph-pencil-simple text-xl"></i></button>
-            <button @click="deleteCurrentDetail" class="p-2 text-red-500"><i class="ph ph-trash text-xl"></i></button>
-          </div>
-        </div>
-        
-        <div v-if="detailView.type === 'member'" class="flex-1">
-          <div class="h-80 w-full relative">
-            <img :src="detailView.data.image || 'https://via.placeholder.com/400x500'" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-800 to-transparent"></div>
-          </div>
-          <div class="px-6 -mt-20 relative z-10">
-            <span class="bg-brand-100 text-brand-700 dark:bg-brand-900/50 dark:text-brand-300 px-3 py-1 rounded-full text-xs font-bold">{{ detailView.data.position }}</span>
-            <h2 class="text-4xl font-bold mt-3 mb-1">{{ detailView.data.stageName }}</h2>
-            <p class="text-gray-500 mb-6">{{ detailView.data.realName }} • {{ detailView.data.nationality }}</p>
-            
-            <div class="grid grid-cols-2 gap-4 mb-8">
-              <div class="p-4 rounded-3xl bg-gray-50 dark:bg-slate-700/50">
-                <div class="text-xs text-gray-400 mb-1">생년월일</div>
-                <div class="font-bold">{{ detailView.data.birth }}</div>
-              </div>
-              <div class="p-4 rounded-3xl bg-gray-50 dark:bg-slate-700/50">
-                <div class="text-xs text-gray-400 mb-1">MBTI / 키</div>
-                <div class="font-bold">{{ detailView.data.mbti }} / {{ detailView.data.height }}cm</div>
-              </div>
-            </div>
-            
-            <div class="space-y-6">
-              <DetailSection title="성격 & 취향" :content="detailView.data.personality" />
-              <DetailSection title="습관 & 특기" :content="detailView.data.habits" />
-              <DetailSection title="가족 관계" :content="detailView.data.family" />
-              <DetailSection title="자유 메모" :content="detailView.data.memo" />
-            </div>
-          </div>
-        </div>
-
-        <div v-else class="px-6 pt-4 space-y-6">
-          <template v-if="detailView.type === 'schedule'">
-            <div class="text-brand-500 font-bold mb-2">{{ detailView.data.date }} {{ detailView.data.time }}</div>
-            <h2 class="text-3xl font-bold mb-6">{{ detailView.data.title }}</h2>
-            <DetailSection title="참여 멤버" :content="detailView.data.members" />
-            <DetailSection title="메모" :content="detailView.data.memo" />
-            <div class="flex gap-2 flex-wrap">
-              <span v-for="tag in detailView.data.tags" class="px-3 py-1 rounded-full bg-gray-100 dark:bg-slate-700 text-sm">#{{ tag }}</span>
-            </div>
-          </template>
-
-          <template v-if="detailView.type === 'person'">
-            <div class="w-20 h-20 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-3xl font-bold mb-4">{{ detailView.data.name.charAt(0) }}</div>
-            <h2 class="text-3xl font-bold">{{ detailView.data.name }}</h2>
-            <p class="text-gray-500 mb-6">{{ detailView.data.role }} • {{ detailView.data.relationship }}</p>
-            <DetailSection title="설명" :content="detailView.data.description" />
-            <DetailSection title="메모" :content="detailView.data.memo" />
-          </template>
-
-          <template v-if="detailView.type === 'note'">
-            <h2 class="text-3xl font-bold mb-6">{{ detailView.data.title }}</h2>
-            <div class="whitespace-pre-wrap leading-relaxed text-gray-700 dark:text-gray-300">{{ detailView.data.content }}</div>
-            <div class="flex gap-2 flex-wrap mt-8">
-              <span v-for="tag in detailView.data.tags" class="px-3 py-1 rounded-full bg-gray-100 dark:bg-slate-700 text-sm">#{{ tag }}</span>
-            </div>
-          </template>
-        </div>
-      </div>
-    </transition>
-
-    <transition name="slide-up">
-      <div v-if="editor.isOpen" class="absolute inset-0 bg-white dark:bg-slate-800 z-[60] flex flex-col">
-        <div class="glass px-5 py-4 flex justify-between items-center border-b border-gray-100 dark:border-slate-700">
-          <button @click="editor.isOpen = false" class="text-gray-500 font-medium">취소</button>
-          <h3 class="font-bold">{{ editorTitle }}</h3>
-          <button @click="saveData" class="text-brand-600 font-bold">저장</button>
-        </div>
-        <div class="flex-1 overflow-y-auto px-6 py-6 space-y-5 pb-32">
-          
-          <template v-if="editor.type === 'schedule'">
-            <InputField label="제목" v-model="editor.form.title" />
-            <div class="grid grid-cols-2 gap-4">
-              <InputField label="날짜" type="date" v-model="editor.form.date" />
-              <InputField label="시간" type="time" v-model="editor.form.time" />
-            </div>
-            <InputField label="참여 멤버" placeholder="쉼표로 구분" v-model="editor.form.members" />
-            <InputField label="태그" placeholder="쉼표로 구분 (예: 데뷔, 학교)" v-model="editor.form.tagsRaw" />
-            <TextareaField label="메모" v-model="editor.form.memo" />
-          </template>
-
-          <template v-if="editor.type === 'members'">
-            <div class="flex flex-col items-center mb-6">
-              <div class="w-24 h-24 rounded-3xl bg-gray-100 dark:bg-slate-700 overflow-hidden relative mb-2 flex items-center justify-center">
-                <img v-if="editor.form.image" :src="editor.form.image" class="w-full h-full object-cover">
-                <i v-else class="ph ph-camera text-3xl text-gray-400"></i>
-                <input type="file" class="absolute inset-0 opacity-0 cursor-pointer" @change="uploadImage">
-              </div>
-              <span class="text-xs text-gray-400" v-if="isUploading">업로드 중...</span>
-            </div>
-            <InputField label="활동명" v-model="editor.form.stageName" />
-            <InputField label="본명" v-model="editor.form.realName" />
-            <div class="grid grid-cols-2 gap-4">
-              <InputField label="국적" v-model="editor.form.nationality" />
-              <InputField label="생년월일" placeholder="YYYY.MM.DD" v-model="editor.form.birth" />
-              <InputField label="키 (cm)" type="number" v-model="editor.form.height" />
-              <InputField label="MBTI" v-model="editor.form.mbti" />
-            </div>
-            <InputField label="포지션" v-model="editor.form.position" />
-            <InputField label="별명" v-model="editor.form.nicknames" />
-            <TextareaField label="성격" v-model="editor.form.personality" />
-            <TextareaField label="취향" v-model="editor.form.tastes" />
-            <TextareaField label="습관 및 특기" v-model="editor.form.habits" />
-            <TextareaField label="가족 관계" v-model="editor.form.family" />
-            <TextareaField label="자유 메모" v-model="editor.form.memo" />
-          </template>
-
-          <template v-if="editor.type === 'people'">
-            <InputField label="이름" v-model="editor.form.name" />
-            <InputField label="역할" placeholder="예: 매니저, 프로듀서" v-model="editor.form.role" />
-            <InputField label="관계" v-model="editor.form.relationship" />
-            <TextareaField label="설명" v-model="editor.form.description" />
-            <TextareaField label="자유 메모" v-model="editor.form.memo" />
-          </template>
-
-          <template v-if="editor.type === 'notes'">
-            <InputField label="제목" v-model="editor.form.title" />
-            <InputField label="태그" placeholder="쉼표로 구분" v-model="editor.form.tagsRaw" />
-            <TextareaField label="내용" v-model="editor.form.content" rows="10" />
-          </template>
-
-        </div>
-      </div>
-    </transition>
+      <div class="notes-list" id="notes-list"></div>
+    </div>
 
   </div>
 
-  <script type="module">
-    import { createApp, ref, computed, onMounted, watch } from 'vue';
-    import { initializeApp } from 'firebase/app';
-    import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, writeBatch } from 'firebase/firestore';
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="nav-item active" data-page="schedule">
+      <div class="nav-icon">📅</div>
+      <div class="nav-label">SCHEDULE</div>
+    </div>
+    <div class="nav-item" data-page="members">
+      <div class="nav-icon">👤</div>
+      <div class="nav-label">MEMBERS</div>
+    </div>
+    <div class="nav-item" data-page="people">
+      <div class="nav-icon">👥</div>
+      <div class="nav-label">PEOPLE</div>
+    </div>
+    <div class="nav-item" data-page="notes">
+      <div class="nav-icon">📝</div>
+      <div class="nav-label">NOTES</div>
+    </div>
+  </nav>
+</div>
 
-    // Cloudinary Config
-    const CLOUDINARY_CLOUD = 'dbljkloal';
-    const CLOUDINARY_PRESET = 'Everything';
+<!-- FAB -->
+<button class="fab" id="fab">＋</button>
 
-    // Firebase Config
-    const firebaseConfig = {
-      apiKey: "AIzaSyAA6mbdYfLrrgCJjN47PX91_mU7I53RiBs",
-      authDomain: "site-c67b4.firebaseapp.com",
-      projectId: "site-c67b4",
-      storageBucket: "site-c67b4.firebasestorage.app",
-      messagingSenderId: "744761377245",
-      appId: "1:744761377245:web:3ddaee14f184716eeef634"
-    };
+<!-- ══ DETAIL PAGES ══ -->
+<div class="detail-page" id="detail-member">
+  <div class="detail-header">
+    <div class="back-btn" id="close-member-detail">←</div>
+    <div class="detail-header-title" id="detail-member-name-header">멤버</div>
+    <div style="flex:1"></div>
+    <div class="icon-btn" id="btn-edit-member">✏️</div>
+    <div class="icon-btn" id="btn-delete-member" style="margin-left:6px">🗑️</div>
+  </div>
+  <div id="detail-member-content"></div>
+</div>
 
-    const firebaseApp = initializeApp(firebaseConfig);
-    const db = getFirestore(firebaseApp);
+<div class="detail-page" id="detail-people">
+  <div class="detail-header">
+    <div class="back-btn" id="close-people-detail">←</div>
+    <div class="detail-header-title" id="detail-people-name-header">인물</div>
+    <div style="flex:1"></div>
+    <div class="icon-btn" id="btn-edit-people">✏️</div>
+    <div class="icon-btn" id="btn-delete-people" style="margin-left:6px">🗑️</div>
+  </div>
+  <div id="detail-people-content"></div>
+</div>
 
-    // Vue Components for Forms
-    const InputField = {
-      props: ['label', 'modelValue', 'type', 'placeholder'],
-      template: `
+<div class="detail-page" id="detail-note">
+  <div class="detail-header">
+    <div class="back-btn" id="close-note-detail">←</div>
+    <div class="detail-header-title" id="detail-note-name-header">노트</div>
+    <div style="flex:1"></div>
+    <div class="icon-btn" id="btn-edit-note">✏️</div>
+    <div class="icon-btn" id="btn-delete-note" style="margin-left:6px">🗑️</div>
+  </div>
+  <div id="detail-note-content"></div>
+</div>
+
+<div class="detail-page" id="detail-schedule">
+  <div class="detail-header">
+    <div class="back-btn" id="close-schedule-detail">←</div>
+    <div class="detail-header-title">스케줄 상세</div>
+    <div style="flex:1"></div>
+    <div class="icon-btn" id="btn-edit-schedule">✏️</div>
+    <div class="icon-btn" id="btn-delete-schedule" style="margin-left:6px">🗑️</div>
+  </div>
+  <div id="detail-schedule-content"></div>
+</div>
+
+<!-- ══ SEARCH OVERLAY ══ -->
+<div class="detail-page" id="search-overlay">
+  <div class="detail-header">
+    <div class="back-btn" id="close-search">←</div>
+    <div style="flex:1; padding-left:8px;">
+      <input class="search-input" id="search-input-main" placeholder="검색어를 입력하세요" style="padding-left:14px;" autofocus>
+    </div>
+  </div>
+  <div class="search-page-wrap" id="search-results"></div>
+</div>
+
+<!-- ══ SETTINGS OVERLAY ══ -->
+<div class="detail-page" id="settings-overlay">
+  <div class="detail-header">
+    <div class="back-btn" id="close-settings">←</div>
+    <div class="detail-header-title">SETTINGS</div>
+  </div>
+  <div style="padding: 16px 0 80px;">
+    <div class="settings-item" id="settings-theme-toggle">
+      <div>
+        <div class="settings-label">다크 모드</div>
+        <div class="settings-sub">테마를 전환합니다</div>
+      </div>
+      <div class="toggle on" id="theme-toggle-switch"></div>
+    </div>
+    <div class="settings-item" id="settings-export">
+      <div>
+        <div class="settings-label">데이터 내보내기</div>
+        <div class="settings-sub">JSON 파일로 백업</div>
+      </div>
+      <span style="color:var(--text3)">›</span>
+    </div>
+    <div class="settings-item" id="settings-import">
+      <div>
+        <div class="settings-label">데이터 불러오기</div>
+        <div class="settings-sub">JSON 파일로 복원</div>
+      </div>
+      <span style="color:var(--text3)">›</span>
+    </div>
+    <input type="file" id="import-file-input" accept=".json" style="display:none">
+    <div style="padding: 20px 20px 0; font-size:11px; color:var(--text3); font-family:'Space Mono',monospace; line-height:1.8;">
+      ARCHIVE v1.0<br>
+      가상 아이돌 아카이빙 시스템<br>
+      Firebase + Cloudinary
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODALS ══ -->
+
+<!-- Schedule Modal -->
+<div class="modal-overlay" id="modal-schedule">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-schedule-title">스케줄 추가</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">제목</label>
+        <input class="form-input" id="sch-title" placeholder="스케줄 제목">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">날짜</label>
+          <input class="form-input" type="date" id="sch-date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">시간</label>
+          <input class="form-input" type="time" id="sch-time">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">참여 멤버</label>
+        <div class="member-checkboxes" id="sch-members"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">태그 (쉼표로 구분)</label>
+        <input class="form-input" id="sch-tags" placeholder="#데뷔, #팬사인회">
+      </div>
+      <div class="form-group">
+        <label class="form-label">메모</label>
+        <textarea class="form-textarea" id="sch-memo" placeholder="메모를 입력하세요"></textarea>
+      </div>
+      <button class="btn-primary" id="btn-save-schedule">저장</button>
+      <button class="btn-danger" id="btn-cancel-schedule" style="margin-top:8px; display:block; width:100%; padding:12px; background:transparent; border:1px solid var(--border); border-radius:10px; color:var(--text2); font-family:'Noto Sans KR',sans-serif; font-size:14px; cursor:pointer;">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- Member Modal -->
+<div class="modal-overlay" id="modal-member">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-member-title">멤버 추가</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">프로필 사진</label>
+        <div id="member-photo-upload" class="upload-area" style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:28px">📸</span>
+          <div>
+            <p style="font-size:13px;color:var(--text2);margin:0">사진 업로드</p>
+            <p style="margin-top:2px!important">Cloudinary 자동 업로드</p>
+          </div>
+          <img id="member-photo-preview" class="upload-preview" style="display:none;margin-left:auto">
+        </div>
+        <input type="file" id="member-photo-input" accept="image/*" style="display:none">
+        <input type="hidden" id="member-photo-url">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">활동명</label>
+          <input class="form-input" id="mem-stagename" placeholder="활동명">
+        </div>
+        <div class="form-group">
+          <label class="form-label">본명</label>
+          <input class="form-input" id="mem-realname" placeholder="본명">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">국적</label>
+          <input class="form-input" id="mem-nationality" placeholder="한국">
+        </div>
+        <div class="form-group">
+          <label class="form-label">생년월일</label>
+          <input class="form-input" type="date" id="mem-birthday">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">키</label>
+          <input class="form-input" id="mem-height" placeholder="165cm">
+        </div>
+        <div class="form-group">
+          <label class="form-label">포지션</label>
+          <input class="form-input" id="mem-position" placeholder="메인보컬">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">MBTI</label>
+          <input class="form-input" id="mem-mbti" placeholder="INFP">
+        </div>
+        <div class="form-group">
+          <label class="form-label">별명</label>
+          <input class="form-input" id="mem-nickname" placeholder="별명">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">성격</label>
+        <textarea class="form-textarea" id="mem-personality" placeholder="성격 설명" style="min-height:60px"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">취향</label>
+        <textarea class="form-textarea" id="mem-taste" placeholder="취향 설명" style="min-height:60px"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">습관 / 특기</label>
+        <textarea class="form-textarea" id="mem-habit" placeholder="습관, 특기 설명" style="min-height:60px"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">가족관계</label>
+        <textarea class="form-textarea" id="mem-family" placeholder="가족관계 설명" style="min-height:60px"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">자유 메모</label>
+        <textarea class="form-textarea" id="mem-memo" placeholder="자유 메모"></textarea>
+      </div>
+      <button class="btn-primary" id="btn-save-member">저장</button>
+      <button class="btn-danger" id="btn-cancel-member">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- People Modal -->
+<div class="modal-overlay" id="modal-people">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-people-title">인물 추가</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">프로필 사진</label>
+        <div id="people-photo-upload" class="upload-area" style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:28px">👤</span>
+          <div><p style="font-size:13px;color:var(--text2);margin:0">사진 업로드</p><p style="margin-top:2px!important">Cloudinary 자동 업로드</p></div>
+          <img id="people-photo-preview" class="upload-preview" style="display:none;margin-left:auto">
+        </div>
+        <input type="file" id="people-photo-input" accept="image/*" style="display:none">
+        <input type="hidden" id="people-photo-url">
+      </div>
+      <div class="form-group">
+        <label class="form-label">이름</label>
+        <input class="form-input" id="ppl-name" placeholder="이름">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">역할</label>
+          <input class="form-input" id="ppl-role" placeholder="프로듀서">
+        </div>
+        <div class="form-group">
+          <label class="form-label">관계</label>
+          <input class="form-input" id="ppl-relation" placeholder="소속사 직원">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">설명</label>
+        <textarea class="form-textarea" id="ppl-desc" placeholder="설명"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">자유 메모</label>
+        <textarea class="form-textarea" id="ppl-memo" placeholder="자유 메모"></textarea>
+      </div>
+      <button class="btn-primary" id="btn-save-people">저장</button>
+      <button class="btn-danger" id="btn-cancel-people">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- Note Modal -->
+<div class="modal-overlay" id="modal-note">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-note-title">노트 추가</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">제목</label>
+        <input class="form-input" id="note-title-input" placeholder="노트 제목">
+      </div>
+      <div class="form-group">
+        <label class="form-label">색상</label>
+        <div class="color-picker">
+          <div class="color-option selected" data-color="purple" style="background:var(--accent)" onclick="selectNoteColor('purple',this)"></div>
+          <div class="color-option" data-color="pink" style="background:var(--pink)" onclick="selectNoteColor('pink',this)"></div>
+          <div class="color-option" data-color="teal" style="background:var(--teal)" onclick="selectNoteColor('teal',this)"></div>
+          <div class="color-option" data-color="yellow" style="background:var(--yellow)" onclick="selectNoteColor('yellow',this)"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">내용</label>
+        <textarea class="form-textarea" id="note-content-input" placeholder="자유롭게 작성하세요" style="min-height:160px"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">태그 (쉼표로 구분)</label>
+        <input class="form-input" id="note-tags-input" placeholder="#컨셉, #세계관">
+      </div>
+      <button class="btn-primary" id="btn-save-note">저장</button>
+      <button class="btn-danger" id="btn-cancel-note">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══ CONSTANTS ══
+const CLOUDINARY_CLOUD = 'dbljkloal';
+const CLOUDINARY_PRESET = 'Everything';
+const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`;
+
+// ══ STATE ══
+let db, fbModules;
+let currentPage = 'schedule';
+let calYear = 2026, calMonth = 5; // 0-indexed
+let selectedDate = null;
+let schedules = [], members = [], peoples = [], notes = [];
+let editingId = null;
+let currentNoteColor = 'purple';
+let isDark = true;
+
+// Dummy data
+const DUMMY_MEMBERS = [
+  { stagename:'하늘', realname:'김하늘', nationality:'한국', birthday:'2003-03-15', height:'165cm', position:'메인보컬', mbti:'INFJ', nickname:'하늘이, 천사', personality:'조용하고 섬세하다. 혼자 있는 시간을 좋아하지만 팀원들에게는 따뜻하다.', taste:'클래식 음악, 수채화, 비오는 날', habit:'무언가 생각할 때 머리를 만지는 습관. 피아노 연주 특기.', family:'부모님과 남동생 1명', memo:'그룹의 센터이자 감성 담당', photo:'' },
+  { stagename:'리아', realname:'이리아', nationality:'한국', birthday:'2004-07-22', height:'162cm', position:'리드댄서', mbti:'ENFP', nickname:'리아, 에너지폭탄', personality:'활발하고 긍정적. 어떤 상황에서도 팀 분위기를 밝게 만든다.', taste:'R&B, 스트릿 패션, 카페 탐방', habit:'기분 좋을 때 콧노래, 춤 연습 중독.', family:'부모님과 언니 1명', memo:'그룹의 에너지 담당, 안무 창작 참여', photo:'' },
+  { stagename:'세린', realname:'박세린', nationality:'한국', birthday:'2002-11-08', height:'168cm', position:'메인래퍼', mbti:'INTJ', nickname:'세린, 아이스퀸', personality:'냉철하고 논리적이지만 가끔 유머감각이 폭발.', taste:'힙합, 스케이트보드, 독서', habit:'공책에 가사 메모, 음악 들을 때 눈 감는 버릇.', family:'부모님 (독자)', memo:'그룹의 리더 역할 담당', photo:'' },
+];
+const DUMMY_PEOPLE = [
+  { name:'박민수', role:'프로듀서', relation:'소속사 관계자', desc:'주력 앨범 프로듀서. 데뷔 전부터 함께해온 음악 파트너.', memo:'감성적인 곡 스타일 선호', photo:'' },
+  { name:'이나리', role:'안무가', relation:'협업 아티스트', desc:'컴백 때마다 안무를 맡아온 안무가. 세린과 특히 잘 맞음.', memo:'스트릿댄스 베이스', photo:'' },
+  { name:'정수아', role:'팬', relation:'팬덤 대표', desc:'팬클럽 1기 회원. 팬미팅에서 자주 만나는 얼굴.', memo:'하늘 최애', photo:'' },
+];
+const DUMMY_NOTES = [
+  { title:'컴백 컨셉 아이디어', content:'다크 판타지 + 사이버펑크 융합 컨셉 고려.\n\n- 세계관: 기억을 잃은 아이돌이 자신의 과거를 찾아가는 스토리\n- 색감: 딥 퍼플, 네온 핑크, 블랙\n- 키워드: 기억, 거울, 달빛\n\n타이틀곡 후보:\n1. "MIRROR" - 자기 자신과의 대면\n2. "ECHO" - 사라진 기억의 메아리', tags:'#컨셉,#컴백,#세계관', color:'purple', date:'2026-06-01' },
+  { title:'세계관 설정 — 라이벌 그룹', content:'라이벌 그룹 "ECLIPSE" 설정\n\n같은 소속사 출신이지만 다른 길을 걷게 된 그룹.\n리더와 하늘 사이에 과거의 인연이 있음.', tags:'#세계관,#라이벌', color:'pink', date:'2026-05-28' },
+  { title:'미정 설정 모음', content:'아직 확정되지 않은 설정들:\n\n- 리아의 해외 유학 경험 여부\n- 세린의 데뷔 전 솔로 활동\n- 그룹명의 의미와 유래\n- 팬클럽명 후보 목록', tags:'#미정,#설정', color:'teal', date:'2026-05-20' },
+];
+const DUMMY_SCHEDULES = [
+  { date:'2026-06-06', time:'14:00', title:'팬사인회', members:['하늘','리아','세린'], tags:'#팬사인회,#공식행사', memo:'강남 코엑스 행사장. 300명 규모.' },
+  { date:'2026-06-06', time:'19:30', title:'뮤직뱅크 사전녹화', members:['하늘','리아','세린'], tags:'#방송,#음방', memo:'KBS 여의도 공개홀' },
+  { date:'2026-06-12', time:'13:00', title:'자체 콘텐츠 촬영', members:['리아','세린'], tags:'#콘텐츠,#유튜브', memo:'멤버 일상 브이로그 촬영' },
+  { date:'2026-06-18', time:'20:00', title:'단독 콘서트', members:['하늘','리아','세린'], tags:'#콘서트,#공연', memo:'올림픽홀 2일차 공연' },
+  { date:'2026-06-25', time:'15:00', title:'잡지 화보 촬영', members:['하늘'], tags:'#화보,#잡지', memo:'보그코리아 7월호 커버 화보' },
+];
+
+// ══ FIREBASE INIT ══
+window.addEventListener('firebase-ready', async () => {
+  db = window.__db;
+  fbModules = window.__fbModules;
+  await loadAll();
+  if(schedules.length===0) await seedDummy();
+  renderAll();
+});
+
+async function loadAll() {
+  try {
+    schedules = await loadCollection('schedules');
+    members = await loadCollection('members');
+    peoples = await loadCollection('peoples');
+    notes = await loadCollection('notes');
+  } catch(e) {
+    console.error('Firebase load error:', e);
+    loadFromLocal();
+  }
+}
+
+async function loadCollection(name) {
+  const { collection, getDocs, query, orderBy } = fbModules;
+  const q = query(collection(db, name));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+function loadFromLocal() {
+  try {
+    schedules = JSON.parse(localStorage.getItem('arch_schedules')||'[]');
+    members = JSON.parse(localStorage.getItem('arch_members')||'[]');
+    peoples = JSON.parse(localStorage.getItem('arch_peoples')||'[]');
+    notes = JSON.parse(localStorage.getItem('arch_notes')||'[]');
+  } catch(e) {}
+}
+
+function saveLocal() {
+  localStorage.setItem('arch_schedules', JSON.stringify(schedules));
+  localStorage.setItem('arch_members', JSON.stringify(members));
+  localStorage.setItem('arch_peoples', JSON.stringify(peoples));
+  localStorage.setItem('arch_notes', JSON.stringify(notes));
+}
+
+async function seedDummy() {
+  for(const m of DUMMY_MEMBERS) await addItem('members', m);
+  for(const p of DUMMY_PEOPLE) await addItem('peoples', p);
+  for(const n of DUMMY_NOTES) await addItem('notes', n);
+  for(const s of DUMMY_SCHEDULES) await addItem('schedules', s);
+  await loadAll();
+}
+
+async function addItem(col, data) {
+  try {
+    const { collection, addDoc } = fbModules;
+    const ref = await addDoc(collection(db, col), data);
+    return ref.id;
+  } catch(e) {
+    const id = 'local_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const arr = col==='schedules'?schedules:col==='members'?members:col==='peoples'?peoples:notes;
+    arr.push({ id, ...data });
+    saveLocal();
+    return id;
+  }
+}
+
+async function updateItem(col, id, data) {
+  try {
+    const { doc, updateDoc } = fbModules;
+    await updateDoc(doc(db, col, id), data);
+  } catch(e) {
+    const arr = col==='schedules'?schedules:col==='members'?members:col==='peoples'?peoples:notes;
+    const i = arr.findIndex(x=>x.id===id);
+    if(i>=0) { arr[i] = {...arr[i],...data}; saveLocal(); }
+  }
+}
+
+async function deleteItem(col, id) {
+  try {
+    const { doc, deleteDoc } = fbModules;
+    await deleteDoc(doc(db, col, id));
+  } catch(e) {
+    const arr = col==='schedules'?schedules:col==='members'?members:col==='peoples'?peoples:notes;
+    const i = arr.findIndex(x=>x.id===id);
+    if(i>=0) { arr.splice(i,1); saveLocal(); }
+  }
+}
+
+// ══ RENDER ══
+function renderAll() {
+  renderCalendar();
+  renderMembers();
+  renderPeople();
+  renderNotes();
+  updateCounts();
+}
+
+function updateCounts() {
+  document.getElementById('members-count').textContent = members.length + '명';
+  document.getElementById('people-count').textContent = peoples.length + '명';
+  document.getElementById('notes-count').textContent = notes.length + '개';
+}
+
+// ── Calendar ──
+const MONTHS = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+const WEEKDAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+
+function renderCalendar() {
+  document.getElementById('cal-month-label').textContent = MONTHS[calMonth];
+  document.getElementById('cal-year-label').textContent = calYear;
+
+  const wdEl = document.getElementById('cal-weekdays');
+  wdEl.innerHTML = WEEKDAYS.map(d=>`<div class="cal-weekday">${d}</div>`).join('');
+
+  const first = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const daysInPrev = new Date(calYear, calMonth, 0).getDate();
+  const today = new Date();
+
+  let cells = [];
+  for(let i=first-1;i>=0;i--) cells.push({d:daysInPrev-i, cur:false});
+  for(let i=1;i<=daysInMonth;i++) cells.push({d:i, cur:true});
+  while(cells.length%7!==0) cells.push({d:cells.length-first-daysInMonth+1, cur:false});
+
+  const dayEl = document.getElementById('cal-days');
+  dayEl.innerHTML = '';
+  cells.forEach(({d, cur}) => {
+    const dateStr = cur ? `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}` : null;
+    const schsForDay = cur ? schedules.filter(s=>s.date===dateStr) : [];
+    const isToday = cur && d===today.getDate() && calMonth===today.getMonth() && calYear===today.getFullYear();
+    const isSelected = dateStr && dateStr===selectedDate;
+
+    const div = document.createElement('div');
+    div.className = `cal-day${!cur?' other-month':''}${isToday?' today':''}${isSelected?' selected':''}`;
+
+    const dots = schsForDay.slice(0,3).map(s=>{
+      const tags = (s.tags||'').toLowerCase();
+      let cls = '';
+      if(tags.includes('콘서트')||tags.includes('공연')) cls=' tag-concert';
+      else if(tags.includes('방송')||tags.includes('녹화')) cls=' tag-schedule';
+      else if(tags.includes('콘텐츠')) cls=' tag-content';
+      return `<div class="cal-dot${cls}"></div>`;
+    }).join('');
+
+    div.innerHTML = `<span class="cal-day-num">${d}</span><div class="cal-dots">${dots}</div>`;
+    if(cur) div.addEventListener('click', ()=>selectDate(dateStr));
+    dayEl.appendChild(div);
+  });
+
+  if(selectedDate) renderDayDetail(selectedDate);
+}
+
+function selectDate(dateStr) {
+  selectedDate = dateStr;
+  renderCalendar();
+}
+
+function renderDayDetail(dateStr) {
+  const container = document.getElementById('day-detail-container');
+  const daySchs = schedules.filter(s=>s.date===dateStr).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+
+  const [y,m,d] = dateStr.split('-');
+  const dateLabel = `${y}.${m}.${d}`;
+
+  let html = `<div class="day-detail">
+    <div class="day-detail-header">
+      <div class="day-detail-date">${dateLabel}</div>
+      <div style="font-size:11px;color:var(--text3)">${daySchs.length}개의 스케줄</div>
+    </div>`;
+
+  if(daySchs.length===0) {
+    html += `<div class="no-schedule">이 날의 스케줄이 없습니다</div>`;
+  } else {
+    daySchs.forEach(s => {
+      const tags = (s.tags||'').split(',').filter(Boolean).map(t=>`<div class="tag-chip accent">${t.trim()}</div>`).join('');
+      const mems = (s.members||[]).map(m=>`<div class="member-dot">${m[0]||'?'}</div>`).join('');
+      html += `<div class="schedule-item" onclick="openScheduleDetail('${s.id}')">
+        <div class="sch-time">${s.time||'—'}</div>
+        <div class="sch-body">
+          <div class="sch-title">${s.title||''}</div>
+          ${tags?`<div class="sch-tags">${tags}</div>`:''}
+          ${mems?`<div class="sch-members">${mems}</div>`:''}
+        </div>
+        <div style="color:var(--text3);font-size:18px">›</div>
+      </div>`;
+    });
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// ── Members ──
+function renderMembers() {
+  const grid = document.getElementById('members-grid');
+  if(members.length===0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">👤</div><p>멤버가 없습니다.<br>+ 버튼으로 추가하세요.</p></div>`;
+    return;
+  }
+  grid.innerHTML = members.map(m => {
+    const photo = m.photo ? `<img src="${m.photo}" alt="${m.stagename}">` : `<div class="member-photo-placeholder">${getEmoji(m.stagename)}</div>`;
+    return `<div class="member-card" onclick="openMemberDetail('${m.id}')">
+      <div class="member-photo">
+        ${photo}
+        <div class="member-photo-overlay">
+          <div class="member-name">${m.stagename||'?'}</div>
+          <div class="member-position">${m.position||''}</div>
+        </div>
+      </div>
+      <div class="member-info-strip">
+        ${m.mbti?`<div class="tag-chip">${m.mbti}</div>`:''}
+        ${m.birthday?`<div class="tag-chip">${getAge(m.birthday)}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── People ──
+function renderPeople() {
+  const list = document.getElementById('people-list');
+  if(peoples.length===0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">👥</div><p>인물이 없습니다.<br>+ 버튼으로 추가하세요.</p></div>`;
+    return;
+  }
+  list.innerHTML = peoples.map(p => {
+    const photo = p.photo ? `<img src="${p.photo}" alt="${p.name}">` : getEmoji(p.name);
+    return `<div class="people-item" onclick="openPeopleDetail('${p.id}')">
+      <div class="people-avatar">${p.photo?`<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:'<span style="font-size:20px">'+getEmoji(p.name)+'</span>'}</div>
+      <div class="people-info">
+        <div class="people-name">${p.name||'?'}</div>
+        <div class="people-role">${p.role||''} ${p.relation?'· '+p.relation:''}</div>
+      </div>
+      <div style="color:var(--text3)">›</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Notes ──
+function renderNotes() {
+  const list = document.getElementById('notes-list');
+  if(notes.length===0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">📝</div><p>노트가 없습니다.<br>+ 버튼으로 추가하세요.</p></div>`;
+    return;
+  }
+  list.innerHTML = notes.map(n => {
+    const tags = (n.tags||'').split(',').filter(Boolean).map(t=>`<div class="tag-chip">${t.trim()}</div>`).join('');
+    return `<div class="note-card" data-color="${n.color||'purple'}" onclick="openNoteDetail('${n.id}')">
+      <div class="note-accent-bar"></div>
+      <div class="note-title">${n.title||'제목 없음'}</div>
+      <div class="note-preview">${(n.content||'').replace(/\n/g,' ')}</div>
+      <div class="note-meta">
+        <div class="note-date">${n.date||''}</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">${tags}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══ DETAIL PAGES ══
+function openMemberDetail(id) {
+  const m = members.find(x=>x.id===id);
+  if(!m) return;
+  editingId = id;
+  document.getElementById('detail-member-name-header').textContent = m.stagename||'멤버';
+
+  const photo = m.photo ? `<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:60px;background:linear-gradient(135deg,var(--bg3),var(--card2))">${getEmoji(m.stagename)}</div>`;
+
+  document.getElementById('detail-member-content').innerHTML = `
+    <div class="detail-hero" style="height:280px">
+      ${photo}
+      <div class="detail-hero-overlay">
+        <div class="detail-hero-name">${m.stagename||''}</div>
+        <div class="detail-hero-sub">${m.realname||''} ${m.position?'· '+m.position:''}</div>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="info-section">
+        <div class="info-section-title">BASIC INFO</div>
+        ${infoRow('국적',m.nationality)}${infoRow('생년월일',m.birthday?m.birthday+(m.birthday?' ('+getAge(m.birthday)+')':''):'')}${infoRow('키',m.height)}${infoRow('포지션',m.position)}${infoRow('MBTI',m.mbti)}${infoRow('별명',m.nickname)}
+      </div>
+      ${m.personality?`<div class="info-section"><div class="info-section-title">PERSONALITY</div><div class="info-row"><div class="info-value">${m.personality}</div></div></div>`:''}
+      ${m.taste?`<div class="info-section"><div class="info-section-title">TASTE & INTERESTS</div><div class="info-row"><div class="info-value">${m.taste}</div></div></div>`:''}
+      ${m.habit?`<div class="info-section"><div class="info-section-title">HABIT & SKILLS</div><div class="info-row"><div class="info-value">${m.habit}</div></div></div>`:''}
+      ${m.family?`<div class="info-section"><div class="info-section-title">FAMILY</div><div class="info-row"><div class="info-value">${m.family}</div></div></div>`:''}
+      ${m.memo?`<div class="info-section"><div class="info-section-title">MEMO</div><div class="info-row"><div class="info-value">${m.memo}</div></div></div>`:''}
+    </div>`;
+
+  document.getElementById('detail-member').classList.add('open');
+}
+
+function openPeopleDetail(id) {
+  const p = peoples.find(x=>x.id===id);
+  if(!p) return;
+  editingId = id;
+  document.getElementById('detail-people-name-header').textContent = p.name||'인물';
+
+  const photo = p.photo?`<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0">`:
+    `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:60px;background:linear-gradient(135deg,var(--bg3),var(--card2))">${getEmoji(p.name)}</div>`;
+
+  document.getElementById('detail-people-content').innerHTML = `
+    <div class="detail-hero" style="height:200px">
+      ${photo}
+      <div class="detail-hero-overlay">
+        <div class="detail-hero-name">${p.name||''}</div>
+        <div class="detail-hero-sub">${p.role||''} ${p.relation?'· '+p.relation:''}</div>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="info-section">
+        <div class="info-section-title">INFO</div>
+        ${infoRow('역할',p.role)}${infoRow('관계',p.relation)}
+      </div>
+      ${p.desc?`<div class="info-section"><div class="info-section-title">DESCRIPTION</div><div class="info-row"><div class="info-value">${p.desc}</div></div></div>`:''}
+      ${p.memo?`<div class="info-section"><div class="info-section-title">MEMO</div><div class="info-row"><div class="info-value">${p.memo}</div></div></div>`:''}
+    </div>`;
+
+  document.getElementById('detail-people').classList.add('open');
+}
+
+function openNoteDetail(id) {
+  const n = notes.find(x=>x.id===id);
+  if(!n) return;
+  editingId = id;
+  document.getElementById('detail-note-name-header').textContent = n.title||'노트';
+
+  const tags = (n.tags||'').split(',').filter(Boolean).map(t=>`<div class="tag-chip accent">${t.trim()}</div>`).join('');
+
+  document.getElementById('detail-note-content').innerHTML = `
+    <div style="padding:20px 20px 100px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div style="width:4px;height:32px;border-radius:2px;background:${getColorVar(n.color)}"></div>
         <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1 pl-1">{{ label }}</label>
-          <input :type="type || 'text'" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" :placeholder="placeholder"
-                 class="w-full bg-gray-50 dark:bg-slate-700/50 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-brand-500 transition-all border border-gray-100 dark:border-slate-600">
+          <div style="font-size:22px;font-weight:700">${n.title||''}</div>
+          <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:2px">${n.date||''}</div>
         </div>
-      `
-    };
+      </div>
+      ${tags?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">${tags}</div>`:''}
+      <div style="font-size:14px;line-height:1.9;color:var(--text);white-space:pre-wrap">${n.content||''}</div>
+    </div>`;
 
-    const TextareaField = {
-      props: ['label', 'modelValue', 'rows'],
-      template: `
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1 pl-1">{{ label }}</label>
-          <textarea :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" :rows="rows || 3"
-                 class="w-full bg-gray-50 dark:bg-slate-700/50 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-brand-500 transition-all border border-gray-100 dark:border-slate-600 resize-none"></textarea>
-        </div>
-      `
-    };
+  document.getElementById('detail-note').classList.add('open');
+}
 
-    const DetailSection = {
-      props: ['title', 'content'],
-      template: `
-        <div v-if="content">
-          <h4 class="text-sm font-bold text-brand-500 mb-2">{{ title }}</h4>
-          <p class="text-sm leading-relaxed whitespace-pre-wrap">{{ content }}</p>
-        </div>
-      `
-    };
+function openScheduleDetail(id) {
+  const s = schedules.find(x=>x.id===id);
+  if(!s) return;
+  editingId = id;
 
-    createApp({
-      components: { InputField, TextareaField, DetailSection },
-      setup() {
-        const isDark = ref(false);
-        const activeTab = ref('schedule');
-        const searchQuery = ref('');
-        const isUploading = ref(false);
+  const tags = (s.tags||'').split(',').filter(Boolean).map(t=>`<div class="tag-chip accent">${t.trim()}</div>`).join('');
+  const mems = (s.members||[]).map(m=>`<div class="tag-chip">${m}</div>`).join('');
 
-        const tabs = [
-          { id: 'schedule', label: 'Schedule', icon: 'ph-calendar-blank', iconFill: 'ph-fill ph-calendar-blank' },
-          { id: 'members', label: 'Members', icon: 'ph-users', iconFill: 'ph-fill ph-users' },
-          { id: 'people', label: 'People', icon: 'ph-address-book', iconFill: 'ph-fill ph-address-book' },
-          { id: 'notes', label: 'Notes', icon: 'ph-notebook', iconFill: 'ph-fill ph-notebook' }
-        ];
+  document.getElementById('detail-schedule-content').innerHTML = `
+    <div style="padding:20px 20px 100px">
+      <div style="margin-bottom:16px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;color:var(--text)">${s.title||''}</div>
+        <div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);margin-top:4px">${s.date||''} ${s.time||''}</div>
+      </div>
+      ${tags?`<div class="info-section" style="margin-bottom:12px"><div class="info-section-title">TAGS</div><div class="info-row"><div style="display:flex;flex-wrap:wrap;gap:6px">${tags}</div></div></div>`:''}
+      ${mems?`<div class="info-section" style="margin-bottom:12px"><div class="info-section-title">MEMBERS</div><div class="info-row"><div style="display:flex;flex-wrap:wrap;gap:6px">${mems}</div></div></div>`:''}
+      ${s.memo?`<div class="info-section"><div class="info-section-title">MEMO</div><div class="info-row"><div class="info-value">${s.memo}</div></div></div>`:''}
+    </div>`;
 
-        // Collections
-        const schedules = ref([]);
-        const members = ref([]);
-        const people = ref([]);
-        const notes = ref([]);
+  document.getElementById('detail-schedule').classList.add('open');
+}
 
-        // Calendar logic
-        const today = new Date();
-        const currentMonth = ref(today.getMonth());
-        const currentYear = ref(today.getFullYear());
-        const selectedDate = ref(new Date());
+function infoRow(label, value) {
+  if(!value) return '';
+  return `<div class="info-row"><div class="info-label">${label}</div><div class="info-value">${value}</div></div>`;
+}
 
-        const daysInMonth = computed(() => new Date(currentYear.value, currentMonth.value + 1, 0).getDate());
-        const blankDays = computed(() => new Date(currentYear.value, currentMonth.value, 1).getDay());
-        
-        const changeMonth = (step) => {
-          let newMonth = currentMonth.value + step;
-          let newYear = currentYear.value;
-          if (newMonth > 11) { newMonth = 0; newYear++; }
-          if (newMonth < 0) { newMonth = 11; newYear--; }
-          currentMonth.value = newMonth;
-          currentYear.value = newYear;
-        };
+// ══ NAVIGATION ══
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const page = item.dataset.page;
+    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+    item.classList.add('active');
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-'+page).classList.add('active');
+    currentPage = page;
+    document.getElementById('content-area').scrollTop = 0;
+  });
+});
 
-        const selectDate = (day) => {
-          selectedDate.value = new Date(currentYear.value, currentMonth.value, day);
-        };
+// ══ DETAIL PAGE CLOSE ══
+['member','people','note','schedule'].forEach(type => {
+  document.getElementById('close-'+type+'-detail').addEventListener('click', ()=>{
+    document.getElementById('detail-'+type).classList.remove('open');
+    editingId = null;
+  });
+});
 
-        const selectedDateStr = computed(() => {
-          const m = String(selectedDate.value.getMonth() + 1).padStart(2, '0');
-          const d = String(selectedDate.value.getDate()).padStart(2, '0');
-          return `${selectedDate.value.getFullYear()}-${m}-${d}`;
-        });
+// ══ CALENDAR NAV ══
+document.getElementById('cal-prev').addEventListener('click', ()=>{
+  calMonth--; if(calMonth<0){calMonth=11;calYear--;}
+  selectedDate=null;
+  document.getElementById('day-detail-container').innerHTML='';
+  renderCalendar();
+});
+document.getElementById('cal-next').addEventListener('click', ()=>{
+  calMonth++; if(calMonth>11){calMonth=0;calYear++;}
+  selectedDate=null;
+  document.getElementById('day-detail-container').innerHTML='';
+  renderCalendar();
+});
 
-        const selectedDaySchedules = computed(() => {
-          return schedules.value.filter(s => s.date === selectedDateStr.value).sort((a,b) => a.time.localeCompare(b.time));
-        });
+// ══ FAB ══
+document.getElementById('fab').addEventListener('click', () => {
+  const page = currentPage;
+  if(page==='schedule') {
+    editingId = null;
+    openScheduleModal(selectedDate);
+  } else if(page==='members') {
+    editingId = null;
+    openMemberModal();
+  } else if(page==='people') {
+    editingId = null;
+    openPeopleModal();
+  } else if(page==='notes') {
+    editingId = null;
+    openNoteModal();
+  }
+});
 
-        const hasSchedule = (day) => {
-          const m = String(currentMonth.value + 1).padStart(2, '0');
-          const d = String(day).padStart(2, '0');
-          const dateStr = `${currentYear.value}-${m}-${d}`;
-          return schedules.value.some(s => s.date === dateStr);
-        };
+// ══ SCHEDULE MODAL ══
+function openScheduleModal(date) {
+  document.getElementById('modal-schedule-title').textContent = editingId ? '스케줄 수정' : '스케줄 추가';
+  if(editingId) {
+    const s = schedules.find(x=>x.id===editingId);
+    if(s) {
+      document.getElementById('sch-title').value = s.title||'';
+      document.getElementById('sch-date').value = s.date||'';
+      document.getElementById('sch-time').value = s.time||'';
+      document.getElementById('sch-tags').value = s.tags||'';
+      document.getElementById('sch-memo').value = s.memo||'';
+    }
+  } else {
+    document.getElementById('sch-title').value='';
+    document.getElementById('sch-date').value = date||'';
+    document.getElementById('sch-time').value='';
+    document.getElementById('sch-tags').value='';
+    document.getElementById('sch-memo').value='';
+  }
+  const mems = document.getElementById('sch-members');
+  const selected = editingId ? (schedules.find(x=>x.id===editingId)?.members||[]) : [];
+  mems.innerHTML = members.map(m=>`<div class="member-checkbox${selected.includes(m.stagename)?' checked':''}" data-name="${m.stagename}" onclick="this.classList.toggle('checked')">${m.stagename}</div>`).join('');
+  document.getElementById('modal-schedule').classList.add('open');
+}
 
-        // Navigation Views
-        const detailView = ref({ isOpen: false, type: '', data: null });
-        const editor = ref({ isOpen: false, type: '', isEdit: false, id: null, form: {} });
+document.getElementById('btn-save-schedule').addEventListener('click', async () => {
+  const title = document.getElementById('sch-title').value.trim();
+  if(!title) { showToast('제목을 입력해주세요'); return; }
+  const selectedMems = [...document.querySelectorAll('#sch-members .member-checkbox.checked')].map(el=>el.dataset.name);
+  const data = {
+    title,
+    date: document.getElementById('sch-date').value,
+    time: document.getElementById('sch-time').value,
+    members: selectedMems,
+    tags: document.getElementById('sch-tags').value,
+    memo: document.getElementById('sch-memo').value,
+  };
+  if(editingId) {
+    await updateItem('schedules', editingId, data);
+    const i = schedules.findIndex(x=>x.id===editingId);
+    if(i>=0) schedules[i] = {...schedules[i], ...data};
+  } else {
+    const id = await addItem('schedules', data);
+    if(!schedules.find(x=>x.id===id)) schedules.push({id,...data});
+  }
+  document.getElementById('modal-schedule').classList.remove('open');
+  renderCalendar();
+  if(selectedDate) renderDayDetail(selectedDate);
+  showToast(editingId?'스케줄이 수정되었습니다':'스케줄이 추가되었습니다');
+  editingId=null;
+});
 
-        const openDetail = (type, data) => {
-          detailView.value = { isOpen: true, type, data: { ...data } };
-        };
+document.getElementById('btn-cancel-schedule').addEventListener('click',()=>document.getElementById('modal-schedule').classList.remove('open'));
 
-        const openEditor = (type, editData = null) => {
-          editor.value.type = type;
-          editor.value.isEdit = !!editData;
-          editor.value.id = editData ? editData.id : null;
-          
-          if (editData) {
-            editor.value.form = { ...editData };
-            if (editData.tags) editor.value.form.tagsRaw = editData.tags.join(', ');
-          } else {
-            editor.value.form = type === 'schedule' ? { date: selectedDateStr.value, time: '12:00' } : {};
-          }
-          editor.value.isOpen = true;
-        };
+document.getElementById('btn-edit-schedule').addEventListener('click',()=>{
+  if(!editingId) return;
+  document.getElementById('detail-schedule').classList.remove('open');
+  openScheduleModal(null);
+});
 
-        const editCurrentDetail = () => {
-          const mapType = { 'member': 'members', 'person': 'people', 'note': 'notes', 'schedule': 'schedule' };
-          openEditor(mapType[detailView.value.type], detailView.value.data);
-          detailView.value.isOpen = false;
-        };
+document.getElementById('btn-delete-schedule').addEventListener('click', async ()=>{
+  if(!editingId) return;
+  if(!confirm('스케줄을 삭제하시겠습니까?')) return;
+  await deleteItem('schedules', editingId);
+  schedules = schedules.filter(x=>x.id!==editingId);
+  document.getElementById('detail-schedule').classList.remove('open');
+  renderCalendar();
+  if(selectedDate) renderDayDetail(selectedDate);
+  showToast('삭제되었습니다');
+  editingId=null;
+});
 
-        const editorTitle = computed(() => {
-          const action = editor.value.isEdit ? '수정' : '추가';
-          const t = editor.value.type;
-          return t === 'schedule' ? `스케줄 ${action}` : t === 'members' ? `멤버 ${action}` : t === 'people' ? `인물 ${action}` : `노트 ${action}`;
-        });
+// ══ MEMBER MODAL ══
+function openMemberModal() {
+  document.getElementById('modal-member-title').textContent = editingId ? '멤버 수정' : '멤버 추가';
+  const fields = ['stagename','realname','nationality','birthday','height','position','mbti','nickname','personality','taste','habit','family','memo'];
+  if(editingId) {
+    const m = members.find(x=>x.id===editingId);
+    if(m) {
+      fields.forEach(f=>{ const el=document.getElementById('mem-'+f); if(el) el.value=m[f]||''; });
+      document.getElementById('member-photo-url').value = m.photo||'';
+      if(m.photo) { document.getElementById('member-photo-preview').src=m.photo; document.getElementById('member-photo-preview').style.display='block'; }
+      else document.getElementById('member-photo-preview').style.display='none';
+    }
+  } else {
+    fields.forEach(f=>{ const el=document.getElementById('mem-'+f); if(el) el.value=''; });
+    document.getElementById('member-photo-url').value='';
+    document.getElementById('member-photo-preview').style.display='none';
+  }
+  document.getElementById('modal-member').classList.add('open');
+}
 
-        // Search Logic
-        const searchResults = computed(() => {
-          if (!searchQuery.value) return [];
-          const q = searchQuery.value.toLowerCase();
-          const isTagSearch = q.startsWith('#');
-          const term = isTagSearch ? q.substring(1).trim() : q;
+document.getElementById('member-photo-upload').addEventListener('click',()=>document.getElementById('member-photo-input').click());
+document.getElementById('member-photo-input').addEventListener('change', async function(){
+  const file = this.files[0]; if(!file) return;
+  showToast('업로드 중...');
+  const url = await uploadToCloudinary(file);
+  if(url) {
+    document.getElementById('member-photo-url').value=url;
+    document.getElementById('member-photo-preview').src=url;
+    document.getElementById('member-photo-preview').style.display='block';
+    showToast('업로드 완료!');
+  }
+});
 
-          let results = [];
-          
-          const matchTag = (tags) => tags && tags.some(t => t.toLowerCase().includes(term));
-          const matchText = (text) => text && text.toLowerCase().includes(term);
+document.getElementById('btn-save-member').addEventListener('click', async () => {
+  const stagename = document.getElementById('mem-stagename').value.trim();
+  if(!stagename) { showToast('활동명을 입력해주세요'); return; }
+  const fields = ['stagename','realname','nationality','birthday','height','position','mbti','nickname','personality','taste','habit','family','memo'];
+  const data = {};
+  fields.forEach(f=>{ data[f]=document.getElementById('mem-'+f).value; });
+  data.photo = document.getElementById('member-photo-url').value;
+  if(editingId) {
+    await updateItem('members', editingId, data);
+    const i = members.findIndex(x=>x.id===editingId);
+    if(i>=0) members[i]={...members[i],...data};
+  } else {
+    const id = await addItem('members', data);
+    if(!members.find(x=>x.id===id)) members.push({id,...data});
+  }
+  document.getElementById('modal-member').classList.remove('open');
+  renderMembers(); updateCounts();
+  showToast(editingId?'수정되었습니다':'멤버가 추가되었습니다');
+  editingId=null;
+});
+document.getElementById('btn-cancel-member').addEventListener('click',()=>document.getElementById('modal-member').classList.remove('open'));
+document.getElementById('btn-edit-member').addEventListener('click',()=>{
+  if(!editingId) return;
+  document.getElementById('detail-member').classList.remove('open');
+  openMemberModal();
+});
+document.getElementById('btn-delete-member').addEventListener('click', async ()=>{
+  if(!editingId) return;
+  if(!confirm('멤버를 삭제하시겠습니까?')) return;
+  await deleteItem('members', editingId);
+  members=members.filter(x=>x.id!==editingId);
+  document.getElementById('detail-member').classList.remove('open');
+  renderMembers(); updateCounts();
+  showToast('삭제되었습니다'); editingId=null;
+});
 
-          schedules.value.forEach(s => {
-            if (isTagSearch ? matchTag(s.tags) : (matchText(s.title) || matchText(s.memo)))
-              results.push({ ...s, type: 'schedule', desc: s.date });
-          });
-          members.value.forEach(m => {
-            if (!isTagSearch && (matchText(m.stageName) || matchText(m.realName)))
-              results.push({ ...m, type: 'member', name: m.stageName, desc: m.position });
-          });
-          people.value.forEach(p => {
-            if (!isTagSearch && (matchText(p.name) || matchText(p.role)))
-              results.push({ ...p, type: 'person', desc: p.role });
-          });
-          notes.value.forEach(n => {
-            if (isTagSearch ? matchTag(n.tags) : (matchText(n.title) || matchText(n.content)))
-              results.push({ ...n, type: 'note', desc: n.content });
-          });
+// ══ PEOPLE MODAL ══
+function openPeopleModal() {
+  document.getElementById('modal-people-title').textContent = editingId ? '인물 수정' : '인물 추가';
+  const fields = ['name','role','relation','desc','memo'];
+  if(editingId) {
+    const p = peoples.find(x=>x.id===editingId);
+    if(p) {
+      fields.forEach(f=>{ const el=document.getElementById('ppl-'+f); if(el) el.value=p[f]||''; });
+      document.getElementById('people-photo-url').value=p.photo||'';
+      if(p.photo){document.getElementById('people-photo-preview').src=p.photo;document.getElementById('people-photo-preview').style.display='block';}
+      else document.getElementById('people-photo-preview').style.display='none';
+    }
+  } else {
+    fields.forEach(f=>{ const el=document.getElementById('ppl-'+f); if(el) el.value=''; });
+    document.getElementById('people-photo-url').value='';
+    document.getElementById('people-photo-preview').style.display='none';
+  }
+  document.getElementById('modal-people').classList.add('open');
+}
+document.getElementById('people-photo-upload').addEventListener('click',()=>document.getElementById('people-photo-input').click());
+document.getElementById('people-photo-input').addEventListener('change', async function(){
+  const file=this.files[0]; if(!file) return;
+  showToast('업로드 중...');
+  const url = await uploadToCloudinary(file);
+  if(url){document.getElementById('people-photo-url').value=url;document.getElementById('people-photo-preview').src=url;document.getElementById('people-photo-preview').style.display='block';showToast('업로드 완료!');}
+});
+document.getElementById('btn-save-people').addEventListener('click', async ()=>{
+  const name=document.getElementById('ppl-name').value.trim();
+  if(!name){showToast('이름을 입력해주세요');return;}
+  const fields=['name','role','relation','desc','memo'];
+  const data={};
+  fields.forEach(f=>{data[f]=document.getElementById('ppl-'+f).value;});
+  data.photo=document.getElementById('people-photo-url').value;
+  if(editingId){await updateItem('peoples',editingId,data);const i=peoples.findIndex(x=>x.id===editingId);if(i>=0)peoples[i]={...peoples[i],...data};}
+  else{const id=await addItem('peoples',data);if(!peoples.find(x=>x.id===id))peoples.push({id,...data});}
+  document.getElementById('modal-people').classList.remove('open');
+  renderPeople();updateCounts();
+  showToast(editingId?'수정되었습니다':'인물이 추가되었습니다');editingId=null;
+});
+document.getElementById('btn-cancel-people').addEventListener('click',()=>document.getElementById('modal-people').classList.remove('open'));
+document.getElementById('btn-edit-people').addEventListener('click',()=>{if(!editingId)return;document.getElementById('detail-people').classList.remove('open');openPeopleModal();});
+document.getElementById('btn-delete-people').addEventListener('click', async ()=>{
+  if(!editingId)return;
+  if(!confirm('인물을 삭제하시겠습니까?'))return;
+  await deleteItem('peoples',editingId);peoples=peoples.filter(x=>x.id!==editingId);
+  document.getElementById('detail-people').classList.remove('open');renderPeople();updateCounts();
+  showToast('삭제되었습니다');editingId=null;
+});
 
-          return results;
-        });
+// ══ NOTE MODAL ══
+function openNoteModal() {
+  document.getElementById('modal-note-title').textContent = editingId ? '노트 수정' : '노트 추가';
+  if(editingId){
+    const n=notes.find(x=>x.id===editingId);
+    if(n){
+      document.getElementById('note-title-input').value=n.title||'';
+      document.getElementById('note-content-input').value=n.content||'';
+      document.getElementById('note-tags-input').value=n.tags||'';
+      currentNoteColor=n.color||'purple';
+      document.querySelectorAll('.color-option').forEach(el=>{el.classList.toggle('selected',el.dataset.color===currentNoteColor);});
+    }
+  } else {
+    document.getElementById('note-title-input').value='';
+    document.getElementById('note-content-input').value='';
+    document.getElementById('note-tags-input').value='';
+    currentNoteColor='purple';
+    document.querySelectorAll('.color-option').forEach(el=>el.classList.toggle('selected',el.dataset.color==='purple'));
+  }
+  document.getElementById('modal-note').classList.add('open');
+}
+window.selectNoteColor = function(color, el) {
+  currentNoteColor=color;
+  document.querySelectorAll('.color-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+};
+document.getElementById('btn-save-note').addEventListener('click', async ()=>{
+  const title=document.getElementById('note-title-input').value.trim();
+  if(!title){showToast('제목을 입력해주세요');return;}
+  const data={title,content:document.getElementById('note-content-input').value,tags:document.getElementById('note-tags-input').value,color:currentNoteColor,date:new Date().toISOString().slice(0,10)};
+  if(editingId){await updateItem('notes',editingId,data);const i=notes.findIndex(x=>x.id===editingId);if(i>=0)notes[i]={...notes[i],...data};}
+  else{const id=await addItem('notes',data);if(!notes.find(x=>x.id===id))notes.push({id,...data});}
+  document.getElementById('modal-note').classList.remove('open');
+  renderNotes();updateCounts();
+  showToast(editingId?'수정되었습니다':'노트가 추가되었습니다');editingId=null;
+});
+document.getElementById('btn-cancel-note').addEventListener('click',()=>document.getElementById('modal-note').classList.remove('open'));
+document.getElementById('btn-edit-note').addEventListener('click',()=>{if(!editingId)return;document.getElementById('detail-note').classList.remove('open');openNoteModal();});
+document.getElementById('btn-delete-note').addEventListener('click', async ()=>{
+  if(!editingId)return;
+  if(!confirm('노트를 삭제하시겠습니까?'))return;
+  await deleteItem('notes',editingId);notes=notes.filter(x=>x.id!==editingId);
+  document.getElementById('detail-note').classList.remove('open');renderNotes();updateCounts();
+  showToast('삭제되었습니다');editingId=null;
+});
 
-        // Cloudinary Upload
-        const uploadImage = async (e) => {
-          const file = e.target.files[0];
-          if (!file) return;
-          isUploading.value = true;
-          const formData = new FormData();
-          formData.append('file', file);
-          formData.append('upload_preset', CLOUDINARY_PRESET);
-          
-          try {
-            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
-              method: 'POST', body: formData
-            });
-            const data = await res.json();
-            editor.value.form.image = data.secure_url;
-          } catch (err) {
-            alert('이미지 업로드 실패');
-          } finally {
-            isUploading.value = false;
-          }
-        };
+// ══ SEARCH ══
+document.getElementById('btn-search-open').addEventListener('click',()=>document.getElementById('search-overlay').classList.add('open'));
+document.getElementById('close-search').addEventListener('click',()=>{document.getElementById('search-overlay').classList.remove('open');document.getElementById('search-results').innerHTML='';document.getElementById('search-input-main').value='';});
 
-        // Firebase Sync
-        const initFirebaseSync = () => {
-          const collections = ['schedules', 'members', 'people', 'notes'];
-          const stateRefs = { schedules, members, people, notes };
+document.getElementById('search-input-main').addEventListener('input', function(){
+  const q=this.value.trim().toLowerCase();
+  if(!q){document.getElementById('search-results').innerHTML='';return;}
+  
+  const rs = schedules.filter(s=>(s.title||'').toLowerCase().includes(q)||(s.tags||'').toLowerCase().includes(q)||(s.memo||'').toLowerCase().includes(q));
+  const rm = members.filter(m=>(m.stagename||'').toLowerCase().includes(q)||(m.realname||'').toLowerCase().includes(q)||(m.position||'').toLowerCase().includes(q));
+  const rp = peoples.filter(p=>(p.name||'').toLowerCase().includes(q)||(p.role||'').toLowerCase().includes(q)||(p.desc||'').toLowerCase().includes(q));
+  const rn = notes.filter(n=>(n.title||'').toLowerCase().includes(q)||(n.content||'').toLowerCase().includes(q)||(n.tags||'').toLowerCase().includes(q));
 
-          collections.forEach(colName => {
-            onSnapshot(collection(db, colName), (snapshot) => {
-              stateRefs[colName].value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-              // Dummy Data Seed (if empty)
-              if (snapshot.empty && colName === 'members') seedDummyData();
-            });
-          });
-        };
+  let html = '';
+  if(rs.length) html+=`<div class="search-result-group"><div class="search-result-label">SCHEDULE</div>${rs.map(s=>`<div class="search-result-item" onclick="document.getElementById('search-overlay').classList.remove('open');setTimeout(()=>openScheduleDetail('${s.id}'),200)"><div style="font-size:16px">📅</div><div><div style="font-weight:500">${s.title}</div><div style="font-size:11px;color:var(--text3)">${s.date}</div></div></div>`).join('')}</div>`;
+  if(rm.length) html+=`<div class="search-result-group"><div class="search-result-label">MEMBERS</div>${rm.map(m=>`<div class="search-result-item" onclick="document.getElementById('search-overlay').classList.remove('open');setTimeout(()=>{document.querySelectorAll('.nav-item')[1].click();setTimeout(()=>openMemberDetail('${m.id}'),100)},200)"><div style="font-size:16px">👤</div><div><div style="font-weight:500">${m.stagename}</div><div style="font-size:11px;color:var(--text3)">${m.position||''}</div></div></div>`).join('')}</div>`;
+  if(rp.length) html+=`<div class="search-result-group"><div class="search-result-label">PEOPLE</div>${rp.map(p=>`<div class="search-result-item" onclick="document.getElementById('search-overlay').classList.remove('open');setTimeout(()=>{document.querySelectorAll('.nav-item')[2].click();setTimeout(()=>openPeopleDetail('${p.id}'),100)},200)"><div style="font-size:16px">👥</div><div><div style="font-weight:500">${p.name}</div><div style="font-size:11px;color:var(--text3)">${p.role||''}</div></div></div>`).join('')}</div>`;
+  if(rn.length) html+=`<div class="search-result-group"><div class="search-result-label">NOTES</div>${rn.map(n=>`<div class="search-result-item" onclick="document.getElementById('search-overlay').classList.remove('open');setTimeout(()=>{document.querySelectorAll('.nav-item')[3].click();setTimeout(()=>openNoteDetail('${n.id}'),100)},200)"><div style="font-size:16px">📝</div><div><div style="font-weight:500">${n.title}</div><div style="font-size:11px;color:var(--text3)">${(n.content||'').slice(0,40)}...</div></div></div>`).join('')}</div>`;
 
-        const seedDummyData = async () => {
-          // Add subtle dummy data to make it look like an active project
-          await setDoc(doc(collection(db, 'members')), {
-            stageName: '공주영', realName: '공주영', nationality: '대한민국',
-            birth: '2008.08.09', height: '174', mbti: 'ENFP', position: '리드보컬',
-            personality: '활발하고 긍정적', habits: '', family: '부모님, 여동생', memo: '교복 컨셉 촬영 완료.'
-          });
-          await setDoc(doc(collection(db, 'notes')), {
-            title: 'Starline 브랜드 컨셉 설정', content: 'Y2K 감성의 스티커팩 및 CD 플레이트 아트워크 기획.', tags: ['디자인', '스타라인', 'Y2K']
-          });
-        };
+  if(!html) html=`<div class="empty-state" style="padding-top:40px"><div class="empty-icon">🔍</div><p>"${q}"에 대한 결과가 없습니다</p></div>`;
+  document.getElementById('search-results').innerHTML=html;
+});
 
-        const saveData = async () => {
-          const colName = editor.value.type;
-          const data = { ...editor.value.form };
-          
-          // Process Tags
-          if (data.tagsRaw !== undefined) {
-            data.tags = data.tagsRaw.split(',').map(t => t.trim()).filter(t => t);
-            delete data.tagsRaw;
-          }
+// ══ THEME ══
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', isDark?'dark':'light');
+  document.getElementById('btn-theme').textContent = isDark?'🌙':'☀️';
+  const toggle = document.getElementById('theme-toggle-switch');
+  toggle.classList.toggle('on', isDark);
+}
 
-          try {
-            const docRef = editor.value.isEdit ? doc(db, colName, editor.value.id) : doc(collection(db, colName));
-            await setDoc(docRef, data);
-            editor.value.isOpen = false;
-          } catch (e) {
-            alert('저장 실패: ' + e.message);
-          }
-        };
+document.getElementById('btn-theme').addEventListener('click',()=>{isDark=!isDark;applyTheme();localStorage.setItem('arch_theme',isDark?'dark':'light');});
+document.getElementById('settings-theme-toggle').addEventListener('click',()=>{isDark=!isDark;applyTheme();localStorage.setItem('arch_theme',isDark?'dark':'light');});
 
-        const deleteCurrentDetail = async () => {
-          if (!confirm('정말 삭제하시겠습니까?')) return;
-          const colMap = { 'member': 'members', 'person': 'people', 'note': 'notes', 'schedule': 'schedules' };
-          const colName = colMap[detailView.value.type];
-          await deleteDoc(doc(db, colName, detailView.value.data.id));
-          detailView.value.isOpen = false;
-        };
+// ══ SETTINGS ══
+document.getElementById('btn-settings').addEventListener('click',()=>document.getElementById('settings-overlay').classList.add('open'));
+document.getElementById('close-settings').addEventListener('click',()=>document.getElementById('settings-overlay').classList.remove('open'));
 
-        // Export / Import
-        const exportData = () => {
-          const data = {
-            schedules: schedules.value, members: members.value, people: people.value, notes: notes.value
-          };
-          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `idol_archive_${new Date().toISOString().slice(0,10)}.json`;
-          a.click();
-        };
+document.getElementById('settings-export').addEventListener('click',()=>{
+  const data={schedules,members,peoples,notes,exportedAt:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`archive_backup_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  showToast('백업 파일이 다운로드됩니다');
+});
 
-        const importData = (e) => {
-          const file = e.target.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = async (event) => {
-            try {
-              const data = JSON.parse(event.target.result);
-              const batch = writeBatch(db);
-              
-              ['schedules', 'members', 'people', 'notes'].forEach(colName => {
-                if(data[colName]) {
-                  data[colName].forEach(item => {
-                    const id = item.id;
-                    delete item.id;
-                    batch.set(doc(db, colName, id), item);
-                  });
-                }
-              });
-              await batch.commit();
-              alert('복원 완료!');
-            } catch (err) {
-              alert('잘못된 JSON 파일입니다.');
-            }
-          };
-          reader.readAsText(file);
-        };
+document.getElementById('settings-import').addEventListener('click',()=>document.getElementById('import-file-input').click());
+document.getElementById('import-file-input').addEventListener('change', async function(){
+  const file=this.files[0]; if(!file) return;
+  const text=await file.text();
+  try {
+    const data=JSON.parse(text);
+    if(data.schedules) { for(const s of data.schedules) await addItem('schedules',s); schedules=[...schedules,...data.schedules]; }
+    if(data.members) { for(const m of data.members) await addItem('members',m); members=[...members,...data.members]; }
+    if(data.peoples) { for(const p of data.peoples) await addItem('peoples',p); peoples=[...peoples,...data.peoples]; }
+    if(data.notes) { for(const n of data.notes) await addItem('notes',n); notes=[...notes,...data.notes]; }
+    renderAll();
+    showToast('데이터를 불러왔습니다');
+  } catch(e) { showToast('파일 형식이 올바르지 않습니다'); }
+});
 
-        // Dark Mode Toggle
-        const toggleDarkMode = () => {
-          isDark.value = !isDark.value;
-          document.documentElement.classList.toggle('dark', isDark.value);
-        };
+// ══ MODAL OVERLAY CLOSE ══
+document.querySelectorAll('.modal-overlay').forEach(overlay=>{
+  overlay.addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
+});
 
-        onMounted(() => {
-          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            toggleDarkMode();
-          }
-          initFirebaseSync();
-        });
+// ══ CLOUDINARY UPLOAD ══
+async function uploadToCloudinary(file) {
+  const formData=new FormData();
+  formData.append('file',file);
+  formData.append('upload_preset',CLOUDINARY_PRESET);
+  try {
+    const res=await fetch(CLOUDINARY_URL,{method:'POST',body:formData});
+    const data=await res.json();
+    return data.secure_url||null;
+  } catch(e) { showToast('이미지 업로드 실패'); return null; }
+}
 
-        return {
-          isDark, toggleDarkMode, activeTab, tabs, searchQuery, searchResults,
-          currentMonth, currentYear, daysInMonth, blankDays, changeMonth, selectDate, selectedDate, selectedDateStr,
-          hasSchedule, selectedDaySchedules,
-          schedules, members, people, notes,
-          detailView, openDetail, editCurrentDetail, deleteCurrentDetail,
-          editor, openEditor, editorTitle, saveData, uploadImage, isUploading,
-          exportData, importData
-        };
-      }
-    }).mount('#app');
-  </script>
+// ══ HELPERS ══
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+function getAge(birthday) {
+  if(!birthday) return '';
+  const birth=new Date(birthday);
+  const today=new Date();
+  let age=today.getFullYear()-birth.getFullYear();
+  if(today.getMonth()<birth.getMonth()||(today.getMonth()===birth.getMonth()&&today.getDate()<birth.getDate())) age--;
+  return age+'세';
+}
+
+function getColorVar(color) {
+  const map={purple:'var(--accent)',pink:'var(--pink)',teal:'var(--teal)',yellow:'var(--yellow)'};
+  return map[color]||'var(--accent)';
+}
+
+function getEmoji(name) {
+  const emojis=['🌸','⭐','🌙','💫','🎵','🎀','🌟','💜','🎤','✨'];
+  let h=0; for(let i=0;i<(name||'').length;i++) h+=name.charCodeAt(i);
+  return emojis[h%emojis.length];
+}
+
+// ══ INIT THEME ══
+const savedTheme=localStorage.getItem('arch_theme');
+if(savedTheme==='light') isDark=false;
+applyTheme();
+
+// ══ FALLBACK: if Firebase not ready after 3s, load from local ══
+setTimeout(()=>{
+  if(schedules.length===0&&members.length===0) {
+    loadFromLocal();
+    if(members.length===0) {
+      DUMMY_MEMBERS.forEach((m,i)=>{ members.push({id:'local_m_'+i,...m}); });
+      DUMMY_PEOPLE.forEach((p,i)=>{ peoples.push({id:'local_p_'+i,...p}); });
+      DUMMY_NOTES.forEach((n,i)=>{ notes.push({id:'local_n_'+i,...n}); });
+      DUMMY_SCHEDULES.forEach((s,i)=>{ schedules.push({id:'local_s_'+i,...s}); });
+      saveLocal();
+    }
+    renderAll();
+  }
+}, 3000);
+</script>
 </body>
 </html>
