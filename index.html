@@ -160,6 +160,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
   }
   #fab{bottom:calc(60px + env(safe-area-inset-bottom,0px) + 14px)}
   .content-scroll{padding-bottom:0}
+  .page{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
 }
 
 /* ══════════════════════════════
@@ -167,7 +168,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 ══════════════════════════════ */
 .page{display:none;padding-bottom:80px}
 .page.active{display:block}
-#page-schedule.active{display:flex;flex-direction:column}
+
+/* PC: schedule page uses flex for side-by-side calendar+detail */
+@media(min-width:768px){
+  #page-schedule.active{display:flex;flex-direction:column;height:100%;padding-bottom:0}
+}
 
 /* Section header */
 .sec-hdr{
@@ -191,6 +196,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
   #day-detail .day-detail{margin:0;border:none;border-radius:0;background:transparent}
   #day-detail .day-detail .dd-hdr{padding:16px 20px;border-bottom:1px solid var(--border)}
   #day-detail .day-detail .sch-item{padding:14px 20px}
+}
+
+/* Mobile: 달력 아래 일정 표시 */
+@media(max-width:767px){
+  .cal-schedule-layout{display:block}
+  .detail-panel{display:block}
 }
 
 .cal-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 2px}
@@ -1248,7 +1259,10 @@ function renderCal(){
     });
     h+='</div>';
     ddEl.innerHTML=h;
-  } else ddEl.innerHTML='';
+  } else {
+    // 모바일에서 날짜 미선택 시 안내 메시지
+    ddEl.innerHTML=`<div class="no-sch" style="padding:24px 16px;text-align:center;color:var(--text3);font-size:12px">날짜를 선택하면 스케줄이 표시됩니다</div>`;
+  }
 }
 
 /* Month/Year pickers */
