@@ -2,7 +2,7 @@
 <html lang="ko" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>ARCHIVE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700&family=Space+Mono&display=swap" rel="stylesheet">
@@ -44,7 +44,7 @@ window.dispatchEvent(new Event('fb-ready'));
 
 /* ── RESET ── */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:14px;overflow:hidden}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:14px;overflow:hidden;touch-action:manipulation;overscroll-behavior:none}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -797,10 +797,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
     <div class="modal-title" id="m-schedule-title">스케줄 추가</div>
     <div class="modal-body">
       <div class="form-group"><label class="form-label">제목</label><input class="form-input" id="f-sch-title" placeholder="스케줄 제목"></div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">날짜</label><input class="form-input" type="date" id="f-sch-date"></div>
-        <div class="form-group"><label class="form-label">시간</label><input class="form-input" type="time" id="f-sch-time"></div>
-      </div>
+      <div class="form-group"><label class="form-label">시간</label><input class="form-input" type="time" id="f-sch-time" style="max-width:180px"></div>
       <div class="form-group">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
           <label class="form-label" style="margin:0">참여 멤버</label>
@@ -808,7 +805,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
         </div>
         <div class="mem-checks" id="f-sch-members"></div>
       </div>
-      <div class="form-group"><label class="form-label">태그 (쉼표 구분)</label><input class="form-input" id="f-sch-tags" placeholder="#팬사인회, #방송"></div>
+      <div class="form-group">
+        <label class="form-label">날짜 (여러 날 선택 가능)</label>
+        <div id="sch-date-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="form-input" type="date" id="f-sch-date" style="flex:1">
+          <button type="button" id="btn-add-date" style="padding:8px 14px;border-radius:var(--rs);border:1px solid var(--border2);background:var(--card2);color:var(--text);font-size:13px;cursor:pointer;white-space:nowrap;transition:var(--tr)">+ 날짜 추가</button>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">태그</label>
+        <div class="sch-tag-chips" id="sch-tag-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
+        <input class="form-input" id="f-sch-tags" placeholder="추가 태그 직접 입력" style="margin-top:4px">
+      </div>
       <div class="form-group"><label class="form-label">메모</label><textarea class="form-textarea" id="f-sch-memo" placeholder="메모"></textarea></div>
       <div class="form-group">
         <label class="form-label">사진</label>
@@ -1387,11 +1395,54 @@ document.getElementById('fab').addEventListener('click',()=>{
   else if(currentPage==='notes') openMNote();
 });
 
+/* ── Schedule tag chips ── */
+const SCH_TAGS=['음악방송','라디오','방송','이벤트','행사','공연','컴백','기타'];
+const SCH_TAG_COLORS={'음악방송':'#b89aff','라디오':'#4dd8c0','방송':'#7b6cff','이벤트':'#ff6eb4','행사':'#ffd166','공연':'#ff8ac8','컴백':'#ff6b6b','기타':'#8888a4'};
+let schSelectedTags=[];
+let schExtraDates=[]; // additional dates for multi-day
+
+function renderSchTagChips(){
+  const el=document.getElementById('sch-tag-chips');
+  el.innerHTML=SCH_TAGS.map(t=>{
+    const on=schSelectedTags.includes(t);
+    const c=SCH_TAG_COLORS[t]||'var(--accent)';
+    return `<div onclick="toggleSchTag('${t}')" style="padding:5px 12px;border-radius:20px;font-size:12px;cursor:pointer;transition:var(--tr);border:1px solid ${on?c:'var(--border)'};background:${on?c+'22':'var(--card)'};color:${on?c:'var(--text2)'};font-weight:${on?'600':'400'}">${t}</div>`;
+  }).join('');
+}
+window.toggleSchTag=function(t){
+  const i=schSelectedTags.indexOf(t);
+  if(i>=0) schSelectedTags.splice(i,1); else schSelectedTags.push(t);
+  // sync to hidden input
+  const manual=getVal('f-sch-tags').split(',').map(x=>x.trim()).filter(x=>x&&!SCH_TAGS.includes(x.replace(/^#/,'')));
+  const all=[...schSelectedTags.map(x=>'#'+x),...manual];
+  document.getElementById('f-sch-tags').value=all.join(', ');
+  renderSchTagChips();
+};
+
+function renderSchDateChips(){
+  const el=document.getElementById('sch-date-chips');
+  if(!schExtraDates.length){el.innerHTML='';return;}
+  el.innerHTML=schExtraDates.map((d,i)=>`<div style="display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(184,154,255,.15);border:1px solid rgba(184,154,255,.3);font-size:12px;color:var(--accent)">
+    ${d}<span onclick="removeSchDate(${i})" style="cursor:pointer;color:var(--text3);margin-left:2px">✕</span></div>`).join('');
+}
+window.removeSchDate=function(i){ schExtraDates.splice(i,1); renderSchDateChips(); };
+
 function openMSchedule(date){
   document.getElementById('m-schedule-title').textContent=editingId?'스케줄 수정':'스케줄 추가';
   const s=editingId?schedules.find(x=>x.id===editingId):null;
-  setVal('f-sch-title',s?.title||''); setVal('f-sch-date',s?.date||date||''); setVal('f-sch-time',s?.time||''); setVal('f-sch-tags',s?.tags||''); setVal('f-sch-memo',s?.memo||'');
+  setVal('f-sch-title',s?.title||''); setVal('f-sch-time',s?.time||''); setVal('f-sch-memo',s?.memo||'');
   setVal('sch-photo-url',s?.photo||'');
+  // date
+  setVal('f-sch-date',s?.date||date||'');
+  schExtraDates=s?.extraDates?[...s.extraDates]:[];
+  renderSchDateChips();
+  // tags
+  const rawTags=(s?.tags||'').split(',').map(x=>x.trim().replace(/^#/,'')).filter(Boolean);
+  schSelectedTags=rawTags.filter(t=>SCH_TAGS.includes(t));
+  const manualTags=rawTags.filter(t=>!SCH_TAGS.includes(t)).map(t=>'#'+t);
+  setVal('f-sch-tags',manualTags.join(', '));
+  renderSchTagChips();
+  // photo
   const schPrev=document.getElementById('sch-photo-preview');
   if(s?.photo){schPrev.src=s.photo;schPrev.style.display='block';}else{schPrev.style.display='none';}
   document.getElementById('f-sch-members').innerHTML=members.map(m=>`<div class="mem-chk${(s?.members||[]).includes(m.stagename)?' on':''}" data-name="${m.stagename}" onclick="this.classList.toggle('on')">${m.stagename}</div>`).join('');
@@ -1435,6 +1486,11 @@ function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',function(e){if(e.target===this)closeModal(this.id);}));
 
 /* ── Schedule save ── */
+document.getElementById('btn-add-date').addEventListener('click',()=>{
+  const d=getVal('f-sch-date'); if(!d){toast('날짜를 먼저 선택해주세요');return;}
+  if(!schExtraDates.includes(d)){ schExtraDates.push(d); renderSchDateChips(); toast(d+' 추가됨'); }
+  else toast('이미 추가된 날짜입니다');
+});
 document.getElementById('sch-photo-area').addEventListener('click',()=>document.getElementById('sch-photo-input').click());
 document.getElementById('sch-photo-input').addEventListener('change',async function(){
   const f=this.files[0];if(!f)return;toast('업로드 중...');
@@ -1450,13 +1506,30 @@ document.getElementById('btn-sch-all').addEventListener('click',()=>{
 document.getElementById('save-schedule').addEventListener('click',async()=>{
   const title=getVal('f-sch-title'); if(!title){toast('제목을 입력해주세요');return;}
   const mems=[...document.querySelectorAll('#f-sch-members .mem-chk.on')].map(el=>el.dataset.name);
-  const data={title,date:getVal('f-sch-date'),time:getVal('f-sch-time'),members:mems,tags:getVal('f-sch-tags'),memo:getVal('f-sch-memo'),photo:getVal('sch-photo-url')};
-  if(editingId){await updateItem('schedules',editingId,data);}
-  else{const id=await addItem('schedules',data);if(!schedules.find(x=>x.id===id))schedules.push({id,...data});}
+  // combine chip tags + manual tags
+  const manualRaw=getVal('f-sch-tags').split(',').map(x=>x.trim()).filter(x=>x&&!SCH_TAGS.includes(x.replace(/^#/,'')));
+  const allTags=[...schSelectedTags.map(x=>'#'+x),...manualRaw];
+  const tagsStr=allTags.join(', ');
+  const mainDate=getVal('f-sch-date');
+  const data={title,date:mainDate,time:getVal('f-sch-time'),members:mems,tags:tagsStr,memo:getVal('f-sch-memo'),photo:getVal('sch-photo-url'),extraDates:schExtraDates};
+  if(editingId){
+    await updateItem('schedules',editingId,data);
+    // also save copies for extra dates if new ones added
+  } else {
+    const id=await addItem('schedules',data);
+    if(!schedules.find(x=>x.id===id))schedules.push({id,...data});
+    // create entries for extra dates
+    for(const ed of schExtraDates){
+      if(ed===mainDate) continue;
+      const ecopy={...data,date:ed,extraDates:[]};
+      const eid=await addItem('schedules',ecopy);
+      if(!schedules.find(x=>x.id===eid))schedules.push({id:eid,...ecopy});
+    }
+  }
   closeModal('m-schedule'); renderCal(); toast(editingId?'수정되었습니다':'스케줄이 추가되었습니다'); editingId=null;
 });
 document.getElementById('cancel-schedule').addEventListener('click',()=>closeModal('m-schedule'));
-document.getElementById('btn-edit-sch').addEventListener('click',()=>{if(!editingId)return;close('dp-schedule');openMSchedule(null);});
+document.getElementById('btn-edit-sch').addEventListener('click',()=>{if(!editingId)return;const eid=editingId;close('dp-schedule');editingId=eid;openMSchedule(null);});
 document.getElementById('btn-copy-sch').addEventListener('click',async()=>{
   if(!editingId)return;
   const s=schedules.find(x=>x.id===editingId); if(!s)return;
@@ -1486,7 +1559,7 @@ document.getElementById('save-member').addEventListener('click',async()=>{
   closeModal('m-member');renderMembers();updateCnts();toast(editingId?'수정되었습니다':'멤버가 추가되었습니다');editingId=null;
 });
 document.getElementById('cancel-member').addEventListener('click',()=>closeModal('m-member'));
-document.getElementById('btn-edit-member').addEventListener('click',()=>{if(!editingId)return;close('dp-member');openMMember();});
+document.getElementById('btn-edit-member').addEventListener('click',()=>{if(!editingId)return;const eid=editingId;close('dp-member');editingId=eid;openMMember();});
 document.getElementById('btn-del-member').addEventListener('click',async()=>{if(!editingId)return;if(!confirm('삭제할까요?'))return;await deleteItem('members',editingId);close('dp-member');renderMembers();updateCnts();toast('삭제되었습니다');});
 
 /* ── People save ── */
@@ -1504,7 +1577,7 @@ document.getElementById('save-people').addEventListener('click',async()=>{
   closeModal('m-people');renderPeople();updateCnts();toast(editingId?'수정되었습니다':'지인이 추가되었습니다');editingId=null;
 });
 document.getElementById('cancel-people').addEventListener('click',()=>closeModal('m-people'));
-document.getElementById('btn-edit-people').addEventListener('click',()=>{if(!editingId)return;close('dp-people');openMPeople();});
+document.getElementById('btn-edit-people').addEventListener('click',()=>{if(!editingId)return;const eid=editingId;close('dp-people');editingId=eid;openMPeople();});
 document.getElementById('btn-del-people').addEventListener('click',async()=>{if(!editingId)return;if(!confirm('삭제할까요?'))return;await deleteItem('peoples',editingId);close('dp-people');renderPeople();updateCnts();toast('삭제되었습니다');});
 
 /* ── Note save ── */
@@ -1517,7 +1590,7 @@ document.getElementById('save-note').addEventListener('click',async()=>{
   closeModal('m-note');renderNotes();updateCnts();toast(editingId?'수정되었습니다':'노트가 추가되었습니다');editingId=null;
 });
 document.getElementById('cancel-note').addEventListener('click',()=>closeModal('m-note'));
-document.getElementById('btn-edit-note').addEventListener('click',()=>{if(!editingId)return;close('dp-note');openMNote();});
+document.getElementById('btn-edit-note').addEventListener('click',()=>{if(!editingId)return;const eid=editingId;close('dp-note');editingId=eid;openMNote();});
 document.getElementById('btn-del-note').addEventListener('click',async()=>{if(!editingId)return;if(!confirm('삭제할까요?'))return;await deleteItem('notes',editingId);close('dp-note');renderNotes();updateCnts();toast('삭제되었습니다');});
 
 /* ════════════════════════════
@@ -1578,7 +1651,7 @@ document.getElementById('save-family').addEventListener('click',()=>{
   else currentFamilyItems.push(item);
   closeModal('m-family');
   renderFamilyModal();
-  toast('가족이 추가되었습니다');
+  toast(editFamIdx!==null?'가족 정보가 수정되었습니다':'가족이 추가되었습니다');
 });
 document.getElementById('cancel-family').addEventListener('click',()=>closeModal('m-family'));
 
