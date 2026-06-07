@@ -52,7 +52,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 /* ══════════════════════════════
    PC LAYOUT (≥768px)
 ══════════════════════════════ */
-#app{display:flex;height:100dvh;overflow:hidden}
+#app{display:flex;height:100dvh;overflow:hidden;max-width:100vw}
 
 /* Sidebar */
 .sidebar{
@@ -91,7 +91,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 .sidebar-icon-btn:hover{background:var(--card2);color:var(--text)}
 
 /* Main content */
-.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;max-width:calc(100vw - var(--sidebar))}
 .top-bar-pc{
   display:flex;align-items:center;gap:12px;
   padding:14px 24px;background:var(--bg);
@@ -167,6 +167,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 ══════════════════════════════ */
 .page{display:none;padding-bottom:80px}
 .page.active{display:block}
+#page-schedule.active{display:flex;flex-direction:column}
 
 /* Section header */
 .sec-hdr{
@@ -182,7 +183,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 
 /* PC: 달력 + 일정 상세 2단 레이아웃 */
 @media(min-width:768px){
-  #page-schedule{display:flex;flex-direction:column;height:100%}
   .cal-schedule-layout{display:flex;gap:0;flex:1;min-height:0;overflow:hidden}
   .cal-panel{width:340px;flex-shrink:0;border-right:1px solid var(--border);overflow-y:auto;padding-bottom:20px}
   .detail-panel{flex:1;overflow-y:auto;padding:0}
@@ -613,6 +613,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
       <div class="sidebar-nav-item" data-page="members"><span class="nav-icon-pc">👤</span>멤버</div>
       <div class="sidebar-nav-item" data-page="people"><span class="nav-icon-pc">👥</span>지인</div>
       <div class="sidebar-nav-item" data-page="notes"><span class="nav-icon-pc">📝</span>노트</div>
+      <div class="sidebar-nav-item" data-page="history"><span class="nav-icon-pc">📜</span>연혁</div>
     </nav>
     <div class="sidebar-bottom">
       <div class="sidebar-icon-btn" id="pc-search-btn" title="검색">🔍</div>
@@ -708,6 +709,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
         <div class="notes-grid" id="notes-grid"></div>
       </div>
 
+      <!-- HISTORY -->
+      <div class="page" id="page-history">
+        <div class="sec-hdr">
+          <span class="sec-title">연혁</span>
+          <span class="sec-sub" id="history-cnt">0개</span>
+        </div>
+        <div id="history-list" style="padding:0 24px 80px"></div>
+      </div>
+
     </div>
 
     <!-- Bottom nav (Mobile) -->
@@ -716,6 +726,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
       <div class="nav-item" data-page="members"><div class="ni">👤</div><div class="nl">멤버</div></div>
       <div class="nav-item" data-page="people"><div class="ni">👥</div><div class="nl">지인</div></div>
       <div class="nav-item" data-page="notes"><div class="ni">📝</div><div class="nl">노트</div></div>
+      <div class="nav-item" data-page="history"><div class="ni">📜</div><div class="nl">연혁</div></div>
     </nav>
   </div>
 </div>
@@ -838,13 +849,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
       </div>
       <div class="form-group"><label class="form-label">메모</label><textarea class="form-textarea" id="f-sch-memo" placeholder="메모"></textarea></div>
       <div class="form-group">
-        <label class="form-label">사진</label>
+        <label class="form-label">사진 (여러 장 추가 가능)</label>
+        <div id="sch-photos-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px"></div>
         <div class="upload-area" id="sch-photo-area">
           <span style="font-size:26px">🖼️</span>
-          <div><p style="font-size:13px;color:var(--text2);margin:0">사진 업로드</p><p style="font-size:11px;color:var(--text3);margin-top:2px">Cloudinary 자동 업로드</p></div>
-          <img id="sch-photo-preview" class="upload-preview">
+          <div><p style="font-size:13px;color:var(--text2);margin:0">사진 추가</p><p style="font-size:11px;color:var(--text3);margin-top:2px">클릭하여 사진 선택 (여러 장 가능)</p></div>
         </div>
-        <input type="file" id="sch-photo-input" accept="image/*" style="display:none">
+        <input type="file" id="sch-photo-input" accept="image/*" multiple style="display:none">
         <input type="hidden" id="sch-photo-url">
       </div>
       <button class="btn-primary" id="save-schedule">저장</button>
@@ -945,9 +956,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
         </select>
       </div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">역할</label><input class="form-input" id="f-ppl-role" placeholder="역할"></div>
+        <div class="form-group"><label class="form-label">생년월일</label><input class="form-input" type="date" id="f-ppl-birthday"></div>
         <div class="form-group"><label class="form-label">관계</label><input class="form-input" id="f-ppl-relation" placeholder="소속사 직원"></div>
       </div>
+      <div class="form-group"><label class="form-label">소속</label><input class="form-input" id="f-ppl-affiliation" placeholder="소속사, 학교, 회사 등"></div>
       <div class="form-group"><label class="form-label">설명</label><textarea class="form-textarea" id="f-ppl-desc" placeholder="설명"></textarea></div>
       <div class="form-group"><label class="form-label">자유 메모</label><textarea class="form-textarea" id="f-ppl-memo" placeholder="자유 메모"></textarea></div>
       <button class="btn-primary" id="save-people">저장</button>
@@ -1010,6 +1022,37 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
   </div>
 </div>
 
+<!-- History -->
+<div class="modal-overlay" id="m-history">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="m-history-title">연혁 추가</div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">날짜</label><input class="form-input" type="date" id="f-hist-date"></div>
+        <div class="form-group"><label class="form-label">분류</label>
+          <select class="form-select" id="f-hist-category">
+            <option value="데뷔">데뷔</option>
+            <option value="컴백">컴백</option>
+            <option value="앨범">앨범</option>
+            <option value="수상">수상</option>
+            <option value="방송">방송</option>
+            <option value="공연">공연</option>
+            <option value="팬미팅">팬미팅</option>
+            <option value="화보">화보</option>
+            <option value="광고">광고</option>
+            <option value="기타">기타</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">제목</label><input class="form-input" id="f-hist-title" placeholder="연혁 제목"></div>
+      <div class="form-group"><label class="form-label">내용</label><textarea class="form-textarea" id="f-hist-content" placeholder="상세 내용"></textarea></div>
+      <button class="btn-primary" id="save-history">저장</button>
+      <button class="btn-cancel" id="cancel-history">취소</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1024,7 +1067,7 @@ const CL_URL = `https://api.cloudinary.com/v1_1/${CL_CLOUD}/image/upload`;
    STATE
 ════════════════════════════ */
 let db, fb;
-let schedules=[], members=[], peoples=[], notes=[];
+let schedules=[], members=[], peoples=[], notes=[], histories=[];
 let editingId=null, editingFamilyIdx=null;
 let currentPage='schedule';
 let calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
@@ -1078,6 +1121,7 @@ async function loadAll(){
     members=await loadCol('members');
     peoples=await loadCol('peoples');
     notes=await loadCol('notes');
+    histories=await loadCol('histories');
   }catch(e){ loadLocal(); }
 }
 async function loadCol(name){
@@ -1090,6 +1134,7 @@ function loadLocal(){
     members=JSON.parse(localStorage.getItem('a_m')||'[]');
     peoples=JSON.parse(localStorage.getItem('a_p')||'[]');
     notes=JSON.parse(localStorage.getItem('a_n')||'[]');
+    histories=JSON.parse(localStorage.getItem('a_h')||'[]');
   }catch(e){}
 }
 function saveLocal(){
@@ -1097,6 +1142,7 @@ function saveLocal(){
   localStorage.setItem('a_m',JSON.stringify(members));
   localStorage.setItem('a_p',JSON.stringify(peoples));
   localStorage.setItem('a_n',JSON.stringify(notes));
+  localStorage.setItem('a_h',JSON.stringify(histories));
 }
 async function addItem(col,data){
   try{
@@ -1116,7 +1162,7 @@ async function deleteItem(col,id){
   const arr=getArr(col), i=arr.findIndex(x=>x.id===id);
   if(i>=0){ arr.splice(i,1); saveLocal(); }
 }
-function getArr(col){ return col==='schedules'?schedules:col==='members'?members:col==='peoples'?peoples:notes; }
+function getArr(col){ return col==='schedules'?schedules:col==='members'?members:col==='peoples'?peoples:col==='histories'?histories:notes; }
 
 async function seedDummy(){
   for(const m of DUMMY_MEMBERS){ const id=await addItem('members',m); if(!members.find(x=>x.id===id)) members.push({id,...m}); }
@@ -1135,11 +1181,12 @@ function quickSeed(){
 /* ════════════════════════════
    RENDER ALL
 ════════════════════════════ */
-function renderAll(){ renderCal(); renderMembers(); renderPeople(); renderNotes(); updateCnts(); }
+function renderAll(){ renderCal(); renderMembers(); renderPeople(); renderNotes(); renderHistory(); updateCnts(); }
 function updateCnts(){
   document.getElementById('members-cnt').textContent=members.length+'명';
   document.getElementById('people-cnt').textContent=peoples.length+'명';
   document.getElementById('notes-cnt').textContent=notes.length+'개';
+  document.getElementById('history-cnt').textContent=histories.length+'개';
 }
 
 /* ════════════════════════════
@@ -1175,10 +1222,10 @@ function renderCal(){
     const isSel=ds&&ds===selectedDate;
     const el=document.createElement('div');
     el.className=`cal-day${!cur?' other':''}${isToday?' today':''}${isSel?' selected':''}`;
-    const dots=schs.slice(0,3).map(s=>{
-      const t=(s.tags||'').toLowerCase();
-      let c='';if(t.includes('콘서트')||t.includes('공연'))c=' c';else if(t.includes('방송'))c=' b';else if(t.includes('콘텐츠'))c=' ct';
-      return `<div class="cdot${c}"></div>`;
+    const DOT_COLORS=['#b89aff','#ff6eb4','#4dd8c0','#ffd166','#ff8ac8','#ff6b6b','#7b6cff','#64d8b4','#ffb347','#89cff0'];
+    const dots=schs.slice(0,3).map((s,si)=>{
+      const color=DOT_COLORS[(schs.indexOf(s))%DOT_COLORS.length];
+      return `<div class="cdot" style="background:${color}"></div>`;
     }).join('');
     el.innerHTML=`<span class="cdn">${d}</span><div class="cal-dots">${dots}</div>`;
     if(cur) el.addEventListener('click',()=>{ selectedDate=ds; renderCal(); });
@@ -1353,7 +1400,7 @@ function openDpPeople(id){
     <div class="detail-body">
       <div class="info-sec">
         <div class="info-sec-title">정보</div>
-        ${ir('카테고리',p.category)}${ir('역할',p.role)}${ir('관계',p.relation)}
+        ${ir('카테고리',p.category)}${ir('생년월일',p.birthday?(p.birthday+' ('+age(p.birthday)+')'):'')}${ir('소속',p.affiliation)}${ir('관계',p.relation)}
       </div>
       ${p.desc?`<div class="info-sec"><div class="info-sec-title">설명</div><div class="info-row"><div class="info-val">${p.desc}</div></div></div>`:''}
       ${p.memo?`<div class="info-sec"><div class="info-sec-title">메모</div><div class="info-row"><div class="info-val">${p.memo}</div></div></div>`:''}
@@ -1386,8 +1433,7 @@ function openDpSchedule(id){
   const mems=(s.members||[]).map(m=>`<div class="tag-chip">${m}</div>`).join('');
   document.getElementById('dp-schedule-body').innerHTML=`
     <div style="padding:20px 20px 100px">
-      ${s.photo?`<div style="width:100%;border-radius:var(--r);overflow:hidden;margin-bottom:16px;aspect-ratio:16/9"><img src="${s.photo}" style="width:100%;height:100%;object-fit:cover"></div>`:''}
-      <div style="margin-bottom:16px">
+      ${(()=>{const photos=s.photos&&s.photos.length?s.photos:(s.photo?[s.photo]:[]);return photos.length?photos.map(url=>`<div style="width:100%;border-radius:var(--r);overflow:hidden;margin-bottom:12px"><img src="${url}" style="width:100%;height:auto;display:block;border-radius:var(--r)"></div>`).join(''):'';})()}      <div style="margin-bottom:16px">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:2px">${s.title||''}</div>
         <div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);margin-top:4px">${s.date||''} ${s.time||''}</div>
       </div>
@@ -1412,6 +1458,7 @@ document.getElementById('fab').addEventListener('click',()=>{
   else if(currentPage==='members') openMMember();
   else if(currentPage==='people') openMPeople();
   else if(currentPage==='notes') openMNote();
+  else if(currentPage==='history') openMHistory();
 });
 
 /* ── Schedule tag chips ── */
@@ -1419,6 +1466,18 @@ const SCH_TAGS=['음악방송','라디오','방송','이벤트','행사','공연
 const SCH_TAG_COLORS={'음악방송':'#b89aff','라디오':'#4dd8c0','방송':'#7b6cff','이벤트':'#ff6eb4','행사':'#ffd166','공연':'#ff8ac8','컴백':'#ff6b6b','기타':'#8888a4'};
 let schSelectedTags=[];
 let schExtraDates=[]; // additional dates for multi-day
+let schPhotos=[]; // array of photo URLs
+
+function renderSchPhotos(){
+  const el=document.getElementById('sch-photos-list');
+  if(!schPhotos.length){el.innerHTML='';return;}
+  el.innerHTML=schPhotos.map((url,i)=>`
+    <div style="position:relative;border-radius:var(--rs);overflow:hidden;background:var(--card2)">
+      <img src="${url}" style="width:100%;height:auto;display:block;border-radius:var(--rs)">
+      <button onclick="removeSchPhoto(${i})" style="position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.6);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">✕</button>
+    </div>`).join('');
+}
+window.removeSchPhoto=function(i){ schPhotos.splice(i,1); renderSchPhotos(); };
 
 function renderSchTagChips(){
   const el=document.getElementById('sch-tag-chips');
@@ -1450,8 +1509,9 @@ function openMSchedule(date){
   document.getElementById('m-schedule-title').textContent=editingId?'스케줄 수정':'스케줄 추가';
   const s=editingId?schedules.find(x=>x.id===editingId):null;
   setVal('f-sch-title',s?.title||''); setVal('f-sch-time',s?.time||''); setVal('f-sch-memo',s?.memo||'');
-  setVal('sch-photo-url',s?.photo||'');
-  // date
+  // photos - load array or legacy single photo
+  schPhotos=s?.photos?[...s.photos]:(s?.photo?[s.photo]:[]);
+  renderSchPhotos();
   setVal('f-sch-date',s?.date||date||'');
   schExtraDates=s?.extraDates?[...s.extraDates]:[];
   renderSchDateChips();
@@ -1461,9 +1521,6 @@ function openMSchedule(date){
   const manualTags=rawTags.filter(t=>!SCH_TAGS.includes(t)).map(t=>'#'+t);
   setVal('f-sch-tags',manualTags.join(', '));
   renderSchTagChips();
-  // photo
-  const schPrev=document.getElementById('sch-photo-preview');
-  if(s?.photo){schPrev.src=s.photo;schPrev.style.display='block';}else{schPrev.style.display='none';}
   document.getElementById('f-sch-members').innerHTML=members.map(m=>`<div class="mem-chk${(s?.members||[]).includes(m.stagename)?' on':''}" data-name="${m.stagename}" onclick="this.classList.toggle('on')">${m.stagename}</div>`).join('');
   document.getElementById('btn-sch-all').textContent='전체 선택';
   openModal('m-schedule');
@@ -1484,7 +1541,7 @@ function openMMember(){
 function openMPeople(){
   document.getElementById('m-people-title').textContent=editingId?'지인 수정':'지인 추가';
   const p=editingId?peoples.find(x=>x.id===editingId):null;
-  setVal('f-ppl-name',p?.name||''); setVal('f-ppl-role',p?.role||''); setVal('f-ppl-relation',p?.relation||''); setVal('f-ppl-desc',p?.desc||''); setVal('f-ppl-memo',p?.memo||'');
+  setVal('f-ppl-name',p?.name||''); setVal('f-ppl-birthday',p?.birthday||''); setVal('f-ppl-affiliation',p?.affiliation||''); setVal('f-ppl-relation',p?.relation||''); setVal('f-ppl-desc',p?.desc||''); setVal('f-ppl-memo',p?.memo||'');
   document.getElementById('f-ppl-category').value=p?.category||'아이돌';
   setVal('ppl-photo-url',p?.photo||'');
   const prev=document.getElementById('ppl-photo-preview');
@@ -1512,9 +1569,15 @@ document.getElementById('btn-add-date').addEventListener('click',()=>{
 });
 document.getElementById('sch-photo-area').addEventListener('click',()=>document.getElementById('sch-photo-input').click());
 document.getElementById('sch-photo-input').addEventListener('change',async function(){
-  const f=this.files[0];if(!f)return;toast('업로드 중...');
-  const url=await uploadCloud(f);
-  if(url){setVal('sch-photo-url',url);const p=document.getElementById('sch-photo-preview');p.src=url;p.style.display='block';toast('업로드 완료');}
+  const files=Array.from(this.files);if(!files.length)return;
+  toast('업로드 중...');
+  for(const f of files){
+    const url=await uploadCloud(f);
+    if(url) schPhotos.push(url);
+  }
+  renderSchPhotos();
+  toast(files.length>1?files.length+'장 업로드 완료':'업로드 완료');
+  this.value='';
 });
 document.getElementById('btn-sch-all').addEventListener('click',()=>{
   const chks=document.querySelectorAll('#f-sch-members .mem-chk');
@@ -1530,14 +1593,24 @@ document.getElementById('save-schedule').addEventListener('click',async()=>{
   const allTags=[...schSelectedTags.map(x=>'#'+x),...manualRaw];
   const tagsStr=allTags.join(', ');
   const mainDate=getVal('f-sch-date');
-  const data={title,date:mainDate,time:getVal('f-sch-time'),members:mems,tags:tagsStr,memo:getVal('f-sch-memo'),photo:getVal('sch-photo-url'),extraDates:schExtraDates};
+  const data={title,date:mainDate,time:getVal('f-sch-time'),members:mems,tags:tagsStr,memo:getVal('f-sch-memo'),photo:schPhotos[0]||'',photos:schPhotos,extraDates:schExtraDates};
   if(editingId){
     await updateItem('schedules',editingId,data);
-    // also save copies for extra dates if new ones added
+    // For extra dates when editing: add new date copies (don't duplicate existing)
+    for(const ed of schExtraDates){
+      if(ed===mainDate) continue;
+      const existing=schedules.find(x=>x.date===ed&&x.title===title&&x.id!==editingId);
+      if(!existing){
+        const ecopy={...data,date:ed,extraDates:[]};
+        const eid=await addItem('schedules',ecopy);
+        if(!schedules.find(x=>x.id===eid))schedules.push({id:eid,...ecopy});
+      }
+    }
   } else {
+    // Add main date entry
     const id=await addItem('schedules',data);
     if(!schedules.find(x=>x.id===id))schedules.push({id,...data});
-    // create entries for extra dates
+    // create entries for extra dates (only if different from main date)
     for(const ed of schExtraDates){
       if(ed===mainDate) continue;
       const ecopy={...data,date:ed,extraDates:[]};
@@ -1590,7 +1663,7 @@ document.getElementById('ppl-photo-input').addEventListener('change',async funct
 });
 document.getElementById('save-people').addEventListener('click',async()=>{
   const name=getVal('f-ppl-name');if(!name){toast('이름을 입력해주세요');return;}
-  const data={name,category:document.getElementById('f-ppl-category').value,role:getVal('f-ppl-role'),relation:getVal('f-ppl-relation'),desc:getVal('f-ppl-desc'),memo:getVal('f-ppl-memo'),photo:getVal('ppl-photo-url')};
+  const data={name,category:document.getElementById('f-ppl-category').value,relation:getVal('f-ppl-relation'),birthday:getVal('f-ppl-birthday'),affiliation:getVal('f-ppl-affiliation'),desc:getVal('f-ppl-desc'),memo:getVal('f-ppl-memo'),photo:getVal('ppl-photo-url')};
   if(editingId){await updateItem('peoples',editingId,data);}
   else{const id=await addItem('peoples',data);if(!peoples.find(x=>x.id===id))peoples.push({id,...data});}
   closeModal('m-people');renderPeople();updateCnts();toast(editingId?'수정되었습니다':'지인이 추가되었습니다');editingId=null;
@@ -1675,9 +1748,86 @@ document.getElementById('save-family').addEventListener('click',()=>{
 document.getElementById('cancel-family').addEventListener('click',()=>closeModal('m-family'));
 
 /* ════════════════════════════
+   HISTORY
+════════════════════════════ */
+const HIST_CAT_COLORS={데뷔:'#b89aff',컴백:'#ff6eb4',앨범:'#4dd8c0',수상:'#ffd166',방송:'#7b6cff',공연:'#ff8ac8',팬미팅:'#ff6b6b',화보:'#64d8b4',광고:'#ffb347',기타:'#8888a4'};
+
+function renderHistory(){
+  const el=document.getElementById('history-list');
+  if(!histories.length){
+    el.innerHTML=`<div class="empty"><div class="ei">📜</div><p>연혁이 없습니다<br>+ 버튼으로 추가하세요</p></div>`;
+    document.getElementById('history-cnt').textContent='0개';
+    return;
+  }
+  document.getElementById('history-cnt').textContent=histories.length+'개';
+  const sorted=[...histories].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  // Group by year
+  const byYear={};
+  sorted.forEach(h=>{
+    const y=(h.date||'????').slice(0,4);
+    if(!byYear[y])byYear[y]=[];
+    byYear[y].push(h);
+  });
+  let html='';
+  Object.keys(byYear).sort((a,b)=>b-a).forEach(year=>{
+    html+=`<div style="margin-bottom:24px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--accent);margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)">${year}</div>
+      <div style="position:relative;padding-left:20px;border-left:2px solid var(--border)">`;
+    byYear[year].forEach(h=>{
+      const color=HIST_CAT_COLORS[h.category]||'var(--accent)';
+      html+=`<div style="margin-bottom:14px;position:relative" onclick="openEditHistory('${h.id}')">
+        <div style="position:absolute;left:-25px;top:4px;width:8px;height:8px;border-radius:50%;background:${color};border:2px solid var(--bg)"></div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:12px 14px;cursor:pointer;transition:var(--tr)" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='var(--card)'">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <span style="font-size:10px;padding:2px 8px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44;font-family:'Space Mono',monospace;letter-spacing:1px">${h.category||'기타'}</span>
+            <span style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace">${h.date||''}</span>
+            <button onclick="event.stopPropagation();deleteHistory('${h.id}')" style="margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:0 4px;border-radius:4px;transition:var(--tr)" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'">🗑️</button>
+          </div>
+          <div style="font-weight:600;font-size:14px;margin-bottom:${h.content?'6px':'0'}">${h.title||''}</div>
+          ${h.content?`<div style="font-size:12px;color:var(--text2);line-height:1.6;white-space:pre-wrap">${h.content}</div>`:''}
+        </div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  el.innerHTML=html;
+}
+
+let editHistId=null;
+function openMHistory(){
+  editHistId=null;
+  document.getElementById('m-history-title').textContent='연혁 추가';
+  setVal('f-hist-date',new Date().toISOString().slice(0,10));
+  setVal('f-hist-title','');setVal('f-hist-content','');
+  document.getElementById('f-hist-category').value='컴백';
+  openModal('m-history');
+}
+window.openEditHistory=function(id){
+  const h=histories.find(x=>x.id===id);if(!h)return;
+  editHistId=id;
+  document.getElementById('m-history-title').textContent='연혁 수정';
+  setVal('f-hist-date',h.date||'');setVal('f-hist-title',h.title||'');setVal('f-hist-content',h.content||'');
+  document.getElementById('f-hist-category').value=h.category||'기타';
+  openModal('m-history');
+};
+window.deleteHistory=async function(id){
+  if(!confirm('삭제할까요?'))return;
+  await deleteItem('histories',id);
+  renderHistory();updateCnts();toast('삭제되었습니다');
+};
+document.getElementById('save-history').addEventListener('click',async()=>{
+  const title=getVal('f-hist-title');if(!title){toast('제목을 입력해주세요');return;}
+  const data={title,date:getVal('f-hist-date'),category:document.getElementById('f-hist-category').value,content:getVal('f-hist-content')};
+  if(editHistId){await updateItem('histories',editHistId,data);}
+  else{const id=await addItem('histories',data);if(!histories.find(x=>x.id===id))histories.push({id,...data});}
+  closeModal('m-history');renderHistory();updateCnts();toast(editHistId?'수정되었습니다':'연혁이 추가되었습니다');editHistId=null;
+});
+document.getElementById('cancel-history').addEventListener('click',()=>closeModal('m-history'));
+
+/* ════════════════════════════
    NAVIGATION
 ════════════════════════════ */
-const PAGE_TITLES={schedule:'스케줄',members:'멤버',people:'지인',notes:'노트'};
+const PAGE_TITLES={schedule:'스케줄',members:'멤버',people:'지인',notes:'노트',history:'연혁'};
 function navTo(page){
   currentPage=page;
   document.querySelectorAll('.sidebar-nav-item,.nav-item').forEach(el=>el.classList.toggle('active',el.dataset.page===page));
