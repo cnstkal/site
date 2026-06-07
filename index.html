@@ -180,6 +180,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 .cal-wrap{padding:0 24px 16px}
 @media(max-width:767px){.cal-wrap{padding:0 14px 12px}}
 
+/* PC: 달력 + 일정 상세 2단 레이아웃 */
+@media(min-width:768px){
+  #page-schedule{display:flex;flex-direction:column;height:100%}
+  .cal-schedule-layout{display:flex;gap:0;flex:1;min-height:0;overflow:hidden}
+  .cal-panel{width:340px;flex-shrink:0;border-right:1px solid var(--border);overflow-y:auto;padding-bottom:20px}
+  .detail-panel{flex:1;overflow-y:auto;padding:0}
+  .cal-wrap{padding:0 16px 12px}
+  #day-detail{margin:0;border:none;border-radius:0;background:transparent}
+  #day-detail .day-detail{margin:0;border:none;border-radius:0;background:transparent}
+  #day-detail .day-detail .dd-hdr{padding:16px 20px;border-bottom:1px solid var(--border)}
+  #day-detail .day-detail .sch-item{padding:14px 20px}
+}
+
 .cal-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 2px}
 .cal-nav-left{display:flex;align-items:center;gap:8px}
 .cal-month-btn{
@@ -640,25 +653,31 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
           <span class="sec-title">스케줄</span>
           <span class="sec-sub" id="cal-year-display">2026</span>
         </div>
-        <div class="cal-wrap">
-          <div class="cal-nav">
-            <div class="cal-nav-left">
-              <div class="cal-arrow" id="cal-prev">‹</div>
-              <div class="cal-nav-month-wrap">
-                <button class="cal-month-btn" id="cal-month-btn"></button>
-                <div class="monthpicker hidden" id="monthpicker"></div>
+        <div class="cal-schedule-layout">
+          <div class="cal-panel">
+            <div class="cal-wrap">
+              <div class="cal-nav">
+                <div class="cal-nav-left">
+                  <div class="cal-arrow" id="cal-prev">‹</div>
+                  <div class="cal-nav-month-wrap">
+                    <button class="cal-month-btn" id="cal-month-btn"></button>
+                    <div class="monthpicker hidden" id="monthpicker"></div>
+                  </div>
+                  <div class="cal-nav-month-wrap" style="margin-left:-4px">
+                    <button class="cal-year-btn" id="cal-year-btn"></button>
+                    <div class="yearpicker hidden" id="yearpicker"></div>
+                  </div>
+                </div>
+                <div class="cal-arrow" id="cal-next">›</div>
               </div>
-              <div class="cal-nav-month-wrap" style="margin-left:-4px">
-                <button class="cal-year-btn" id="cal-year-btn"></button>
-                <div class="yearpicker hidden" id="yearpicker"></div>
-              </div>
+              <div class="cal-grid" id="cal-wd"></div>
+              <div class="cal-grid" id="cal-days"></div>
             </div>
-            <div class="cal-arrow" id="cal-next">›</div>
           </div>
-          <div class="cal-grid" id="cal-wd"></div>
-          <div class="cal-grid" id="cal-days"></div>
+          <div class="detail-panel">
+            <div id="day-detail"></div>
+          </div>
         </div>
-        <div id="day-detail"></div>
       </div>
 
       <!-- MEMBERS -->
