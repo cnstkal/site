@@ -1258,13 +1258,23 @@ const DUMMY_SCHEDULES=[
 /* ════════════════════════════
    FIREBASE
 ════════════════════════════ */
+let _fbLoaded=false;
 window.addEventListener('fb-ready', async()=>{
   db=window.__db; fb=window.__fb;
   await loadAll();
+  _fbLoaded=true;
   if(!members.length) await seedDummy();
   renderAll();
 });
-setTimeout(()=>{ if(!members.length){ loadLocal(); if(!members.length) quickSeed(); renderAll(); } },3500);
+// Fallback: Firebase가 늦거나 실패할 때 localStorage에서 로드
+// 모든 데이터 배열을 체크
+setTimeout(()=>{
+  if(!_fbLoaded){
+    loadLocal();
+    if(!members.length) quickSeed();
+    renderAll();
+  }
+}, 4000);
 
 async function loadAll(){
   try{
@@ -2635,7 +2645,13 @@ navTo=function(page){
   const PAGE_TITLES2={schedule:'스케줄',members:'멤버',people:'지인',notes:'노트',history:'연혁',records:'성적'};
   document.getElementById('pc-page-title').textContent=PAGE_TITLES2[page]||page;
   document.getElementById('content-scroll').scrollTop=0;
-  if(page==='records') renderRecords();
+  // 페이지 이동 시 항상 최신 데이터로 재렌더
+  if(page==='notes') renderNotes();
+  else if(page==='history') renderHistory();
+  else if(page==='members') renderMembers();
+  else if(page==='people') renderPeople();
+  else if(page==='records') renderRecords();
+  else if(page==='schedule') renderCal();
 };
 
 const _origFab=document.getElementById('fab').onclick;
