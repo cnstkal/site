@@ -44,7 +44,7 @@ window.dispatchEvent(new Event('fb-ready'));
 
 /* ── RESET ── */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:14px;overflow:hidden;touch-action:manipulation;overscroll-behavior:none}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:14px;overflow:hidden;touch-action:manipulation;overscroll-behavior:none;max-width:100vw}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -117,7 +117,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 .search-bar-pc input::placeholder{color:var(--text3)}
 .search-bar-pc .si{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none}
 
-.content-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.content-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;max-width:100%;overscroll-behavior-x:none}
 
 /* ══════════════════════════════
    MOBILE LAYOUT (<768px)
@@ -385,7 +385,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 /* ══ DETAIL PAGE (slide-in) ══ */
 .detail-page{
   position:fixed;inset:0;background:var(--bg);z-index:100;
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
   transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
 }
 .detail-page.open{transform:translateX(0)}
@@ -516,7 +516,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 }
 .modal-sheet{
   background:var(--bg2);border-radius:var(--r) var(--r) 0 0;
-  width:100%;max-height:92dvh;overflow-y:auto;
+  width:100%;max-height:92dvh;overflow-y:auto;overflow-x:hidden;
   padding-bottom:env(safe-area-inset-bottom,20px);
   animation:slideUp .25s cubic-bezier(.4,0,.2,1);
 }
@@ -935,7 +935,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
       </div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">연습생 시작일</label><input class="form-input" type="date" id="f-mem-trainee-start"></div>
-        <div class="form-group"><label class="form-label">연습생 종료일</label><input class="form-input" type="date" id="f-mem-trainee-end"></div>
+        <div class="form-group"><label class="form-label">연습생 기간</label><input class="form-input" id="f-mem-trainee-period" placeholder="예: 2년 3개월"></div>
       </div>
       <div class="form-group"><label class="form-label">연습생 시절 메모</label><textarea class="form-textarea" id="f-mem-trainee-memo" placeholder="연습생 시절 에피소드, 특이사항 등" style="min-height:58px"></textarea></div>
       <div class="form-group"><label class="form-label">모에화 설정</label><textarea class="form-textarea" id="f-mem-moe" placeholder="모에 속성, 캐릭터 설정 등" style="min-height:58px"></textarea></div>
@@ -985,6 +985,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
             <input type="file" id="child-input-high" accept="image/*" multiple style="display:none" onchange="handleChildUpload(this,'high')">
           </div>
         </div>
+      </div>
+
+      <!-- Member relations -->
+      <div class="form-group">
+        <label class="form-label">멤버 관계 설정</label>
+        <div id="mem-relations-modal" style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px"></div>
       </div>
 
       <!-- Controversy -->
@@ -1563,6 +1569,7 @@ function openDpNote(id){
   document.getElementById('dp-note-hdr').textContent=n.title||'노트';
   const tags=(n.tags||'').split(',').filter(Boolean).map(t=>`<div class="tag-chip a">${t.trim()}</div>`).join('');
   const cv={'purple':'var(--accent)','pink':'var(--pink)','teal':'var(--teal)','yellow':'var(--yellow)'};
+  const notePhotoHtml=(n.photos&&n.photos.length)?n.photos.map(url=>`<img src="${url}" style="width:100%;border-radius:var(--r);margin-bottom:12px;display:block">`).join(''):'';
   document.getElementById('dp-note-body').innerHTML=`
     <div style="padding:20px 20px 100px">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
@@ -1570,7 +1577,8 @@ function openDpNote(id){
         <div><div style="font-size:22px;font-weight:700">${n.title||''}</div><div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:2px">${n.date||''}</div></div>
       </div>
       ${tags?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">${tags}</div>`:''}
-      <div style="font-size:14px;line-height:1.9;white-space:pre-wrap">${n.content||''}</div>
+      <div style="font-size:14px;line-height:1.9;white-space:pre-wrap;margin-bottom:${notePhotoHtml?'16px':'0'}">${n.content||''}</div>
+      ${notePhotoHtml}
     </div>`;
   open('dp-note');
 }
@@ -1691,14 +1699,7 @@ function openMPeople(){
   if(p?.photo){prev.src=p.photo;prev.style.display='block';}else{prev.style.display='none';}
   openModal('m-people');
 }
-function openMNote(){
-  document.getElementById('m-note-title').textContent=editingId?'노트 수정':'노트 추가';
-  const n=editingId?notes.find(x=>x.id===editingId):null;
-  setVal('f-note-title',n?.title||''); setVal('f-note-content',n?.content||''); setVal('f-note-tags',n?.tags||'');
-  noteColor=n?.color||'purple';
-  document.querySelectorAll('.co').forEach(el=>el.classList.toggle('sel',el.dataset.c===noteColor));
-  openModal('m-note');
-}
+// openMNote replaced by extended version below
 
 function openModal(id){ document.getElementById(id).classList.add('open'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
@@ -2028,6 +2029,166 @@ function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg
 function age(b){ if(!b)return''; const bd=new Date(b),today=new Date(); let a=today.getFullYear()-bd.getFullYear(); if(today.getMonth()<bd.getMonth()||(today.getMonth()===bd.getMonth()&&today.getDate()<bd.getDate()))a--; return a+'세'; }
 function emoji(name){ const e=['🌸','⭐','🌙','💫','🎵','🎀','🌟','💜','🎤','✨']; let h=0; for(let i=0;i<(name||'').length;i++)h+=name.charCodeAt(i); return e[h%e.length]; }
 
+
+/* ════════════════════════════
+   MEMBER RELATIONS (관계도)
+════════════════════════════ */
+function renderMemRelationsModal(currentMemberId){
+  const el=document.getElementById('mem-relations-modal');
+  if(!el)return;
+  const others=members.filter(x=>x.id!==currentMemberId&&x.id!==editingId);
+  if(!others.length&&!members.filter(x=>x.id!==editingId).length){
+    el.innerHTML='<div style="font-size:12px;color:var(--text3)">다른 멤버가 없습니다</div>';
+    return;
+  }
+  const currentRels=currentMemberRelations||{};
+  const allOthers=members.filter(x=>x.id!==editingId);
+  el.innerHTML=allOthers.map(m=>{
+    const rel=currentRels[m.id]||{closeness:'보통',desc:''};
+    return `<div style="background:var(--card2);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;flex-shrink:0">${(m.stagename||'?')[0]}</div>
+        <div style="font-weight:600;font-size:13px;flex:1">${m.stagename||'?'}</div>
+        <select onchange="updateRelCloseness('${m.id}',this.value)" style="font-size:11px;padding:3px 6px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);cursor:pointer">
+          <option value="절친"${rel.closeness==='절친'?' selected':''}>💜 절친</option>
+          <option value="친함"${rel.closeness==='친함'?' selected':''}>😊 친함</option>
+          <option value="보통"${rel.closeness==='보통'?' selected':''}>🙂 보통</option>
+          <option value="어색함"${rel.closeness==='어색함'?' selected':''}>😐 어색함</option>
+          <option value="갈등"${rel.closeness==='갈등'?' selected':''}>⚡ 갈등</option>
+        </select>
+      </div>
+      <input class="form-input" value="${rel.desc||''}" placeholder="관계 설명 (예: 데뷔 전부터 친구사이, 가장 많이 싸우지만 친한 사이)" style="font-size:12px;padding:7px 10px" oninput="updateRelDesc('${m.id}',this.value)">
+    </div>`;
+  }).join('');
+}
+
+let currentMemberRelations={};
+window.updateRelCloseness=function(memberId,val){
+  if(!currentMemberRelations[memberId]) currentMemberRelations[memberId]={closeness:'보통',desc:''};
+  currentMemberRelations[memberId].closeness=val;
+};
+window.updateRelDesc=function(memberId,val){
+  if(!currentMemberRelations[memberId]) currentMemberRelations[memberId]={closeness:'보통',desc:''};
+  currentMemberRelations[memberId].desc=val;
+};
+
+// Rebuild openMMember to include relations
+function openMMember(){
+  document.getElementById('m-member-title').textContent=editingId?'멤버 수정':'멤버 추가';
+  const m=editingId?members.find(x=>x.id===editingId):null;
+  const fields=['stagename','realname','nationality','birthday','height','position','mbti','nickname','birthplace','education','moe','personality','taste','habit','memo'];
+  fields.forEach(f=>setVal('f-mem-'+f,m?.[f]||''));
+  setVal('mem-photo-url',m?.photo||'');
+  const prev=document.getElementById('mem-photo-preview');
+  if(m?.photo){prev.src=m.photo;prev.style.display='block';}else{prev.style.display='none';}
+  setVal('f-mem-trainee-start',m?.trainee_start||'');
+  setVal('f-mem-trainee-period',m?.trainee_period||'');
+  setVal('f-mem-trainee-memo',m?.trainee_memo||'');
+  setVal('f-mem-controversy',m?.controversy||'');
+  // relations
+  currentMemberRelations=m?.relations?JSON.parse(JSON.stringify(m.relations)):{};
+  renderMemRelationsModal(m?.id);
+  // child photos
+  childPhotos={baby:[...(m?.child_baby||[])],elem:[...(m?.child_elem||[])],mid:[...(m?.child_mid||[])],high:[...(m?.child_high||[])]};
+  ['baby','elem','mid','high'].forEach(s=>renderChildPhotos(s));
+  fashionPhotos=[...(m?.fashion_photos||[])];
+  wimbagPhotos=[...(m?.wimbag_photos||[])];
+  renderFashionPhotos();renderWimbagPhotos();
+  currentFamilyItems=m?.family_list?JSON.parse(JSON.stringify(m.family_list)):[];
+  renderFamilyModal();
+  openModal('m-member');
+}
+
+// Rebuild save-member to include relations
+document.getElementById('save-member').addEventListener('click',async()=>{
+  const sn=getVal('f-mem-stagename');if(!sn){toast('활동명을 입력해주세요');return;}
+  const fields=['stagename','realname','nationality','birthday','height','position','mbti','nickname','birthplace','education','moe','personality','taste','habit','memo'];
+  const data={};fields.forEach(f=>data[f]=getVal('f-mem-'+f));
+  data.photo=getVal('mem-photo-url');
+  data.family_list=currentFamilyItems;
+  data.trainee_start=getVal('f-mem-trainee-start');
+  data.trainee_period=getVal('f-mem-trainee-period');
+  data.trainee_memo=getVal('f-mem-trainee-memo');
+  data.controversy=getVal('f-mem-controversy');
+  data.relations=JSON.parse(JSON.stringify(currentMemberRelations));
+  data.child_baby=[...childPhotos.baby];
+  data.child_elem=[...childPhotos.elem];
+  data.child_mid=[...childPhotos.mid];
+  data.child_high=[...childPhotos.high];
+  data.fashion_photos=[...fashionPhotos];
+  data.wimbag_photos=[...wimbagPhotos];
+  if(editingId){await updateItem('members',editingId,data);}
+  else{const id=await addItem('members',data);if(!members.find(x=>x.id===id))members.push({id,...data});}
+  closeModal('m-member');renderMembers();updateCnts();toast(editingId?'수정되었습니다':'멤버가 추가되었습니다');editingId=null;
+});
+
+// Rebuild buildRelMap with closeness colors and desc
+function buildRelMap(m){
+  if(members.length<=1)return'';
+  const others=members.filter(x=>x.id!==m.id);
+  const CLOSE_COLORS={절친:'#b89aff',친함:'#4dd8c0',보통:'#8888a4',어색함:'#ffd166',갈등:'#ff6b6b'};
+  const CLOSE_DASH={절친:'none',친함:'none',보통:'4 3',어색함:'6 3',갈등:'2 2'};
+  const W=340,H=220,cx=170,cy=110;
+  let svgItems='';
+  others.forEach((mem,i)=>{
+    const angle=(2*Math.PI/others.length)*i-Math.PI/2;
+    const bx=cx+Math.cos(angle)*120,by=cy+Math.sin(angle)*80;
+    const rel=(m.relations&&m.relations[mem.id])||{closeness:'보통',desc:''};
+    const c=CLOSE_COLORS[rel.closeness]||'#8888a4';
+    const dash=CLOSE_DASH[rel.closeness]||'4 3';
+    // midpoint for label
+    const mx=(cx+bx)/2,my=(cy+by)/2;
+    svgItems+=`
+    <line x1="${cx}" y1="${cy}" x2="${bx}" y2="${by}" stroke="${c}" stroke-width="2" stroke-opacity="0.6" stroke-dasharray="${dash}"/>
+    <text x="${mx}" y="${my-4}" text-anchor="middle" fill="${c}" font-size="8" font-family="Noto Sans KR" opacity="0.9">${rel.closeness}</text>
+    <circle cx="${bx}" cy="${by}" r="26" fill="var(--card2)" stroke="${c}" stroke-width="2"/>
+    <text x="${bx}" y="${by+1}" text-anchor="middle" dominant-baseline="middle" fill="${c}" font-size="9" font-family="Noto Sans KR" font-weight="600">${mem.stagename||'?'}</text>`;
+    if(rel.desc){
+      svgItems+=`<title>${mem.stagename}: ${rel.desc}</title>`;
+    }
+  });
+  // relation descriptions list below SVG
+  const relDescs=others.filter(mem=>{
+    const rel=m.relations&&m.relations[mem.id];
+    return rel&&(rel.desc||rel.closeness!=='보통');
+  }).map(mem=>{
+    const rel=m.relations[mem.id];
+    const c=CLOSE_COLORS[rel.closeness]||'#8888a4';
+    return `<div style="display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div style="width:6px;height:6px;border-radius:50%;background:${c};flex-shrink:0;margin-top:5px"></div>
+      <div><span style="font-size:12px;font-weight:600;color:${c}">${mem.stagename}</span> <span style="font-size:11px;color:var(--text3)">${rel.closeness}</span>${rel.desc?`<div style="font-size:12px;color:var(--text2);margin-top:2px;line-height:1.5">${rel.desc}</div>`:''}</div>
+    </div>`;
+  }).join('');
+
+  return `<div class="info-sec"><div class="info-sec-title">멤버 관계도</div>
+    <div style="overflow-x:auto;padding:12px 16px 0">
+      <svg width="${W}" height="${H}" style="display:block;margin:0 auto;overflow:visible">
+        ${svgItems}
+        <circle cx="${cx}" cy="${cy}" r="36" fill="rgba(184,154,255,.15)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="${cx}" y="${cy+1}" text-anchor="middle" dominant-baseline="middle" fill="var(--accent)" font-size="11" font-family="Noto Sans KR" font-weight="700">${m.stagename||'?'}</text>
+      </svg>
+    </div>
+    ${relDescs?`<div style="padding:0 16px 12px">${relDescs}</div>`:''}
+  </div>`;
+}
+
+/* ════════════════════════════
+   NOTE DISPLAY FIX
+   Completely rewrite openMNote to avoid stale closures
+════════════════════════════ */
+function openMNote(){
+  const n=editingId?notes.find(x=>x.id===editingId):null;
+  document.getElementById('m-note-title').textContent=editingId?'노트 수정':'노트 추가';
+  setVal('f-note-title',n?.title||'');
+  setVal('f-note-content',n?.content||'');
+  setVal('f-note-tags',n?.tags||'');
+  noteColor=n?.color||'purple';
+  document.querySelectorAll('.co').forEach(el=>el.classList.toggle('sel',el.dataset.c===noteColor));
+  notePhotos=n?.photos?[...n.photos]:[];
+  renderNotePhotos();
+  openModal('m-note');
+}
+
 /* ════════════════════════════
    INIT THEME
 ════════════════════════════ */
@@ -2154,7 +2315,7 @@ function openMMember(){
   if(m?.photo){prev.src=m.photo;prev.style.display='block';}else{prev.style.display='none';}
   // new fields
   setVal('f-mem-trainee-start',m?.trainee_start||'');
-  setVal('f-mem-trainee-end',m?.trainee_end||'');
+  setVal('f-mem-trainee-period',m?.trainee_period||'');
   setVal('f-mem-trainee-memo',m?.trainee_memo||'');
   setVal('f-mem-controversy',m?.controversy||'');
   // child photos
@@ -2173,26 +2334,7 @@ function openMMember(){
 /* ════════════════════════════
    PATCH save-member to include new fields
 ════════════════════════════ */
-document.getElementById('save-member').addEventListener('click',async()=>{
-  const sn=getVal('f-mem-stagename');if(!sn){toast('활동명을 입력해주세요');return;}
-  const fields=['stagename','realname','nationality','birthday','height','position','mbti','nickname','birthplace','education','moe','personality','taste','habit','memo'];
-  const data={};fields.forEach(f=>data[f]=getVal('f-mem-'+f));
-  data.photo=getVal('mem-photo-url');
-  data.family_list=currentFamilyItems;
-  data.trainee_start=getVal('f-mem-trainee-start');
-  data.trainee_end=getVal('f-mem-trainee-end');
-  data.trainee_memo=getVal('f-mem-trainee-memo');
-  data.controversy=getVal('f-mem-controversy');
-  data.child_baby=[...childPhotos.baby];
-  data.child_elem=[...childPhotos.elem];
-  data.child_mid=[...childPhotos.mid];
-  data.child_high=[...childPhotos.high];
-  data.fashion_photos=[...fashionPhotos];
-  data.wimbag_photos=[...wimbagPhotos];
-  if(editingId){await updateItem('members',editingId,data);}
-  else{const id=await addItem('members',data);if(!members.find(x=>x.id===id))members.push({id,...data});}
-  closeModal('m-member');renderMembers();updateCnts();toast(editingId?'수정되었습니다':'멤버가 추가되었습니다');editingId=null;
-});
+// save-member handler defined in MEMBER RELATIONS section below
 
 /* ════════════════════════════
    PATCH openDpMember to show new fields
@@ -2213,9 +2355,9 @@ function openDpMember(id){
   // trainee period
   let traineePeriod='';
   if(m.trainee_start||m.trainee_end){
-    const dur=calcTraineeDur(m.trainee_start,m.trainee_end);
+    const dur=m.trainee_period||calcTraineeDur(m.trainee_start,null);
     traineePeriod=`<div class="info-sec"><div class="info-sec-title">연습생 기간</div>
-      ${ir('시작일',m.trainee_start)}${ir('종료일',m.trainee_end||'현재')}${ir('기간',dur)}
+      ${ir('시작일',m.trainee_start)}${ir('기간',dur||m.trainee_period||'')}
       ${m.trainee_memo?`<div class="info-row"><div class="info-lbl">메모</div><div class="info-val">${m.trainee_memo}</div></div>`:''}
     </div>`;
   }
