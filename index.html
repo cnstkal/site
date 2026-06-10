@@ -406,8 +406,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 }
 .back-btn:hover{background:var(--card2)}
 .detail-hdr-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;flex:1}
-.detail-hero{height:260px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--bg3),var(--card2))}
-.detail-hero img{width:100%;height:100%;object-fit:contain;object-position:center center;position:absolute;inset:0;background:var(--bg3)}
+.detail-hero{position:relative;overflow:hidden;background:var(--bg3)}
+.detail-hero img{width:100%;height:auto;display:block;object-fit:cover;object-position:center top}
 .detail-hero-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:72px}
 .hero-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.75));padding:30px 20px 18px;position:relative;z-index:2}
 .hero-name{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:3px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.5)}
@@ -730,7 +730,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
           <span class="sec-title">성적</span>
           <span class="sec-sub" id="records-cnt">0개</span>
         </div>
-        <div id="records-tabs" style="padding:0 24px 12px;display:flex;gap:7px;flex-wrap:wrap"></div>
+        <div id="records-tabs" style="padding:0 24px 4px;display:flex;flex-direction:column;gap:4px"></div>
         <div id="records-list" style="padding:0 24px 80px"></div>
       </div>
 
@@ -942,6 +942,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
       <div class="form-group"><label class="form-label">성격</label><textarea class="form-textarea" id="f-mem-personality" placeholder="성격 설명" style="min-height:58px"></textarea></div>
       <div class="form-group"><label class="form-label">취향</label><textarea class="form-textarea" id="f-mem-taste" placeholder="취향 설명" style="min-height:58px"></textarea></div>
       <div class="form-group"><label class="form-label">습관 / 특기</label><textarea class="form-textarea" id="f-mem-habit" placeholder="습관, 특기" style="min-height:58px"></textarea></div>
+      <!-- Photo Gallery Albums -->
+      <div class="form-group">
+        <label class="form-label">사진 앨범 <span style="font-size:10px;color:var(--text3);font-weight:400">(앨범별로 묶어서 추가)</span></label>
+        <div id="gallery-albums-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px"></div>
+        <button type="button" class="add-family-btn" id="add-gallery-album-btn">＋ 앨범 추가</button>
+      </div>
+
       <div class="form-group"><label class="form-label">자유 메모</label><textarea class="form-textarea" id="f-mem-memo" placeholder="자유 메모"></textarea></div>
 
       <!-- Childhood photos -->
@@ -1202,6 +1209,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
       <button class="btn-cancel" id="cancel-history">취소</button>
     </div>
   </div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;flex-direction:column;align-items:center;justify-content:center" onclick="closeLightbox()">
+  <div style="position:absolute;top:16px;right:20px;font-size:24px;color:rgba(255,255,255,.7);cursor:pointer;z-index:501" onclick="closeLightbox()">✕</div>
+  <div style="position:absolute;top:50%;left:12px;transform:translateY(-50%);font-size:32px;color:rgba(255,255,255,.6);cursor:pointer;z-index:501;padding:12px;user-select:none" id="lb-prev" onclick="event.stopPropagation();lbNav(-1)">‹</div>
+  <div style="position:absolute;top:50%;right:12px;transform:translateY(-50%);font-size:32px;color:rgba(255,255,255,.6);cursor:pointer;z-index:501;padding:12px;user-select:none" id="lb-next" onclick="event.stopPropagation();lbNav(1)">›</div>
+  <img id="lb-img" src="" style="max-width:calc(100vw - 80px);max-height:calc(100dvh - 60px);object-fit:contain;border-radius:8px;pointer-events:none">
+  <div id="lb-counter" style="position:absolute;bottom:20px;font-size:12px;color:rgba(255,255,255,.5);font-family:'Space Mono',monospace"></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -2372,14 +2388,14 @@ function openDpMember(id){
     </div>`;
   }
 
-  // relationship map (mindmap style)
-  const relMap=buildRelMap(m);
+  // relationship map - removed per user request
+  const relMap='';
 
   // childhood photos
   function childSec(stage,label,arr){
     if(!arr||!arr.length)return'';
     return `<div style="margin-bottom:10px"><div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:1px;margin-bottom:6px">${label}</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px">${arr.map(url=>`<img src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--border)">`).join('')}</div></div>`;
+      <div style="display:flex;flex-wrap:wrap;gap:8px">${arr.map((url,idx)=>`<img src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(arr)},${idx})">`).join('')}</div></div>`;
   }
   const childHtml=[
     childSec('baby','영유아',m.child_baby),
@@ -2389,8 +2405,8 @@ function openDpMember(id){
   ].filter(Boolean).join('');
 
   // fashion
-  const fashionHtml=m.fashion_photos&&m.fashion_photos.length?`<div class="info-sec"><div class="info-sec-title">사복 패션</div><div style="padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px">${m.fashion_photos.map(url=>`<img src="${url}" style="width:90px;height:112px;object-fit:cover;border-radius:8px;border:1px solid var(--border)">`).join('')}</div></div>`:'';
-  const wimbagHtml=m.wimbag_photos&&m.wimbag_photos.length?`<div class="info-sec"><div class="info-sec-title">왓츠인마이백</div><div style="padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px">${m.wimbag_photos.map(url=>`<img src="${url}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border)">`).join('')}</div></div>`:'';
+  const fashionHtml=m.fashion_photos&&m.fashion_photos.length?`<div class="info-sec"><div class="info-sec-title">사복 패션</div><div style="padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px">${m.fashion_photos.map((url,idx)=>`<img src="${url}" style="width:90px;height:112px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(m.fashion_photos)},${idx})">`).join('')}</div></div>`:'';
+  const wimbagHtml=m.wimbag_photos&&m.wimbag_photos.length?`<div class="info-sec"><div class="info-sec-title">왓츠인마이백</div><div style="padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px">${m.wimbag_photos.map((url,idx)=>`<img src="${url}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(m.wimbag_photos)},${idx})">`).join('')}</div></div>`:'';
 
   document.getElementById('dp-member-body').innerHTML=`
     <div class="detail-hero" style="position:relative">
@@ -2415,7 +2431,6 @@ function openDpMember(id){
       ${childHtml?`<div class="info-sec"><div class="info-sec-title">어린시절 사진</div><div style="padding:12px 16px">${childHtml}</div></div>`:''}
       ${fashionHtml}${wimbagHtml}
       ${m.controversy?`<div class="info-sec" style="border-color:rgba(255,107,107,.3)"><div class="info-sec-title" style="color:var(--red)">논란</div><div class="info-row"><div class="info-val" style="color:var(--text2);font-size:13px">${m.controversy}</div></div></div>`:''}
-      ${m.memo?`<div class="info-sec"><div class="info-sec-title">메모</div><div class="info-row"><div class="info-val">${m.memo}</div></div></div>`:''}
     </div>`;
   open('dp-member');
 }
@@ -2476,9 +2491,7 @@ function saveRecordsLocal(){
 }
 
 function renderRecords(){
-  const tabEl=document.getElementById('records-tabs');
-  if(tabEl) tabEl.innerHTML=REC_CATS.map(c=>`<div class="pf-chip${c===currentRecordFilter?' active':''}" onclick="setRecordFilter('${c}')">${c}</div>`).join('');
-
+  // tabs and view toggle handled by patched version below
   const filtered=currentRecordFilter==='전체'?records:records.filter(r=>r.category===currentRecordFilter);
   const el=document.getElementById('records-list');
   if(!el)return;
@@ -2729,6 +2742,236 @@ setTimeout(()=>{
   try{records=JSON.parse(localStorage.getItem('a_rec')||'[]');}catch(e){}
   renderRecords();
 },3600);
+/* ════════════════════════════
+   LIGHTBOX
+════════════════════════════ */
+let lbPhotos=[], lbIdx=0;
+window.openLightbox=function(photos,idx){
+  lbPhotos=photos; lbIdx=idx||0;
+  const lb=document.getElementById('lightbox');
+  lb.style.display='flex';
+  document.getElementById('lb-img').src=lbPhotos[lbIdx];
+  document.getElementById('lb-counter').textContent=lbPhotos.length>1?(lbIdx+1)+' / '+lbPhotos.length:'';
+  document.getElementById('lb-prev').style.display=lbPhotos.length>1?'block':'none';
+  document.getElementById('lb-next').style.display=lbPhotos.length>1?'block':'none';
+};
+window.closeLightbox=function(){
+  document.getElementById('lightbox').style.display='none';
+  document.getElementById('lb-img').src='';
+};
+window.lbNav=function(dir){
+  lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;
+  document.getElementById('lb-img').src=lbPhotos[lbIdx];
+  document.getElementById('lb-counter').textContent=(lbIdx+1)+' / '+lbPhotos.length;
+};
+// swipe support for lightbox
+(function(){
+  let sx=0;
+  const lb=document.getElementById('lightbox');
+  lb.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
+  lb.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx;
+    if(Math.abs(dx)>50){lbNav(dx<0?1:-1);}
+  },{passive:true});
+})();
+
+/* ════════════════════════════
+   URL HASH - 새로고침 시 현재 페이지 유지
+════════════════════════════ */
+(function(){
+  // navTo 이후 hash 업데이트
+  const _navToOrig=navTo;
+  navTo=function(page){
+    _navToOrig(page);
+    history.replaceState(null,'','#'+page);
+  };
+  // 페이지 로드 시 hash 복원
+  const hash=(location.hash||'').replace('#','');
+  const validPages=['schedule','members','people','notes','history','records'];
+  if(hash&&validPages.includes(hash)){
+    setTimeout(()=>navTo(hash),100);
+  }
+})();
+
+/* ════════════════════════════
+   GALLERY ALBUMS (사진 앨범)
+════════════════════════════ */
+let galleryAlbums=[]; // [{title:'', photos:[]}]
+
+function renderGalleryAlbumsModal(){
+  const el=document.getElementById('gallery-albums-list'); if(!el)return;
+  if(!galleryAlbums.length){el.innerHTML='';return;}
+  el.innerHTML=galleryAlbums.map((album,ai)=>`
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <input class="form-input" value="${album.title||''}" placeholder="앨범 제목" style="flex:1;font-size:13px;padding:6px 10px" oninput="galleryAlbums[${ai}].title=this.value">
+        <button onclick="removeGalleryAlbum(${ai})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;flex-shrink:0">🗑️</button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">${(album.photos||[]).map((url,pi)=>`
+        <div style="position:relative">
+          <img src="${url}" style="width:64px;height:64px;object-fit:cover;border-radius:6px;border:1px solid var(--border)">
+          <button onclick="removeGalleryPhoto(${ai},${pi})" style="position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--red);border:none;color:#fff;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+        </div>`).join('')}
+        <label style="width:64px;height:64px;border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;color:var(--text3)">+
+          <input type="file" accept="image/*" multiple style="display:none" onchange="handleGalleryUpload(this,${ai})">
+        </label>
+      </div>
+    </div>`).join('');
+}
+window.removeGalleryAlbum=function(ai){ galleryAlbums.splice(ai,1); renderGalleryAlbumsModal(); };
+window.removeGalleryPhoto=function(ai,pi){ galleryAlbums[ai].photos.splice(pi,1); renderGalleryAlbumsModal(); };
+window.handleGalleryUpload=async function(input,ai){
+  const files=Array.from(input.files); if(!files.length)return;
+  toast('업로드 중...');
+  for(const f of files){const url=await uploadCloud(f);if(url)galleryAlbums[ai].photos.push(url);}
+  renderGalleryAlbumsModal(); toast(files.length+'장 업로드 완료'); input.value='';
+};
+document.getElementById('add-gallery-album-btn').addEventListener('click',()=>{
+  galleryAlbums.push({title:'',photos:[]});
+  renderGalleryAlbumsModal();
+});
+
+// Patch openMMember to load gallery albums
+const _origOpenMMemberFinal=openMMember;
+openMMember=function(){
+  _origOpenMMemberFinal();
+  const m=editingId?members.find(x=>x.id===editingId):null;
+  galleryAlbums=m?.gallery_albums?JSON.parse(JSON.stringify(m.gallery_albums)):[];
+  renderGalleryAlbumsModal();
+};
+
+// Patch save-member to include gallery albums
+const _origSaveMemberEl=document.getElementById('save-member');
+_origSaveMemberEl.addEventListener('click',async()=>{
+  // gallery_albums is merged into data by the existing handler; patch after
+  setTimeout(()=>{
+    const m=editingId?members.find(x=>x.id===editingId):null;
+    if(m&&m.id) updateItem('members',m.id,{gallery_albums:JSON.parse(JSON.stringify(galleryAlbums))});
+    else if(!editingId&&members.length){
+      const newest=members[members.length-1];
+      if(newest) updateItem('members',newest.id,{gallery_albums:JSON.parse(JSON.stringify(galleryAlbums))});
+    }
+  },600);
+},{once:false});
+
+/* Patch openDpMember to show gallery albums */
+const _origOpenDpMemberFinal=openDpMember;
+openDpMember=function(id){
+  _origOpenDpMemberFinal(id);
+  const m=members.find(x=>x.id===id); if(!m||!m.gallery_albums||!m.gallery_albums.length)return;
+  const galleryHtml=m.gallery_albums.map(album=>`
+    <div class="info-sec">
+      <div class="info-sec-title">${album.title||'앨범'}</div>
+      <div style="padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px">
+        ${(album.photos||[]).map((url,idx)=>`<img src="${url}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(album.photos)},${idx})">`).join('')}
+      </div>
+    </div>`).join('');
+  const body=document.getElementById('dp-member-body');
+  if(body){
+    const wimbagEl=body.querySelector('.info-sec-title');
+    body.insertAdjacentHTML('beforeend',galleryHtml);
+  }
+};
+
+/* ════════════════════════════
+   RECORDS - 활동별 그룹화 뷰
+════════════════════════════ */
+let recordViewMode='list'; // 'list' | 'activity'
+
+// Patch renderRecords to add view toggle and activity grouping
+const _origRenderRecords=renderRecords;
+renderRecords=function(){
+  const tabEl=document.getElementById('records-tabs');
+  if(tabEl){
+    tabEl.innerHTML=`
+      <div style="width:100%;display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px">
+        ${REC_CATS.map(c=>`<div class="pf-chip${c===currentRecordFilter?' active':''}" onclick="setRecordFilter('${c}')">${c}</div>`).join('')}
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:4px">
+        <div class="pf-chip${recordViewMode==='list'?' active':''}" onclick="setRecordViewMode('list')">📋 목록</div>
+        <div class="pf-chip${recordViewMode==='activity'?' active':''}" onclick="setRecordViewMode('activity')">🎯 활동별</div>
+      </div>`;
+  }
+
+  const filtered=currentRecordFilter==='전체'?records:records.filter(r=>r.category===currentRecordFilter);
+  const el=document.getElementById('records-list');
+  if(!el)return;
+  document.getElementById('records-cnt').textContent=(records.length||0)+'개';
+
+  if(!filtered.length){
+    el.innerHTML=`<div class="empty"><div class="ei">🏆</div><p>성적이 없습니다<br>+ 버튼으로 추가하세요</p></div>`;
+    return;
+  }
+
+  if(recordViewMode==='activity'){
+    // Group by activity name (r.name)
+    const groups={};
+    filtered.forEach(r=>{
+      const key=r.name||'기타';
+      if(!groups[key])groups[key]=[];
+      groups[key].push(r);
+    });
+    let html='';
+    Object.entries(groups).sort((a,b)=>{
+      const aDate=Math.max(...a[1].map(r=>new Date(r.date||0).getTime()));
+      const bDate=Math.max(...b[1].map(r=>new Date(r.date||0).getTime()));
+      return bDate-aDate;
+    }).forEach(([name,items])=>{
+      const sorted=[...items].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+      const cats=[...new Set(items.map(r=>r.category))];
+      html+=`<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:14px;overflow:hidden">
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px">
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:15px">${name}</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px;font-family:'Space Mono',monospace">${sorted[0]?.date||''} ~ ${sorted[sorted.length-1]?.date||''} · ${items.length}건</div>
+          </div>
+          <div style="display:flex;gap:4px">${cats.map(c=>`<span style="font-size:9px;padding:2px 7px;border-radius:20px;background:${(REC_COLORS[c]||'#888')}22;color:${(REC_COLORS[c]||'#888')};border:1px solid ${(REC_COLORS[c]||'#888')}44">${c}</span>`).join('')}</div>
+        </div>
+        <div style="padding:8px 0">
+          ${sorted.map(r=>{
+            const c=REC_COLORS[r.category]||'var(--accent)';
+            const ic=REC_ICONS[r.category]||'📊';
+            return `<div style="padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:var(--tr)" onclick="editRecord('${r.id}')" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background=''">
+              <span style="font-size:16px">${ic}</span>
+              <div style="flex:1">
+                <div style="font-size:12px;color:var(--text3);font-family:'Space Mono',monospace">${r.date||''} ${r.platform?'· '+r.platform:''}</div>
+                ${r.memo?`<div style="font-size:11px;color:var(--text2);margin-top:2px">${r.memo}</div>`:''}
+              </div>
+              <div style="font-size:16px;font-weight:700;color:${c}">${r.value||''}</div>
+              <button onclick="event.stopPropagation();deleteRecord('${r.id}')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'">🗑️</button>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    });
+    el.innerHTML=html;
+    return;
+  }
+
+  // default list view
+  const sorted=[...filtered].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  el.innerHTML=sorted.map(r=>{
+    const c=REC_COLORS[r.category]||'var(--accent)';
+    const ic=REC_ICONS[r.category]||'📊';
+    return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:var(--tr)" onclick="editRecord('${r.id}')" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='var(--card)'">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:20px">${ic}</span>
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:14px">${r.name||'—'}</div>
+          <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:2px">${r.date||''} ${r.platform?'· '+r.platform:''}</div>
+        </div>
+        <div style="font-size:18px;font-weight:700;color:${c}">${r.value||''}</div>
+        <button onclick="event.stopPropagation();deleteRecord('${r.id}')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px;border-radius:4px" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'">🗑️</button>
+      </div>
+      <span style="font-size:10px;padding:2px 8px;border-radius:20px;background:${c}22;color:${c};border:1px solid ${c}44;font-family:'Space Mono',monospace">${r.category||'기타'}</span>
+      ${r.memo?`<div style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.5">${r.memo}</div>`:''}
+    </div>`;
+  }).join('');
+};
+
+window.setRecordViewMode=function(mode){ recordViewMode=mode; renderRecords(); };
+
+
 
 </script>
 </body>
