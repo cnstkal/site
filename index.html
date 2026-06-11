@@ -2717,13 +2717,130 @@ document.getElementById('fab').addEventListener('click',()=>{
   if(currentPage==='schedule') openMSchedule(selectedDate);
   else if(currentPage==='members') openMMember();
   else if(currentPage==='people') openMPeople();
-  else if(currentPage==='notes') openMNote();
+  else if(currentPage==='outfit') openMOutfit();
   else if(currentPage==='history') openMHistory();
   else if(currentPage==='records') openMRecord();
 });
 
 /* Save recur field in save-schedule */
 const _origSaveSch=document.getElementById('save-schedule');
+
+/* ════════════════════════════
+   OUTFIT PAGE
+════════════════════════════ */
+let outfits=[];
+let editingOutfitId=null;
+let outfitPhotos=[];
+const OUTFIT_CATS=['전체','무대','사복','화보','방송','공연','팬미팅','기타'];
+const OUTFIT_COLORS={'무대':'#b89aff','사복':'#4dd8c0','화보':'#ff8ac8','방송':'#ffd166','공연':'#ff6eb4','팬미팅':'#64d8b4','기타':'#8888a4'};
+let currentOutfitFilter='전체';
+
+async function loadOutfits(){
+  try{
+    const snap=await fb.getDocs(fb.collection(db,'outfits'));
+    outfits=snap.docs.map(d=>({id:d.id,...d.data()}));
+  }catch(e){
+    try{outfits=JSON.parse(localStorage.getItem('a_outfits')||'[]');}catch(e2){}
+  }
+}
+function saveOutfitsLocal(){ localStorage.setItem('a_outfits',JSON.stringify(outfits)); }
+
+function renderOutfits(){
+  const filterEl=document.getElementById('outfit-filter');
+  if(filterEl) filterEl.innerHTML=OUTFIT_CATS.map(c=>`<div class="pf-chip${c===currentOutfitFilter?' active':''}" onclick="setOutfitFilter('${c}')">${c}</div>`).join('');
+  const filtered=currentOutfitFilter==='전체'?outfits:outfits.filter(o=>o.category===currentOutfitFilter);
+  const el=document.getElementById('outfit-grid');
+  if(!el)return;
+  document.getElementById('outfit-cnt').textContent=(outfits.length||0)+'개';
+  if(!filtered.length){
+    el.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="ei">👗</div><p>의상이 없습니다<br>+ 버튼으로 추가하세요</p></div>`;
+    return;
+  }
+  const sorted=[...filtered].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  el.innerHTML=sorted.map(o=>{
+    const c=OUTFIT_COLORS[o.category]||'#8888a4';
+    const thumb=o.photos&&o.photos.length?`<img src="${o.photos[0]}" style="width:100%;height:100%;object-fit:cover">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--card2)">👗</div>`;
+    return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:var(--tr)" onclick="editOutfit('${o.id}')" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+      <div style="aspect-ratio:3/4;overflow:hidden;position:relative" onclick="event.stopPropagation();${o.photos&&o.photos.length?`openLightbox(${JSON.stringify(o.photos)},0)`:'editOutfit(\''+o.id+'\')'}">
+        ${thumb}
+        ${o.photos&&o.photos.length>1?`<div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;font-family:'Space Mono',monospace">+${o.photos.length-1}</div>`:''}
+      </div>
+      <div style="padding:9px 10px">
+        <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${o.title||'—'}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+          <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:${c}22;color:${c};border:1px solid ${c}44">${o.category||'기타'}</span>
+          ${o.member?`<span style="font-size:10px;color:var(--text3)">${o.member}</span>`:''}
+        </div>
+        ${o.date?`<div style="font-size:10px;color:var(--text3);margin-top:3px;font-family:'Space Mono',monospace">${o.date}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.setOutfitFilter=function(c){ currentOutfitFilter=c; renderOutfits(); };
+
+function renderOutfitPhotos(){
+  const el=document.getElementById('outfit-photos-list');if(!el)return;
+  if(!outfitPhotos.length){el.innerHTML='';return;}
+  el.innerHTML=outfitPhotos.map((url,i)=>`
+    <div style="position:relative">
+      <img src="${url}" style="width:80px;height:100px;object-fit:cover;border-radius:8px;border:1px solid var(--border)">
+      <button onclick="removeOutfitPhoto(${i})" style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:var(--red);border:none;color:#fff;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+    </div>`).join('');
+}
+window.removeOutfitPhoto=function(i){ outfitPhotos.splice(i,1); renderOutfitPhotos(); };
+
+document.getElementById('outfit-photo-area').addEventListener('click',()=>document.getElementById('outfit-photo-input').click());
+document.getElementById('outfit-photo-input').addEventListener('change',async function(){
+  const files=Array.from(this.files);if(!files.length)return;
+  toast('업로드 중...');
+  for(const f of files){const url=await uploadCloud(f);if(url)outfitPhotos.push(url);}
+  renderOutfitPhotos();toast(files.length>1?files.length+'장 업로드 완료':'업로드 완료');
+  this.value='';
+});
+
+function openMOutfit(){
+  editingOutfitId=null;
+  document.getElementById('m-outfit-title').textContent='의상 추가';
+  document.getElementById('f-outfit-category').value='무대';
+  setVal('f-outfit-title','');setVal('f-outfit-date',new Date().toISOString().slice(0,10));
+  setVal('f-outfit-member','');setVal('f-outfit-brand','');setVal('f-outfit-memo','');
+  outfitPhotos=[];renderOutfitPhotos();
+  openModal('m-outfit');
+}
+
+window.editOutfit=function(id){
+  const o=outfits.find(x=>x.id===id);if(!o)return;
+  editingOutfitId=id;
+  document.getElementById('m-outfit-title').textContent='의상 수정';
+  document.getElementById('f-outfit-category').value=o.category||'무대';
+  setVal('f-outfit-title',o.title||'');setVal('f-outfit-date',o.date||'');
+  setVal('f-outfit-member',o.member||'');setVal('f-outfit-brand',o.brand||'');setVal('f-outfit-memo',o.memo||'');
+  outfitPhotos=o.photos?[...o.photos]:[];renderOutfitPhotos();
+  openModal('m-outfit');
+};
+
+document.getElementById('save-outfit').addEventListener('click',async()=>{
+  const title=getVal('f-outfit-title');if(!title){toast('의상명을 입력해주세요');return;}
+  const data={title,category:document.getElementById('f-outfit-category').value,date:getVal('f-outfit-date'),member:getVal('f-outfit-member'),brand:getVal('f-outfit-brand'),memo:getVal('f-outfit-memo'),photos:[...outfitPhotos]};
+  if(editingOutfitId){
+    try{await fb.updateDoc(fb.doc(db,'outfits',editingOutfitId),data);}catch(e){}
+    const i=outfits.findIndex(x=>x.id===editingOutfitId);if(i>=0)outfits[i]={...outfits[i],...data};
+  } else {
+    let oid;
+    try{const r=await fb.addDoc(fb.collection(db,'outfits'),data);oid=r.id;}catch(e){oid='o_'+Date.now();}
+    if(!outfits.find(x=>x.id===oid))outfits.push({id:oid,...data});
+  }
+  saveOutfitsLocal();closeModal('m-outfit');renderOutfits();toast(editingOutfitId?'수정되었습니다':'의상이 추가되었습니다');editingOutfitId=null;
+});
+document.getElementById('cancel-outfit').addEventListener('click',()=>closeModal('m-outfit'));
+
+// Load outfits when Firebase is ready
+window.addEventListener('fb-ready',()=>{ loadOutfits().then(()=>renderOutfits()); });
+// Fallback load
+setTimeout(()=>{ if(!outfits.length){try{outfits=JSON.parse(localStorage.getItem('a_outfits')||'[]');}catch(e){}renderOutfits();} },4500);
+
+
 
 /* ════════════════════════════
    PATCH openMSchedule to load recur
