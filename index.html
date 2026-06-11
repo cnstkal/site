@@ -626,7 +626,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
       <div class="sidebar-nav-item active" data-page="schedule"><span class="nav-icon-pc">📅</span>스케줄</div>
       <div class="sidebar-nav-item" data-page="members"><span class="nav-icon-pc">👤</span>멤버</div>
       <div class="sidebar-nav-item" data-page="people"><span class="nav-icon-pc">👥</span>지인</div>
-      <div class="sidebar-nav-item" data-page="notes"><span class="nav-icon-pc">📝</span>노트</div>
+      <div class="sidebar-nav-item" data-page="outfit"><span class="nav-icon-pc">👗</span>의상</div>
       <div class="sidebar-nav-item" data-page="history"><span class="nav-icon-pc">📜</span>연혁</div>
       <div class="sidebar-nav-item" data-page="records"><span class="nav-icon-pc">🏆</span>성적</div>
     </nav>
@@ -715,13 +715,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
         <div class="people-list" id="people-list"></div>
       </div>
 
-      <!-- NOTES -->
-      <div class="page" id="page-notes">
+      <!-- OUTFIT -->
+      <div class="page" id="page-outfit">
         <div class="sec-hdr">
-          <span class="sec-title">노트</span>
-          <span class="sec-sub" id="notes-cnt">0개</span>
+          <span class="sec-title">의상</span>
+          <span class="sec-sub" id="outfit-cnt">0개</span>
         </div>
-        <div class="notes-grid" id="notes-grid"></div>
+        <div class="people-filter" id="outfit-filter"></div>
+        <div id="outfit-grid" style="padding:0 24px 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px"></div>
       </div>
 
       <!-- RECORDS -->
@@ -750,7 +751,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
       <div class="nav-item active" data-page="schedule"><div class="ni">📅</div><div class="nl">스케줄</div></div>
       <div class="nav-item" data-page="members"><div class="ni">👤</div><div class="nl">멤버</div></div>
       <div class="nav-item" data-page="people"><div class="ni">👥</div><div class="nl">지인</div></div>
-      <div class="nav-item" data-page="notes"><div class="ni">📝</div><div class="nl">노트</div></div>
+      <div class="nav-item" data-page="outfit"><div class="ni">👗</div><div class="nl">의상</div></div>
       <div class="nav-item" data-page="history"><div class="ni">📜</div><div class="nl">연혁</div></div>
       <div class="nav-item" data-page="records"><div class="ni">🏆</div><div class="nl">성적</div></div>
     </nav>
@@ -1151,12 +1152,53 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
   </div>
 </div>
 
+<!-- Outfit -->
+<div class="modal-overlay" id="m-outfit">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="m-outfit-title">의상 추가</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">의상 사진</label>
+        <div id="outfit-photos-list" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
+        <div class="upload-area" id="outfit-photo-area">
+          <span style="font-size:26px">👗</span>
+          <div><p style="font-size:13px;color:var(--text2);margin:0">사진 추가</p><p style="font-size:11px;color:var(--text3);margin-top:2px">클릭하여 사진 선택 (여러 장 가능)</p></div>
+        </div>
+        <input type="file" id="outfit-photo-input" accept="image/*" multiple style="display:none">
+      </div>
+      <div class="form-group"><label class="form-label">의상명 / 제목</label><input class="form-input" id="f-outfit-title" placeholder="예: 컴백 무대 의상, 팬미팅 코디 등"></div>
+      <div class="form-group">
+        <label class="form-label">카테고리</label>
+        <select class="form-select" id="f-outfit-category">
+          <option value="무대">무대 의상</option>
+          <option value="사복">사복</option>
+          <option value="화보">화보</option>
+          <option value="방송">방송 의상</option>
+          <option value="공연">공연 의상</option>
+          <option value="팬미팅">팬미팅</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">날짜</label><input class="form-input" type="date" id="f-outfit-date"></div>
+        <div class="form-group"><label class="form-label">관련 멤버</label><input class="form-input" id="f-outfit-member" placeholder="멤버명"></div>
+      </div>
+      <div class="form-group"><label class="form-label">브랜드 / 스타일</label><input class="form-input" id="f-outfit-brand" placeholder="브랜드명, 스타일 설명 등"></div>
+      <div class="form-group"><label class="form-label">메모</label><textarea class="form-textarea" id="f-outfit-memo" placeholder="추가 메모" style="min-height:58px"></textarea></div>
+      <button class="btn-primary" id="save-outfit">저장</button>
+      <button class="btn-cancel" id="cancel-outfit">취소</button>
+    </div>
+  </div>
+</div>
+
 <!-- Records -->
 <div class="modal-overlay" id="m-record">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title" id="m-record-title">성적 추가</div>
     <div class="modal-body">
+      <div class="form-group"><label class="form-label">활동명 <span style="font-size:10px;color:var(--text3);font-weight:400">(어떤 활동인지)</span></label><input class="form-input" id="f-rec-activity" placeholder="예: ECHO 컴백, 월드투어 2026, 연말시상식 등"></div>
       <div class="form-group"><label class="form-label">분류</label>
         <select class="form-select" id="f-rec-category">
           <option value="음반">음반 성적</option>
@@ -1213,10 +1255,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 
 <!-- Lightbox -->
 <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;flex-direction:column;align-items:center;justify-content:center" onclick="closeLightbox()">
-  <div style="position:absolute;top:16px;right:20px;font-size:24px;color:rgba(255,255,255,.7);cursor:pointer;z-index:501" onclick="closeLightbox()">✕</div>
-  <div style="position:absolute;top:50%;left:12px;transform:translateY(-50%);font-size:32px;color:rgba(255,255,255,.6);cursor:pointer;z-index:501;padding:12px;user-select:none" id="lb-prev" onclick="event.stopPropagation();lbNav(-1)">‹</div>
-  <div style="position:absolute;top:50%;right:12px;transform:translateY(-50%);font-size:32px;color:rgba(255,255,255,.6);cursor:pointer;z-index:501;padding:12px;user-select:none" id="lb-next" onclick="event.stopPropagation();lbNav(1)">›</div>
-  <img id="lb-img" src="" style="max-width:calc(100vw - 80px);max-height:calc(100dvh - 60px);object-fit:contain;border-radius:8px;pointer-events:none">
+  <div style="position:absolute;top:16px;right:20px;font-size:28px;color:rgba(255,255,255,.8);cursor:pointer;z-index:501;line-height:1;padding:4px 8px" onclick="closeLightbox()">✕</div>
+  <div style="position:absolute;top:50%;left:12px;transform:translateY(-50%);font-size:36px;color:rgba(255,255,255,.7);cursor:pointer;z-index:501;padding:14px;user-select:none;background:rgba(255,255,255,.08);border-radius:50%" id="lb-prev" onclick="event.stopPropagation();lbNav(-1)">‹</div>
+  <div style="position:absolute;top:50%;right:12px;transform:translateY(-50%);font-size:36px;color:rgba(255,255,255,.7);cursor:pointer;z-index:501;padding:14px;user-select:none;background:rgba(255,255,255,.08);border-radius:50%" id="lb-next" onclick="event.stopPropagation();lbNav(1)">›</div>
+  <img id="lb-img" src="" style="max-width:calc(100vw - 80px);max-height:calc(100dvh - 80px);object-fit:contain;border-radius:8px;pointer-events:none">
   <div id="lb-counter" style="position:absolute;bottom:20px;font-size:12px;color:rgba(255,255,255,.5);font-family:'Space Mono',monospace"></div>
 </div>
 
@@ -2526,6 +2568,7 @@ window.editRecord=function(id){
   editingRecordId=id;
   document.getElementById('m-record-title').textContent='성적 수정';
   document.getElementById('f-rec-category').value=r.category||'음반';
+  setVal('f-rec-activity',r.activity||'');
   setVal('f-rec-date',r.date||'');setVal('f-rec-name',r.name||'');setVal('f-rec-value',r.value||'');
   setVal('f-rec-platform',r.platform||'');setVal('f-rec-memo',r.memo||'');
   openModal('m-record');
@@ -2542,13 +2585,14 @@ function openMRecord(){
   editingRecordId=null;
   document.getElementById('m-record-title').textContent='성적 추가';
   document.getElementById('f-rec-category').value='음반';
+  setVal('f-rec-activity','');
   setVal('f-rec-date',new Date().toISOString().slice(0,10));
   setVal('f-rec-name','');setVal('f-rec-value','');setVal('f-rec-platform','');setVal('f-rec-memo','');
   openModal('m-record');
 }
 document.getElementById('save-record').addEventListener('click',async()=>{
   const name=getVal('f-rec-name');if(!name){toast('앨범/곡/행사명을 입력해주세요');return;}
-  const data={name,category:document.getElementById('f-rec-category').value,date:getVal('f-rec-date'),value:getVal('f-rec-value'),platform:getVal('f-rec-platform'),memo:getVal('f-rec-memo')};
+  const data={name,activity:getVal('f-rec-activity'),category:document.getElementById('f-rec-category').value,date:getVal('f-rec-date'),value:getVal('f-rec-value'),platform:getVal('f-rec-platform'),memo:getVal('f-rec-memo')};
   if(editingRecordId){
     try{await fb.updateDoc(fb.doc(db,'records',editingRecordId),data);}catch(e){}
     const i=records.findIndex(x=>x.id===editingRecordId);if(i>=0)records[i]={...records[i],...data};
