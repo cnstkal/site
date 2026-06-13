@@ -3034,7 +3034,14 @@ let soloActs=[];
 function renderSoloActsModal(){
   const el=document.getElementById('solo-acts-list'); if(!el)return;
   if(!soloActs.length){el.innerHTML='';return;}
-  el.innerHTML=soloActs.map((a,i)=>`
+  el.innerHTML=soloActs.map((a,i)=>{
+    const photos=a.photos||[];
+    const photoThumbs=photos.map((url,pi)=>`
+      <div style="position:relative;flex-shrink:0">
+        <img src="${url}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(photos)},${pi})">
+        <button onclick="removeSoloActPhoto(${i},${pi})" style="position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--red);border:none;color:#fff;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">✕</button>
+      </div>`).join('');
+    return `
     <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;position:relative">
       <button onclick="removeSoloAct(${i})" class="rm-btn" style="position:absolute;top:8px;right:8px">✕</button>
       <div style="display:flex;gap:8px;margin-bottom:8px;padding-right:28px">
@@ -3045,13 +3052,29 @@ function renderSoloActsModal(){
       </div>
       <input value="${a.title||''}" placeholder="브랜드명 / 작품명 / 행사명" oninput="updateSoloAct(${i},'title',this.value)" style="width:100%;font-size:12px;padding:6px 8px;border-radius:6px;border:1px solid var(--border);background:var(--card2);color:var(--text);margin-bottom:6px;font-family:'Noto Sans KR',sans-serif">
       <input value="${a.role||''}" placeholder="역할 / 역할명 (선택)" oninput="updateSoloAct(${i},'role',this.value)" style="width:100%;font-size:12px;padding:6px 8px;border-radius:6px;border:1px solid var(--border);background:var(--card2);color:var(--text);margin-bottom:6px;font-family:'Noto Sans KR',sans-serif">
-      <input value="${a.memo||''}" placeholder="메모 (선택)" oninput="updateSoloAct(${i},'memo',this.value)" style="width:100%;font-size:12px;padding:6px 8px;border-radius:6px;border:1px solid var(--border);background:var(--card2);color:var(--text);font-family:'Noto Sans KR',sans-serif">
-    </div>`).join('');
+      <input value="${a.memo||''}" placeholder="메모 (선택)" oninput="updateSoloAct(${i},'memo',this.value)" style="width:100%;font-size:12px;padding:6px 8px;border-radius:6px;border:1px solid var(--border);background:var(--card2);color:var(--text);margin-bottom:8px;font-family:'Noto Sans KR',sans-serif">
+      <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+        ${photoThumbs}
+        <label style="width:60px;height:60px;border:1px dashed var(--border2);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:var(--text3);flex-shrink:0;transition:var(--tr)" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'">
+          📷
+          <input type="file" accept="image/*" multiple style="display:none" onchange="handleSoloActUpload(this,${i})">
+        </label>
+      </div>
+    </div>`;
+  }).join('');
 }
 window.removeSoloAct=function(i){ soloActs.splice(i,1); renderSoloActsModal(); };
 window.updateSoloAct=function(i,key,val){ soloActs[i][key]=val; };
+window.removeSoloActPhoto=function(ai,pi){ soloActs[ai].photos.splice(pi,1); renderSoloActsModal(); };
+window.handleSoloActUpload=async function(input,i){
+  const files=Array.from(input.files); if(!files.length)return;
+  toast('업로드 중...');
+  if(!soloActs[i].photos) soloActs[i].photos=[];
+  for(const f of files){ const url=await uploadCloud(f); if(url) soloActs[i].photos.push(url); }
+  renderSoloActsModal(); toast(files.length>1?files.length+'장 업로드 완료':'업로드 완료'); input.value='';
+};
 document.getElementById('add-solo-act-btn').addEventListener('click',()=>{
-  soloActs.push({cat:'앰버서더',date:'',title:'',role:'',memo:''});
+  soloActs.push({cat:'앰버서더',date:'',title:'',role:'',memo:'',photos:[]});
   renderSoloActsModal();
 });
 
@@ -3111,6 +3134,7 @@ openDpMember=function(id){
               <div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4">${a.title||'—'}</div>
               ${a.role?`<div style="font-size:12px;color:var(--text2);margin-top:2px">${a.role}</div>`:''}
               ${a.memo?`<div style="font-size:11px;color:var(--text3);margin-top:3px;line-height:1.5">${a.memo}</div>`:''}
+              ${(a.photos&&a.photos.length)?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${a.photos.map((url,pi)=>`<img src="${url}" style="width:72px;height:72px;object-fit:cover;border-radius:7px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(a.photos)},${pi})">`).join('')}</div>`:''}
             </div>
           </div>`;
         }).join('')}
