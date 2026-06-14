@@ -1279,6 +1279,10 @@ const CL_CLOUD = 'dbljkloal';
 const CL_PRESET = 'Everything';
 const CL_URL = `https://api.cloudinary.com/v1_1/${CL_CLOUD}/image/upload`;
 
+// onclick="..." (double-quoted) 속성 안에 안전하게 배열을 넣기 위한 헬퍼
+// JSON.stringify는 큰따옴표를 쓰므로, 속성 안에 그대로 넣으면 HTML 파싱이 깨짐 → &quot;로 치환
+function lbArr(arr){ return JSON.stringify(arr).replace(/"/g,'&quot;'); }
+
 /* ════════════════════════════
    STATE
 ════════════════════════════ */
@@ -2444,7 +2448,7 @@ function openDpMember(id){
   function childSec(stage,label,arr){
     if(!arr||!arr.length)return'';
     return `<div style="margin-bottom:10px"><div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:1px;margin-bottom:6px">${label}</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px">${arr.map((url,idx)=>`<img src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(arr)},${idx})">`).join('')}</div></div>`;
+      <div style="display:flex;flex-wrap:wrap;gap:8px">${arr.map((url,idx)=>`<img src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${lbArr(arr)},${idx})">`).join('')}</div></div>`;
   }
   const childHtml=[
     childSec('baby','영유아',m.child_baby),
@@ -2454,8 +2458,8 @@ function openDpMember(id){
   ].filter(Boolean).join('');
 
   // fashion
-  const fashionHtml=m.fashion_photos&&m.fashion_photos.length?`<div class="info-sec"><div class="info-sec-title">사복 패션</div><div style="padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px">${m.fashion_photos.map((url,idx)=>`<img src="${url}" style="width:90px;height:112px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(m.fashion_photos)},${idx})">`).join('')}</div></div>`:'';
-  const wimbagHtml=m.wimbag_photos&&m.wimbag_photos.length?`<div class="info-sec"><div class="info-sec-title">왓츠인마이백</div><div style="padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px">${m.wimbag_photos.map((url,idx)=>`<img src="${url}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(m.wimbag_photos)},${idx})">`).join('')}</div></div>`:'';
+  const fashionHtml=m.fashion_photos&&m.fashion_photos.length?`<div class="info-sec"><div class="info-sec-title">사복 패션</div><div style="padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px">${m.fashion_photos.map((url,idx)=>`<img src="${url}" style="width:90px;height:112px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${lbArr(m.fashion_photos)},${idx})">`).join('')}</div></div>`:'';
+  const wimbagHtml=m.wimbag_photos&&m.wimbag_photos.length?`<div class="info-sec"><div class="info-sec-title">왓츠인마이백</div><div style="padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px">${m.wimbag_photos.map((url,idx)=>`<img src="${url}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${lbArr(m.wimbag_photos)},${idx})">`).join('')}</div></div>`:'';
 
   document.getElementById('dp-member-body').innerHTML=`
     <div class="detail-hero" style="position:relative">
@@ -2768,7 +2772,7 @@ function renderOutfits(){
     const c=OUTFIT_COLORS[o.category]||'#8888a4';
     const thumb=o.photos&&o.photos.length?`<img src="${o.photos[0]}" style="width:100%;height:100%;object-fit:cover">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--card2)">👗</div>`;
     return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:var(--tr)" onclick="editOutfit('${o.id}')" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-      <div style="aspect-ratio:3/4;overflow:hidden;position:relative" onclick="event.stopPropagation();${o.photos&&o.photos.length?`openLightbox(${JSON.stringify(o.photos)},0)`:'editOutfit(\''+o.id+'\')'}">
+      <div style="aspect-ratio:3/4;overflow:hidden;position:relative" onclick="event.stopPropagation();${o.photos&&o.photos.length?`openLightbox(${lbArr(o.photos)},0)`:'editOutfit(\''+o.id+'\')'}">
         ${thumb}
         ${o.photos&&o.photos.length>1?`<div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;font-family:'Space Mono',monospace">+${o.photos.length-1}</div>`:''}
       </div>
@@ -3038,7 +3042,7 @@ function renderSoloActsModal(){
     const photos=a.photos||[];
     const photoThumbs=photos.map((url,pi)=>`
       <div style="position:relative;flex-shrink:0">
-        <img src="${url}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(photos)},${pi})">
+        <img src="${url}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${lbArr(photos)},${pi})">
         <button onclick="removeSoloActPhoto(${i},${pi})" style="position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--red);border:none;color:#fff;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">✕</button>
       </div>`).join('');
     return `
@@ -3134,7 +3138,7 @@ openDpMember=function(id){
               <div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4">${a.title||'—'}</div>
               ${a.role?`<div style="font-size:12px;color:var(--text2);margin-top:2px">${a.role}</div>`:''}
               ${a.memo?`<div style="font-size:11px;color:var(--text3);margin-top:3px;line-height:1.5">${a.memo}</div>`:''}
-              ${(a.photos&&a.photos.length)?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${a.photos.map((url,pi)=>`<img src="${url}" style="width:72px;height:72px;object-fit:cover;border-radius:7px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(a.photos)},${pi})">`).join('')}</div>`:''}
+              ${(a.photos&&a.photos.length)?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${a.photos.map((url,pi)=>`<img src="${url}" style="width:72px;height:72px;object-fit:cover;border-radius:7px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${lbArr(a.photos)},${pi})">`).join('')}</div>`:''}
             </div>
           </div>`;
         }).join('')}
@@ -3152,7 +3156,7 @@ openDpMember=function(id){
       <div class="info-sec">
         <div class="info-sec-title">${album.title||'앨범'}</div>
         <div style="padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px">
-          ${(album.photos||[]).map((url,idx)=>`<img src="${url}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(album.photos)},${idx})">`).join('')}
+          ${(album.photos||[]).map((url,idx)=>`<img src="${url}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${lbArr(album.photos)},${idx})">`).join('')}
         </div>
       </div>`).join('');
     body.insertAdjacentHTML('beforeend',galleryHtml);
