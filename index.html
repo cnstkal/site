@@ -665,11 +665,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
 
       <!-- SCHEDULE -->
       <div class="page active" id="page-schedule">
-        <div class="sec-hdr">
-          <span class="sec-title">스케줄</span>
-          <span class="sec-sub" id="cal-year-display">2026</span>
+        <div class="sec-hdr" style="justify-content:space-between">
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <span class="sec-title">스케줄</span>
+            <span class="sec-sub" id="cal-year-display">2026</span>
+          </div>
+          <div style="display:flex;gap:6px">
+            <div id="sch-view-cal" class="sidebar-icon-btn" title="달력" style="font-size:13px;width:auto;padding:0 10px;border-radius:20px;color:var(--accent);background:rgba(184,154,255,.12);border-color:rgba(184,154,255,.2)" onclick="setSchView('cal')">📅 달력</div>
+            <div id="sch-view-list" class="sidebar-icon-btn" title="목록" style="font-size:13px;width:auto;padding:0 10px;border-radius:20px" onclick="setSchView('list')">📋 목록</div>
+            <div id="sch-view-tag" class="sidebar-icon-btn" title="태그별" style="font-size:13px;width:auto;padding:0 10px;border-radius:20px" onclick="setSchView('tag')">🏷 태그</div>
+          </div>
         </div>
-        <div class="cal-schedule-layout">
+        <!-- 달력 뷰 -->
+        <div id="sch-panel-cal" class="cal-schedule-layout">
           <div class="cal-panel">
             <div class="cal-wrap">
               <div class="cal-nav">
@@ -693,6 +701,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
           <div class="detail-panel">
             <div id="day-detail"></div>
           </div>
+        </div>
+        <!-- 목록 뷰: 스케줄 있는 날만 -->
+        <div id="sch-panel-list" style="display:none;padding:0 24px 80px">
+          <div id="sch-list-body"></div>
+        </div>
+        <!-- 태그별 뷰 -->
+        <div id="sch-panel-tag" style="display:none;padding:0 24px 80px">
+          <div id="sch-tag-body"></div>
         </div>
       </div>
 
@@ -1183,14 +1199,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
           <option value="화보">화보</option>
           <option value="방송">방송 의상</option>
           <option value="공연">공연 의상</option>
-          <option value="팬미팅">팬미팅</option>
+          <option value="행사">행사</option>
+          <option value="시상식">시상식</option>
           <option value="기타">기타</option>
         </select>
       </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">날짜</label><input class="form-input" type="date" id="f-outfit-date"></div>
-        <div class="form-group"><label class="form-label">관련 멤버</label><input class="form-input" id="f-outfit-member" placeholder="멤버명"></div>
-      </div>
+      <div class="form-group"><label class="form-label">관련 멤버</label><input class="form-input" id="f-outfit-member" placeholder="멤버명"></div>
       <div class="form-group"><label class="form-label">브랜드 / 스타일</label><input class="form-input" id="f-outfit-brand" placeholder="브랜드명, 스타일 설명 등"></div>
       <div class="form-group"><label class="form-label">메모</label><textarea class="form-textarea" id="f-outfit-memo" placeholder="추가 메모" style="min-height:58px"></textarea></div>
       <button class="btn-primary" id="save-outfit">저장</button>
@@ -1212,7 +1226,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto S
           <option value="음원">음원 성적</option>
           <option value="뮤비">뮤비 조회수</option>
           <option value="수상">수상</option>
-          <option value="투어">투어 관객수</option>
+          <option value="공연">공연 관객수</option>
           <option value="기타">기타</option>
         </select>
       </div>
@@ -1692,8 +1706,8 @@ function close(id){ document.getElementById(id).classList.remove('open'); editin
 // document.getElementById('fab').addEventListener... (replaced)
 
 /* ── Schedule tag chips ── */
-const SCH_TAGS=['음악방송','라디오','방송','이벤트','행사','공연','컴백','생일','데뷔기념일','기타'];
-const SCH_TAG_COLORS={'음악방송':'#b89aff','라디오':'#4dd8c0','방송':'#7b6cff','이벤트':'#ff6eb4','행사':'#ffd166','공연':'#ff8ac8','컴백':'#ff6b6b','생일':'#ff9de2','데뷔기념일':'#64d8b4','기타':'#8888a4'};
+const SCH_TAGS=['음악방송','라디오','방송','이벤트','행사','콘서트','시상식','컴백','생일','데뷔기념일','기타'];
+const SCH_TAG_COLORS={'음악방송':'#b89aff','라디오':'#4dd8c0','방송':'#7b6cff','이벤트':'#ff6eb4','행사':'#ffd166','콘서트':'#ff8ac8','시상식':'#ffb347','컴백':'#ff6b6b','생일':'#ff9de2','데뷔기념일':'#64d8b4','기타':'#8888a4'};
 let schSelectedTags=[];
 let schExtraDates=[]; // additional dates for multi-day
 let schPhotos=[]; // array of photo URLs
@@ -2526,9 +2540,9 @@ function buildRelMap(m){
 ════════════════════════════ */
 let records=[];
 let currentRecordFilter='전체';
-const REC_CATS=['전체','음반','음원','뮤비','수상','투어','기타'];
-const REC_COLORS={'음반':'#b89aff','음원':'#4dd8c0','뮤비':'#ff6eb4','수상':'#ffd166','투어':'#ff8ac8','기타':'#8888a4'};
-const REC_ICONS={'음반':'💿','음원':'🎵','뮤비':'🎬','수상':'🏆','투어':'🎪','기타':'📊'};
+const REC_CATS=['전체','음반','음원','뮤비','수상','공연','기타'];
+const REC_COLORS={'음반':'#b89aff','음원':'#4dd8c0','뮤비':'#ff6eb4','수상':'#ffd166','공연':'#ff8ac8','기타':'#8888a4'};
+const REC_ICONS={'음반':'💿','음원':'🎵','뮤비':'🎬','수상':'🏆','공연':'🎪','기타':'📊'};
 
 async function loadRecords(){
   try{
@@ -2742,8 +2756,8 @@ const _origSaveSch=document.getElementById('save-schedule');
 let outfits=[];
 let editingOutfitId=null;
 let outfitPhotos=[];
-const OUTFIT_CATS=['전체','무대','사복','화보','방송','공연','팬미팅','기타'];
-const OUTFIT_COLORS={'무대':'#b89aff','사복':'#4dd8c0','화보':'#ff8ac8','방송':'#ffd166','공연':'#ff6eb4','팬미팅':'#64d8b4','기타':'#8888a4'};
+const OUTFIT_CATS=['전체','무대','사복','화보','방송','공연','행사','시상식','기타'];
+const OUTFIT_COLORS={'무대':'#b89aff','사복':'#4dd8c0','화보':'#ff8ac8','방송':'#ffd166','공연':'#ff6eb4','행사':'#ffb347','시상식':'#ff9de2','기타':'#8888a4'};
 let currentOutfitFilter='전체';
 
 async function loadOutfits(){
@@ -2767,25 +2781,62 @@ function renderOutfits(){
     el.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="ei">👗</div><p>의상이 없습니다<br>+ 버튼으로 추가하세요</p></div>`;
     return;
   }
-  const sorted=[...filtered].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-  el.innerHTML=sorted.map(o=>{
-    const c=OUTFIT_COLORS[o.category]||'#8888a4';
-    const thumb=o.photos&&o.photos.length?`<img src="${o.photos[0]}" style="width:100%;height:100%;object-fit:cover">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--card2)">👗</div>`;
-    return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:var(--tr)" onclick="editOutfit('${o.id}')" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-      <div style="aspect-ratio:3/4;overflow:hidden;position:relative" onclick="event.stopPropagation();${o.photos&&o.photos.length?`openLightbox(${lbArr(o.photos)},0)`:'editOutfit(\''+o.id+'\')'}">
-        ${thumb}
-        ${o.photos&&o.photos.length>1?`<div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;font-family:'Space Mono',monospace">+${o.photos.length-1}</div>`:''}
-      </div>
-      <div style="padding:9px 10px">
-        <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${o.title||'—'}</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
-          <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:${c}22;color:${c};border:1px solid ${c}44">${o.category||'기타'}</span>
-          ${o.member?`<span style="font-size:10px;color:var(--text3)">${o.member}</span>`:''}
+  // 가나다순 정렬
+  const sorted=[...filtered].sort((a,b)=>(a.title||'').localeCompare(b.title||'','ko'));
+  // 무대 그룹 / 사복 그룹 / 나머지 구분
+  const STAGE_CATS=['무대','공연','방송','화보','행사','시상식'];
+  const CASUAL_CATS=['사복'];
+  let html='';
+  if(currentOutfitFilter==='전체'){
+    const stageItems=sorted.filter(o=>STAGE_CATS.includes(o.category));
+    const casualItems=sorted.filter(o=>CASUAL_CATS.includes(o.category));
+    const otherItems=sorted.filter(o=>!STAGE_CATS.includes(o.category)&&!CASUAL_CATS.includes(o.category));
+    function outfitCards(items){
+      return items.map(o=>{
+        const c=OUTFIT_COLORS[o.category]||'#8888a4';
+        const thumb=o.photos&&o.photos.length?`<img src="${o.photos[0]}" style="width:100%;height:100%;object-fit:cover">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--card2)">👗</div>`;
+        return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:var(--tr)" onclick="editOutfit('${o.id}')" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+          <div style="aspect-ratio:3/4;overflow:hidden;position:relative" onclick="event.stopPropagation();${o.photos&&o.photos.length?`openLightbox(${lbArr(o.photos)},0)`:'editOutfit(\''+o.id+'\')'}">
+            ${thumb}
+            ${o.photos&&o.photos.length>1?`<div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;font-family:'Space Mono',monospace">+${o.photos.length-1}</div>`:''}
+          </div>
+          <div style="padding:9px 10px">
+            <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${o.title||'—'}</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+              <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:${c}22;color:${c};border:1px solid ${c}44">${o.category||'기타'}</span>
+              ${o.member?`<span style="font-size:10px;color:var(--text3)">${o.member}</span>`:''}
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    function groupSection(label, items){
+      if(!items.length) return '';
+      return `<div style="grid-column:1/-1;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--accent);padding:8px 0 4px;border-bottom:1px solid var(--border);margin-bottom:4px">${label}</div>${outfitCards(items)}`;
+    }
+    html+=groupSection('🎤 무대',stageItems);
+    html+=groupSection('👕 사복',casualItems);
+    html+=groupSection('기타',otherItems);
+  } else {
+    html=sorted.map(o=>{
+      const c=OUTFIT_COLORS[o.category]||'#8888a4';
+      const thumb=o.photos&&o.photos.length?`<img src="${o.photos[0]}" style="width:100%;height:100%;object-fit:cover">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--card2)">👗</div>`;
+      return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:var(--tr)" onclick="editOutfit('${o.id}')" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+        <div style="aspect-ratio:3/4;overflow:hidden;position:relative" onclick="event.stopPropagation();${o.photos&&o.photos.length?`openLightbox(${lbArr(o.photos)},0)`:'editOutfit(\''+o.id+'\')'}">
+          ${thumb}
+          ${o.photos&&o.photos.length>1?`<div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;font-family:'Space Mono',monospace">+${o.photos.length-1}</div>`:''}
         </div>
-        ${o.date?`<div style="font-size:10px;color:var(--text3);margin-top:3px;font-family:'Space Mono',monospace">${o.date}</div>`:''}
-      </div>
-    </div>`;
-  }).join('');
+        <div style="padding:9px 10px">
+          <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${o.title||'—'}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+            <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:${c}22;color:${c};border:1px solid ${c}44">${o.category||'기타'}</span>
+            ${o.member?`<span style="font-size:10px;color:var(--text3)">${o.member}</span>`:''}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  el.innerHTML=html;
 }
 
 window.setOutfitFilter=function(c){ currentOutfitFilter=c; renderOutfits(); };
@@ -2814,7 +2865,7 @@ function openMOutfit(){
   editingOutfitId=null;
   document.getElementById('m-outfit-title').textContent='의상 추가';
   document.getElementById('f-outfit-category').value='무대';
-  setVal('f-outfit-title','');setVal('f-outfit-date',new Date().toISOString().slice(0,10));
+  setVal('f-outfit-title','');
   setVal('f-outfit-member','');setVal('f-outfit-brand','');setVal('f-outfit-memo','');
   outfitPhotos=[];renderOutfitPhotos();
   openModal('m-outfit');
@@ -2825,7 +2876,7 @@ window.editOutfit=function(id){
   editingOutfitId=id;
   document.getElementById('m-outfit-title').textContent='의상 수정';
   document.getElementById('f-outfit-category').value=o.category||'무대';
-  setVal('f-outfit-title',o.title||'');setVal('f-outfit-date',o.date||'');
+  setVal('f-outfit-title',o.title||'');
   setVal('f-outfit-member',o.member||'');setVal('f-outfit-brand',o.brand||'');setVal('f-outfit-memo',o.memo||'');
   outfitPhotos=o.photos?[...o.photos]:[];renderOutfitPhotos();
   openModal('m-outfit');
@@ -2833,7 +2884,7 @@ window.editOutfit=function(id){
 
 document.getElementById('save-outfit').addEventListener('click',async()=>{
   const title=getVal('f-outfit-title');if(!title){toast('의상명을 입력해주세요');return;}
-  const data={title,category:document.getElementById('f-outfit-category').value,date:getVal('f-outfit-date'),member:getVal('f-outfit-member'),brand:getVal('f-outfit-brand'),memo:getVal('f-outfit-memo'),photos:[...outfitPhotos]};
+  const data={title,category:document.getElementById('f-outfit-category').value,member:getVal('f-outfit-member'),brand:getVal('f-outfit-brand'),memo:getVal('f-outfit-memo'),photos:[...outfitPhotos]};
   if(editingOutfitId){
     try{await fb.updateDoc(fb.doc(db,'outfits',editingOutfitId),data);}catch(e){}
     const i=outfits.findIndex(x=>x.id===editingOutfitId);if(i>=0)outfits[i]={...outfits[i],...data};
@@ -2914,6 +2965,139 @@ setTimeout(()=>{
   try{records=JSON.parse(localStorage.getItem('a_rec')||'[]');}catch(e){}
   renderRecords();
 },3600);
+/* ════════════════════════════
+   SCHEDULE VIEW TOGGLE (달력/목록/태그)
+════════════════════════════ */
+let schViewMode='cal';
+window.setSchView=function(mode){
+  schViewMode=mode;
+  document.getElementById('sch-panel-cal').style.display=mode==='cal'?'':'none';
+  document.getElementById('sch-panel-list').style.display=mode==='list'?'':'none';
+  document.getElementById('sch-panel-tag').style.display=mode==='tag'?'':'none';
+  // 버튼 스타일
+  ['cal','list','tag'].forEach(m=>{
+    const btn=document.getElementById('sch-view-'+m);
+    if(!btn)return;
+    if(m===mode){
+      btn.style.color='var(--accent)';btn.style.background='rgba(184,154,255,.12)';btn.style.borderColor='rgba(184,154,255,.2)';
+    } else {
+      btn.style.color='var(--text2)';btn.style.background='var(--card)';btn.style.borderColor='var(--border)';
+    }
+  });
+  if(mode==='list') renderSchList();
+  if(mode==='tag') renderSchTagView();
+};
+
+function renderSchList(){
+  const el=document.getElementById('sch-list-body'); if(!el)return;
+  // 스케줄 있는 날만, 날짜순 정렬
+  const allSch=[...schedules].filter(s=>s.date);
+  const today=new Date().toISOString().slice(0,10);
+  // 날짜별 그룹화
+  const byDate={};
+  allSch.forEach(s=>{
+    const d=s.date; if(!byDate[d]) byDate[d]=[];
+    byDate[d].push(s);
+  });
+  const sortedDates=Object.keys(byDate).sort();
+  if(!sortedDates.length){
+    el.innerHTML=`<div class="empty"><div class="ei">📅</div><p>등록된 스케줄이 없습니다</p></div>`;
+    return;
+  }
+  let html='';
+  sortedDates.forEach(date=>{
+    const items=byDate[date].sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+    const isPast=date<today;
+    const isToday=date===today;
+    const [y,m,d]=date.split('-');
+    const dateObj=new Date(date+'T00:00:00');
+    const DOW=['일','월','화','수','목','금','토'][dateObj.getDay()];
+    html+=`<div style="margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);margin-bottom:8px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:${isToday?'var(--accent)':isPast?'var(--text3)':'var(--text)'}">
+          ${y}.${m}.${d} <span style="font-size:13px;font-weight:400">${DOW}</span>
+        </div>
+        ${isToday?`<span style="font-size:10px;padding:1px 7px;border-radius:10px;background:var(--accent);color:#fff;font-weight:700">오늘</span>`:''}
+        <span style="font-size:11px;color:var(--text3);margin-left:auto">${items.length}개</span>
+      </div>
+      ${items.map(s=>{
+        const tags=(s.tags||'').split(',').filter(Boolean).map(t=>`<div class="tag-chip a">${t.trim()}</div>`).join('');
+        return `<div class="sch-item" onclick="openDpSchedule('${s.id}')" style="border-radius:var(--rs);margin-bottom:4px;border:1px solid var(--border);background:var(--card)">
+          <div class="sch-time">${s.time||'—'}</div>
+          <div class="sch-body">
+            <div class="sch-title" style="${isPast?'opacity:.6':''}">${s.title}</div>
+            ${tags?`<div class="sch-tags">${tags}</div>`:''}
+          </div>
+          <span style="color:var(--text3)">›</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+
+function renderSchTagView(){
+  const el=document.getElementById('sch-tag-body'); if(!el)return;
+  // 모든 태그 추출
+  const tagMap={};
+  schedules.filter(s=>s.date).forEach(s=>{
+    (s.tags||'').split(',').map(t=>t.trim()).filter(Boolean).forEach(tag=>{
+      if(!tagMap[tag]) tagMap[tag]=[];
+      tagMap[tag].push(s);
+    });
+  });
+  // 태그 없는 스케줄도 '기타'로
+  const noTag=schedules.filter(s=>s.date&&!(s.tags||'').trim());
+  if(noTag.length) tagMap['(태그 없음)']=noTag;
+  
+  if(!Object.keys(tagMap).length){
+    el.innerHTML=`<div class="empty"><div class="ei">🏷</div><p>등록된 스케줄이 없습니다</p></div>`;
+    return;
+  }
+  
+  // 필터 버튼
+  const allTags=Object.keys(tagMap).sort((a,b)=>tagMap[b].length-tagMap[a].length);
+  let selectedTag=allTags[0]||'';
+  
+  function renderTagContent(){
+    const items=(tagMap[selectedTag]||[]).sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.time||'').localeCompare(b.time||''));
+    const today=new Date().toISOString().slice(0,10);
+    return items.map(s=>{
+      const [y,m,d]=s.date.split('-');
+      const isPast=s.date<today;
+      return `<div class="sch-item" onclick="openDpSchedule('${s.id}')" style="border-radius:var(--rs);margin-bottom:6px;border:1px solid var(--border);background:var(--card)">
+        <div class="sch-time">${s.time||'—'}</div>
+        <div class="sch-body">
+          <div class="sch-title" style="${isPast?'opacity:.6':''}">${s.title}</div>
+          <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:3px">${y}.${m}.${d}</div>
+        </div>
+        <span style="color:var(--text3)">›</span>
+      </div>`;
+    }).join('');
+  }
+  
+  el.innerHTML=`
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px" id="sch-tag-filter-btns">
+      ${allTags.map(t=>{
+        const c=SCH_TAG_COLORS[t.replace(/^#/,'')]||'var(--accent)';
+        return `<div onclick="schSelectTag('${t.replace(/'/g,'\\\'')}')" style="padding:5px 12px;border-radius:20px;border:1px solid ${c}44;background:${c}22;color:${c};font-size:12px;cursor:pointer;transition:var(--tr)" data-stag="${t.replace(/"/g,'&quot;')}">${t} <span style="opacity:.6">${tagMap[t].length}</span></div>`;
+      }).join('')}
+    </div>
+    <div id="sch-tag-content">${renderTagContent()}</div>`;
+  
+  // 첫 태그 선택 강조
+  const firstBtn=el.querySelector('[data-stag]');
+  if(firstBtn) firstBtn.style.fontWeight='700';
+  
+  window.schSelectTag=function(tag){
+    selectedTag=tag;
+    el.querySelectorAll('[data-stag]').forEach(b=>{b.style.fontWeight='';b.style.opacity='.7';});
+    const active=el.querySelector(`[data-stag="${tag}"]`);
+    if(active){active.style.fontWeight='700';active.style.opacity='1';}
+    document.getElementById('sch-tag-content').innerHTML=renderTagContent();
+  };
+}
+
 /* ════════════════════════════
    LIGHTBOX
 ════════════════════════════ */
